@@ -2,38 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Synthetic Routines Dataset Nursery Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
 </head>
     <body>
-    
-    <section id="room-introduction" class="section">
-        
-    </section>
-
-    <section id="daily-routines" class="section">
-        <div id="inputs-routines">
-            <div class="hora">
-                <label for="hora">Hora del día</label>
-                <input type="range" id="hora" name="hora" min="0" max="23" step="1" value="0">
-                <span id="hora-result"></span>
+        <section id="room-introduction" class="section">
+            <div id="assign-rooms">
+                <h2>Asignación habitaciones</h2>
+                <p>Selecciona todas las habitaciones para estudiar en el fichero de las rutinas</p>
+                <select id="room" name="room" class="room-controls">
+                    <option value="" disabled selected id="default">--Select a room--</option>
+                    <option value="" style="display: none;">--Select a room--</option>
+                    <option value="room">Room</option>
+                    <option value="kitchen">Kitchen</option>
+                    <option value="corridors">Corridors</option>
+                    <option value="bathroom">Bathroom</option>
+                    <option value="bedroom">Bedroom</option>
+                    <option value="living-room">Living Room</option>
+                    <option value="tv-room">TV Room</option>
+                    <option value="dining-room">Dining Room</option>
+                    <option value="garage">Garage</option>
+                    <option value="garden">Garden</option>
+                    <option value="pool">Pool</option>
+                    <option value="terrace">Terrace</option>
+                    <option value="therapy">Therapy Room</option>
+                </select>
+                <div id="table-rooms"></div>
             </div>
-            <div class="minuto">
-                <label for="minuto" id="minuto-label">Minuto</label>
-                <input type="range" id="minuto" name="minuto" min="0" max="59" step="1" value="0">
-                <span id="minuto-result"></span>
+            <div id="finish-rooms">
+                <button id="finish-rooms-button">Finish Rooms File</button>
             </div>
-            <span id="hora-minuto"></span>
-        </div>
-        
-        <div id="routines-adding">
-            <button id="add-button"></button>
-            <button id="complete-button"></button>
-        </div>
-        
-        <div id="results">
-            <input type="textarea" id="resultados" name="resultados" readonly>
-        </div>
-    </section>
+            
+        </section>
 
+        <section id="daily-routines" class="section">
+            <div id="inputs-routines">
+                <div class="hora">
+                    <label for="hora">Hora del día</label>
+                    <input type="range" id="hora" name="hora" min="0" max="23" step="1" value="0">
+                    <span id="hora-result"></span>
+                </div>
+                <div class="minuto">
+                    <label for="minuto" id="minuto-label">Minuto</label>
+                    <input type="range" id="minuto" name="minuto" min="0" max="59" step="1" value="0">
+                    <span id="minuto-result"></span>
+                </div>
+                <span id="hora-minuto"></span>
+            </div>
+            
+            <div id="routines-adding">
+                <button id="add-button">Add Daily</button>
+                <button id="complete-button">Complete Routine</button>
+            </div>
+            
+            <div id="results">
+                <input type="textarea" id="resultados" name="resultados" readonly>
+            </div>
+        </section>
+
+    <script src="script.js"></script>
     </body>
 </html>

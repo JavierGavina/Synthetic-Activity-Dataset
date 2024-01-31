@@ -1,0 +1,64 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#assign-rooms, #daily-routines {
+    width: 100%;
+    max-width: 800px; /* Adjust this value based on your design preference */
+}
+
+#table-rooms, #results {
+    width: 100%;
+    overflow-x: auto; /* For small devices */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #assign-rooms, #daily-routines {
+        width: 95%;
+    }
+}
+
+/* Further styling for select, buttons, etc. */
+select, button, input[type=range] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Button specific styles */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for the table created by Plotly.js */
+.plotly-graph-div {
+    margin-bottom: 20px;
+}
+
+/* Override Plotly.js styles if necessary */
+/* You might need to inspect elements and see what classes Plotly adds */
