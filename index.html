@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div id="inputs-routines">
+    <div class="hora">
+        <label for="hora">Hora del día</label>
+        <input type="range" id="hora" name="hora" min="0" max="23" step="1" value="0">
+        <span id="hora-result"></span>
+    </div>
+    <div class="minuto">
+        <label for="minuto" id="minuto-label">Minuto</label>
+        <input type="range" id="minuto" name="minuto" min="0" max="59" step="1" value="0">
+        <span id="minuto-result"></span>
+    </div>
+    <span id="hora-minuto"></span>
+</div>
+
+<div id="routines-adding">
+    <button id="add-button"></button>
+    <button id="complete-button"></button>
+</div>
+
+<div id="results">
+    <input type="textarea" id="resultados" name="resultados" readonly>
+</div>
+
+
+</body>
+</html>
