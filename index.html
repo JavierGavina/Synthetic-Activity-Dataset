@@ -14,7 +14,7 @@
                 <h1>Actualización Página Web</h1>
                 <h2>Asignación habitaciones</h2>
                 <p>Selecciona todas las habitaciones para estudiar en el fichero de las rutinas</p>
-                <select id="room" name="room" class="room-controls">
+                <select id="room-intro" name="room" class="room-controls">
                     <option value="" disabled selected id="default">--Select a room--</option>
                     <option value="" style="display: none;">--Select a room--</option>
                     <option value="room">Room</option>
@@ -41,28 +41,31 @@
         </section>
 
         <section id="daily-routines" class="section">
-            <div id="inputs-routines">
-                <div class="hora">
-                    <label for="hora">Hora del día</label>
-                    <input type="range" id="hora" name="hora" min="0" max="23" step="1" value="0">
-                    <span id="hora-result"></span>
+            <div class="routine-assignment">
+                <h2>Asignación rutinas diarias</h2>
+                <p>Tienes que indicar de qué hora a qué hora se encuentra un usuario en cada habitación</p>
+                <div class="time-inputs">
+                  <label for="startTime">Hora Inicio</label>
+                  <input type="text" id="startTime" placeholder="HH:MM">
+              
+                  <label for="endTime">Hora Fin</label>
+                  <input type="text" id="endTime" placeholder="HH:MM">
                 </div>
-                <div class="minuto">
-                    <label for="minuto" id="minuto-label">Minuto</label>
-                    <input type="range" id="minuto" name="minuto" min="0" max="59" step="1" value="0">
-                    <span id="minuto-result"></span>
+                
+                <div class="room-selection">
+                  <select id="room-daily" class="room-controls">
+                    <option value="" disabled selected id="default">--Select a room--</option>
+                    <!-- Se añadirán las opciones con DOM -->
+                  </select>
                 </div>
-                <span id="hora-minuto"></span>
-            </div>
-            
-            <div id="routines-adding">
-                <button id="add-button">Add Daily</button>
-                <button id="complete-button">Complete Routine</button>
-            </div>
-            
-            <div id="results">
-                <input type="textarea" id="resultados" name="resultados" readonly>
-            </div>
+              
+                <div class="buttons-daily">
+                  <button id="reset-daily">Reset</button>
+                  <button id="add-daily">Add Daily</button>
+                  <button id="complete-daily">Complete Routine</button>
+                </div>
+                <div id="table-daily-routines"></div>
+              </div>
         </section>
 
     <script src="script.js"></script>

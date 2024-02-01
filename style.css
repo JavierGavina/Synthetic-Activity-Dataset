@@ -51,11 +51,67 @@ select, button, input[type=range] {
     border: 1px solid #ccc;
 }
 
+.routine-assignment {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 70%; /* Adjust width as necessary */
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .routine-assignment h2 {
+    margin-bottom: 10px;
+  }
+  
+  .routine-assignment p {
+    margin-bottom: 20px;
+  }
+  
+  .time-inputs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .time-inputs label {
+    margin-right: 10px;
+  }
+  
+  .time-inputs input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .room-selection select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .buttons-daily button {
+    padding: 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #007bff;
+    cursor: pointer;
+  }
+  
+  .buttons-daily button:hover {
+    background-color: #0056b3;
+  }
+
+
+  
+/* 
 /* Button specific styles */
 button {
     background-color: #007bff;
     color: white;
-    border: none;
+    border: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
