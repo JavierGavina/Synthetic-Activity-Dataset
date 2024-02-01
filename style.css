@@ -235,3 +235,47 @@ button:hover {
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
+
+
+#explain-parameters-weekly, #weekly-parameters {
+    width: calc(50% - 40px); /* Cada div hijo ocupará la mitad del ancho del contenedor padre */
+    margin: auto;
+}
+
+/* Asegúrate de que los elementos internos de #weekly-parameters no estén demasiado apretados */
+#weekly-parameters select, 
+#weekly-parameters input,
+#weekly-parameters label {
+    margin-bottom: 10px; /* Añade un margen inferior para evitar que los elementos estén demasiado juntos */
+}
+
+#explain-parameters-weekly {
+    flex: 1; /* Esto permite que el bloque tome el espacio necesario */
+    max-width: 500px; /* Ajusta el ancho máximo según tu preferencia */
+    margin-right: 20px; /* Agrega un margen derecho para separar de los parámetros */
+    padding: 20px;
+    text-align: left;
+    border-right: 2px solid #ddd; /* Agrega una línea divisoria */
+}
+
+#weekly-parameters {
+   flex: 1; /* Esto permite que el bloque tome el espacio necesario*/
+   max-width: 500px; /* Ajusta el ancho máximo según tu preferencia*/
+   padding: 20px;
+   display: flex; /* Para alinear verticalmente los inputs y selects */
+   flex-direction: column;
+}
+
+/* Ajustes para que la selección y entrada de tiempo se alinee correctamente */
+#routine-assignment-weekly .time-inputs {
+    display: flex;
+    flex-direction: column; 
+}
+
+/* Asegúrate de que los labels estén alineados con sus respectivos inputs */
+#routine-assignment-weekly .time-inputs label {
+    margin-bottom: 5px;
+}
+
+/* Estilos adicionales para responsividad */
+
