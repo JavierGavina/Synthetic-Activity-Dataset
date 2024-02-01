@@ -4,6 +4,43 @@ body, html {
     font-family: 'Arial', sans-serif;
 }
 
+/*COSILLAS PARA EL TÍTULO Y EL MENÚ DE LA CABECERA*/
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.page-title {
+    margin: 0;
+    font-size: 2em;
+}
+
+/* Estilos para el menú de navegación */
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.nav-menu li {
+    margin: 0 15px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #ddd;
+}
+
 .section {
     display: flex;
     flex-direction: column;
@@ -37,10 +74,20 @@ body, html {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .nav-menu {
+        flex-direction: column;
+        margin-top: 5px;
+    }
+
+    .nav-menu li {
+        margin: 5px 0;
+    }
     #assign-rooms, #daily-routines {
         width: 95%;
     }
 }
+
+/*COSILLAS GENERALES Y PARA LA PRIMERA SECCIÓN*/
 
 /* Further styling for select, buttons, etc. */
 select, button, input[type=range] {
