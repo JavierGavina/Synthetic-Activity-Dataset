@@ -13,17 +13,16 @@
             <h1 class="page-title">Synthetic Routines Dataset Nursery Home</h1>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="#room-introduction">Asignación de Habitaciones</a></li>
-                    <li><a href="#daily-routines">Rutinas Diarias</a></li>
+                    <li><a href="#room-introduction">Assign rooms</a></li>
+                    <li><a href="#daily-routines">Daily Routines</a></li>
                     <!-- Agrega aquí más elementos de navegación si es necesario -->
                 </ul>
             </nav>
         </header>
         <section id="room-introduction" class="section">
             <div id="assign-rooms">
-                <h1>Actualización Página Web</h1>
-                <h2>Asignación habitaciones</h2>
-                <p>Selecciona todas las habitaciones para estudiar en el fichero de las rutinas</p>
+                <h2>Create ID associated with each room</h2>
+                <p>You have to select all the places that you want to include in your study for generating a dataset representing the typical routines</p>
                 <select id="room-intro" name="room" class="room-controls">
                     <option value="" disabled selected id="default">--Select a room--</option>
                     <option value="" style="display: none;">--Select a room--</option>
@@ -52,8 +51,8 @@
 
         <section id="daily-routines" class="section">
             <div class="routine-assignment">
-                <h2>Asignación rutinas diarias</h2>
-                <p>Tienes que indicar de qué hora a qué hora se encuentra un usuario en cada habitación</p>
+                <h2>Daily Routines</h2>
+                <p>Here you have to indicate from what time to what time the user is in one room or another. </p>
                 <div class="time-inputs">
                   <label for="startTime">Hora Inicio</label>
                   <input type="text" id="startTime" placeholder="HH:MM">

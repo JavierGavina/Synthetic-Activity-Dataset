@@ -147,6 +147,8 @@ finish_room.addEventListener("click", function(e) {
 });
 
 
+
+
 /*CODIGO PARA SECCIÓN DOS*/
 
 const validarHoras = function(element){
@@ -169,6 +171,9 @@ const start = document.querySelector("#startTime")
 const end = document.querySelector("#endTime")
 
 const add_daily = document.querySelector("#add-daily")
+const reset_daily = document.querySelector("#reset-daily")
+const complete_daily = document.querySelector("#complete-daily")
+
 add_daily.addEventListener("click", function(e) {
     if (validarHoras(start) && validarHoras(end)){
         daily_routines = daily_routines.push({ "Start-Time": start.value, "End-Time": end.value, "Room": rooms.value})

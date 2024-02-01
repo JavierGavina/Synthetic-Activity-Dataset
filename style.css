@@ -53,6 +53,16 @@ header {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
+#room-introduction {
+    width: 100%;
+    max-width: 800px; /* Adjust this value based on your design preference */
+    margin: 20px auto; /* Esto centrará la sección horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Esto centrará los elementos hijos horizontalmente */
+    justify-content: center; 
+}
+
 #assign-rooms, #daily-routines {
     width: 100%;
     max-width: 800px; /* Adjust this value based on your design preference */
@@ -98,14 +108,31 @@ select, button, input[type=range] {
     border: 1px solid #ccc;
 }
 
+#daily-routines {
+    width: 100%; /* O un ancho fijo si prefieres un ancho específico */
+    max-width: 800px; /* Ajusta este valor según tus preferencias de diseño */
+    margin: 20px auto; /* Esto centrará la sección horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Esto centrará los elementos hijos horizontalmente */
+    justify-content: center; /* Esto centrará los elementos hijos verticalmente si la altura es definida */
+}
+
 .routine-assignment {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    width: 70%; /* Adjust width as necessary */
-    margin: auto;
+    width: 100%; /* O un porcentaje específico para un ancho relativo */
+    max-width: 600px; /* Ajusta este valor para que coincida con el diseño deseado */
+    margin: auto; /* Centra horizontalmente dentro de #daily-routines */
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
+    text-align: center;
+}
+
+/* Asegurándose de que los elementos dentro de .routine-assignment también estén centrados si es necesario */
+.routine-assignment > * {
+    margin-left: auto;
+    margin-right: auto;
+}
+
   
   .routine-assignment h2 {
     margin-bottom: 10px;
