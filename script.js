@@ -5,9 +5,13 @@ var daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
 var weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
 
 const seccion2 = document.querySelector("#daily-routines")
+const seccion3 = document.querySelector("#weekly-routines")
 seccion2.style.display = "none"
+seccion3.style.display = "none"
 
 room_selector = document.querySelector(".room-controls")
+daily_room_selector = document.querySelector("#room-daily")
+weekly_room_selector = document.querySelector("#room-weekly")
 var count = 0
 
 room_selector.addEventListener("change", function(e) {
@@ -94,27 +98,26 @@ const finish_room = document.querySelector("#finish-rooms-button")
 
 reset.addEventListener("click", function(e) {
     var options = rooms_ids.select("Room").toArray().flat();
-    var select = document.querySelector(".room-controls");
     
     options.forEach(function(option) {
         var newOption = document.createElement("option");
         newOption.value = option;
         newOption.text = option;
-        select.appendChild(newOption);
+        room_selector.appendChild(newOption);
     });
 
     seccion2.style.display = "none"
-    seccion2.querySelectorAll("option").forEach(function(option) {
-        if (option.value != ""){
-            option.remove()
-        }
-    })
+    seccion3.style.display = "none"
+    daily_room_selector.innerHTML = `<option value="" disabled selected id="default">--Select a room--</option>`
+
 
     /*RESTART ALL DATAFRAMES, TABLES AND COUNTERS*/
     rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
     daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
+    weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
     document.querySelector("#table-rooms").innerHTML = ""
     document.querySelector("#table-daily-routines").innerHTML = ""
+    document.querySelector("#table-weekly-routines").innerHTML = ""
     document.querySelector("#startTime").value = ""
     document.querySelector("#endTime").value = ""
     document.querySelector("#startTime").removeAttribute("readonly")
@@ -126,18 +129,23 @@ reset.addEventListener("click", function(e) {
 }) 
 
 finish_room.addEventListener("click", function(e) {
+    if (rooms_ids.count() === 0){
+        room_selector.focus()
+        window.alert("Tienes que asignar al menos una habitación")
+        return
+    }
     if (room_selector.disabled === false){
 
         seccion2.style.display = "block"
-        rooms = document.querySelector("#room-daily")
         selected_rooms = rooms_ids.select("Room").toArray().flat()
-        console.log(rooms.children.length)
-        if (rooms.children.length === 0){
+    
+        if (daily_room_selector.children.length === 1 || daily_room_selector.children.length === 0){
             selected_rooms.forEach(function(room) {
                     var newOption = document.createElement("option");
                     newOption.value = room;
                     newOption.text = room[0].toUpperCase() + room.slice(1).toLowerCase();
-                    rooms.appendChild(newOption);
+                    daily_room_selector.appendChild(newOption);
+                    weekly_room_selector.appendChild(newOption.cloneNode(true)); /*BORRAR*/
             
             })
         } 
@@ -168,33 +176,62 @@ const validarHoras = function(element){
     return true
 }
 
-const start = document.querySelector("#startTime")
-const end = document.querySelector("#endTime")
+const start_daily = document.querySelector("#startTime")
+const end_daily = document.querySelector("#endTime")
 
 const add_daily = document.querySelector("#add-daily")
 const reset_daily = document.querySelector("#reset-daily")
 const complete_daily = document.querySelector("#complete-daily")
 
 add_daily.addEventListener("click", function(e) {
-    if (validarHoras(start) && validarHoras(end)){
-        daily_routines = daily_routines.push({ "Start-Time": start.value, "End-Time": end.value, "Room": rooms.value})
+    if (validarHoras(start_daily) && validarHoras(end_daily)){
+        if (daily_room_selector.value === ""){
+            daily_room_selector.focus()
+            window.alert("Tienes que seleccionar una habitación")
+            return
+        }
+        daily_routines = daily_routines.push({ "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
         show_table_daily(daily_routines)
-        start.value = end.value
-        end.value = ""
-        start.setAttribute("readonly", "readonly")
+        start_daily.value = end_daily.value
+        end_daily.value = ""
+        start_daily.setAttribute("readonly", "readonly")
     }
 })
 
 reset_daily.addEventListener("click", function(e) {
     daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
+    weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
     document.querySelector("#table-daily-routines").innerHTML = ""
-    start.value = ""
-    end.value = ""
-    start.removeAttribute("readonly")
+    document.querySelector("#table-weekly-routines").innerHTML = ""
+    start_daily.value = ""
+    end_daily.value = ""
+    start_daily.removeAttribute("readonly")
+    end_daily.removeAttribute("readonly")
+    seccion3.style.display = "none"
+    daily_room_selector.disabled = false;
+})
+
+complete_daily.addEventListener("click", function(e) {
+    if (daily_routines.count() === 0){
+        start_daily.focus()
+        window.alert("Tienes que asignar al menos una rutina diaria")
+        return
+    }
+
+    if (daily_room_selector.disabled === false){
+        seccion3.style.display = "block"
+        selected_rooms = rooms_ids.select("Room").toArray().flat()
+        } 
+    
+    daily_room_selector.disabled = true;
+    start_daily.value=""
+    end_daily.value=""
+    start_daily.setAttribute("readonly", "readonly")
+    end_daily.setAttribute("readonly", "readonly")
 })
 
 
-
+/*CODIGO PARA SECCIÓN TRES*/
 
 
 
