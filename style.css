@@ -235,7 +235,7 @@ button:hover {
 }
 
 #explain-parameters-weekly, #weekly-parameters {
-    width: calc(500px - 40px); /* Cada div hijo ocupará la mitad del ancho del contenedor padre */
+    width: calc(50% - 40px); /* Cada div hijo ocupará la mitad del ancho del contenedor padre */
     margin: auto;
 }
 
