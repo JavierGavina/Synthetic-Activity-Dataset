@@ -2,6 +2,7 @@ var DataFrame = dfjs.DataFrame;
 
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
 var daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
+var weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
 
 const seccion2 = document.querySelector("#daily-routines")
 seccion2.style.display = "none"
@@ -182,6 +183,14 @@ add_daily.addEventListener("click", function(e) {
         end.value = ""
         start.setAttribute("readonly", "readonly")
     }
+})
+
+reset_daily.addEventListener("click", function(e) {
+    daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
+    document.querySelector("#table-daily-routines").innerHTML = ""
+    start.value = ""
+    end.value = ""
+    start.removeAttribute("readonly")
 })
 
 
