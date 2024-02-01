@@ -21,6 +21,15 @@ body, html {
     max-width: 800px; /* Adjust this value based on your design preference */
 }
 
+#finish-rooms {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Crea dos columnas de igual anchura */
+    gap: 10px; /* Espacio entre las columnas */
+    width: 70%;
+    max-width: 500px; /* Asegúrate de que esto concuerde con el ancho de tus secciones */
+    margin-top: 20px; /* Espacio por encima del grid para separar de otros elementos */
+}
+
 #table-rooms, #results {
     width: 100%;
     overflow-x: auto; /* For small devices */

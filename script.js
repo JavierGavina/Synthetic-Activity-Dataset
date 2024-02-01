@@ -51,5 +51,22 @@ const show_table = (df)=>{
     
 }
 
+const reset = document.querySelector("#reset")
+reset.addEventListener("click", function(e) {
+    var options = rooms_ids.select("Room").toArray().flat();
+    var select = document.querySelector(".room-controls");
+    
+    options.forEach(function(option) {
+        var newOption = document.createElement("option");
+        newOption.value = option;
+        newOption.text = option;
+        select.appendChild(newOption);
+    });
+
+    rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
+    document.querySelector("#table-rooms").innerHTML = ""
+    count = 0
+}) 
+
 
 
