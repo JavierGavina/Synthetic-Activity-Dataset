@@ -109,39 +109,56 @@ reset.addEventListener("click", function(e) {
         }
     })
 
+    /*RESTART ALL DATAFRAMES, TABLES AND COUNTERS*/
     rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
+    daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
     document.querySelector("#table-rooms").innerHTML = ""
+    document.querySelector("#table-daily-routines").innerHTML = ""
+    document.querySelector("#startTime").value = ""
+    document.querySelector("#endTime").value = ""
+    document.querySelector("#startTime").removeAttribute("readonly")
     count = 0
+
+    room_selector.disabled = false;
+
+    // Restaurar evento finish_room
 }) 
 
 finish_room.addEventListener("click", function(e) {
-    seccion2.style.display = "block"
-    rooms = document.querySelector("#room-daily")
-    selected_rooms = rooms_ids.select("Room").toArray().flat()
-    console.log(rooms.children.length)
-    if (rooms.children.length === 0){
-        selected_rooms.forEach(function(room) {
-                var newOption = document.createElement("option");
-                newOption.value = room;
-                newOption.text = room[0].toUpperCase() + room.slice(1).toLowerCase();
-                rooms.appendChild(newOption);
-        
-        })
-    }    
+    if (room_selector.disabled === false){
+
+        seccion2.style.display = "block"
+        rooms = document.querySelector("#room-daily")
+        selected_rooms = rooms_ids.select("Room").toArray().flat()
+        console.log(rooms.children.length)
+        if (rooms.children.length === 0){
+            selected_rooms.forEach(function(room) {
+                    var newOption = document.createElement("option");
+                    newOption.value = room;
+                    newOption.text = room[0].toUpperCase() + room.slice(1).toLowerCase();
+                    rooms.appendChild(newOption);
+            
+            })
+        } 
+    }
+
+    // Impedimos que se puedan seleccionar más habitaciones
+    room_selector.disabled = true;
 });
 
 
-const validarHoras = function(string){
-    const [hora, minuto] = string.split(":")
+/*CODIGO PARA SECCIÓN DOS*/
+
+const validarHoras = function(element){
+    const [hora, minuto] = element.value.split(":")
     if (hora.length != 2 || minuto.length != 2){
-        
+        element.focus()
+        window.alert("Las hora tienen que tener el formato HH:MM")
         return false
     }
-    if (hora > 23 || minuto > 59){
-        return false
-    }
-    
-    if (hora < 0 || minuto < 0){
+    if ((hora > 23 || minuto > 59) || (hora < 0 || minuto < 0)){
+        element.focus()
+        window.alert("Las horas tienen que ir desde 00:00 hasta 23:59")
         return false
     }
 
@@ -153,17 +170,15 @@ const end = document.querySelector("#endTime")
 
 const add_daily = document.querySelector("#add-daily")
 add_daily.addEventListener("click", function(e) {
-    if (validarHoras(start.value) && validarHoras(end.value)){
+    if (validarHoras(start) && validarHoras(end)){
         daily_routines = daily_routines.push({ "Start-Time": start.value, "End-Time": end.value, "Room": rooms.value})
         show_table_daily(daily_routines)
         start.value = end.value
         end.value = ""
         start.setAttribute("readonly", "readonly")
-
-    } else {
-        alert("Horas no válidas")
     }
 })
+
 
 
 
