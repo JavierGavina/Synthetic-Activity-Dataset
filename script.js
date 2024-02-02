@@ -153,6 +153,7 @@ finish_room.addEventListener("click", function(e) {
 
     // Impedimos que se puedan seleccionar más habitaciones
     room_selector.disabled = true;
+    window.location.href = "#daily-routines";
 });
 
 
@@ -228,6 +229,7 @@ complete_daily.addEventListener("click", function(e) {
     end_daily.value=""
     start_daily.setAttribute("readonly", "readonly")
     end_daily.setAttribute("readonly", "readonly")
+    window.location.href = "#weekly-routines";
 })
 
 
