@@ -1,7 +1,7 @@
 var DataFrame = dfjs.DataFrame;
 
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
-var daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
+var daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
 var weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
 
 const seccion2 = document.querySelector("#daily-routines")
@@ -62,6 +62,7 @@ const show_table = (df)=>{
 
 const show_table_daily = (df)=> {
     table = document.querySelector("#table-daily-routines")
+    aux = df.filter(row => row.get("Day")==count_daily)
     var data = [{
         type: 'table',
         header: {
@@ -72,9 +73,10 @@ const show_table_daily = (df)=> {
             font: {family: 'Arial', size: 12, color: 'black'}
         },
         cells: {
-            values: [df.select("Start-Time").toArray().flat(),
-                     df.select("End-Time").toArray().flat(),
-                     df.select("Room").toArray().flat()],
+            values: [aux.select("Day").toArray().flat(),
+                     aux.select("Start-Time").toArray().flat(),
+                     aux.select("End-Time").toArray().flat(),
+                     aux.select("Room").toArray().flat()],
 
             align: 'center',
             line: {color: 'black', width: 1},
@@ -83,7 +85,7 @@ const show_table_daily = (df)=> {
     }];
     
     var layout = {
-        title: 'Tabla Interactiva',
+        title: `Routines Day ${count_daily}`,
         height: 400,
         width: 600
     };
@@ -113,7 +115,7 @@ reset.addEventListener("click", function(e) {
 
     /*RESTART ALL DATAFRAMES, TABLES AND COUNTERS*/
     rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
-    daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
+    daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
     weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
     document.querySelector("#table-rooms").innerHTML = ""
     document.querySelector("#table-daily-routines").innerHTML = ""
@@ -125,6 +127,8 @@ reset.addEventListener("click", function(e) {
     count = 0
 
     room_selector.disabled = false;
+
+    count_daily = 1
 
     // Restaurar evento finish_room
 }) 
@@ -162,14 +166,18 @@ finish_room.addEventListener("click", function(e) {
 
 /*CODIGO PARA SECCIÓN DOS*/
 
+var count_daily = 1
+
 const validarHoras = function(element){
     const [hora, minuto] = element.value.split(":")
     if (hora.length != 2 || minuto.length != 2){
+        element.value=""
         element.focus()
         window.alert("Las hora tienen que tener el formato HH:MM")
         return false
     }
     if ((hora > 23 || minuto > 59) || (hora < 0 || minuto < 0)){
+        element.value=""
         element.focus()
         window.alert("Las horas tienen que ir desde 00:00 hasta 23:59")
         return false
@@ -178,40 +186,119 @@ const validarHoras = function(element){
     return true
 }
 
+const convertToSeconds = function(hora){
+    const [h, m] = hora.split(":")
+    return h*3600 + m*60
+}
+
 const start_daily = document.querySelector("#startTime")
 const end_daily = document.querySelector("#endTime")
 
-const add_daily = document.querySelector("#add-daily")
 const reset_daily = document.querySelector("#reset-daily")
+const add_activity = document.querySelector("#add-activity")
+const add_daily = document.querySelector("#add-daily")
 const complete_daily = document.querySelector("#complete-daily")
 
-add_daily.addEventListener("click", function(e) {
+
+end_daily.addEventListener("keyup", function(e) {
+    input_char = end_daily.value 
+    if (input_char.length === 2){
+        end_daily.value += ":"
+    }
+    if (input_char.length === 6){
+        // eliminar última letra
+        end_daily.value = end_daily.value.slice(0, -1)
+    }
+})
+
+end_daily.addEventListener("keydown", function(e){
+    if (e.key === "Enter"){
+        if (end_daily.hasAttribute("readonly")){
+            add_daily.click()
+        } else {
+            add_activity.click()
+        }
+    }
+})
+
+daily_room_selector.addEventListener("keydown", function(e) {
+    if (e.key === "Enter"){
+        e.preventDefault()
+        if (end_daily.hasAttribute("readonly")){
+            add_daily.click()
+        } else {
+            add_activity.click()
+        }
+    }
+})
+
+reset_daily.addEventListener("click", function(e) {
+    count_daily = 1
+    daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
+    weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
+    document.querySelector("#table-daily-routines").innerHTML = ""
+    document.querySelector("#table-weekly-routines").innerHTML = ""
+    start_daily.value = "00:00"
+    end_daily.value = ""
+    end_daily.removeAttribute("readonly")
+
+    seccion3.style.display = "none"
+    daily_room_selector.disabled = false;
+})
+
+add_activity.addEventListener("click", function(e) {
     if (validarHoras(start_daily) && validarHoras(end_daily)){
+        if (convertToSeconds(start_daily.value) > convertToSeconds(end_daily.value)){
+            end_daily.value=""
+            end_daily.focus()
+            window.alert("La hora de inicio no puede ser mayor a la hora de fin")
+            return
+        }
         if (daily_room_selector.value === ""){
             daily_room_selector.focus()
             window.alert("Tienes que seleccionar una habitación")
             return
         }
-        daily_routines = daily_routines.push({ "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
+
+        if (end_daily.hasAttribute("readonly")){
+            window.alert("Dia completo")
+            return
+        }
+
+        if (end_daily.value != "23:59"){
+            daily_routines = daily_routines.push({"Day": count_daily,  "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
+            start_daily.value = end_daily.value
+            end_daily.value = ""
+
+        } else {
+            end_daily.setAttribute("readonly", "readonly")
+            daily_routines = daily_routines.push({"Day": count_daily,  "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
+        }
+        
         show_table_daily(daily_routines)
-        start_daily.value = end_daily.value
-        end_daily.value = ""
-        start_daily.setAttribute("readonly", "readonly")
     }
 })
 
-reset_daily.addEventListener("click", function(e) {
-    daily_routines = new DataFrame({}, ["Start-Time", "End-Time", "Room"]);
-    weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
-    document.querySelector("#table-daily-routines").innerHTML = ""
-    document.querySelector("#table-weekly-routines").innerHTML = ""
-    start_daily.value = ""
-    end_daily.value = ""
-    start_daily.removeAttribute("readonly")
+
+
+add_daily.addEventListener("click", function(e) {
+    if (daily_routines.count() === 0){
+        end_daily.focus()
+        window.alert("Tienes que asignar al menos una actividad diaria")
+        return
+    }
+    if (end_daily.value != "23:59"){
+        end_daily.focus()
+        window.alert("Tienes que asignar al menos una actividad")
+        return
+    }
+    count_daily++
+    start_daily.value="00:00"
+    end_daily.value=""
     end_daily.removeAttribute("readonly")
-    seccion3.style.display = "none"
-    daily_room_selector.disabled = false;
 })
+
+
 
 complete_daily.addEventListener("click", function(e) {
     if (daily_routines.count() === 0){
@@ -231,7 +318,26 @@ complete_daily.addEventListener("click", function(e) {
     start_daily.setAttribute("readonly", "readonly")
     end_daily.setAttribute("readonly", "readonly")
     window.location.href = "#weekly-routines";
+    downloadCSV(daily_routines);
+    
 })
+
+const downloadCSV = (data) => {
+    columnas = data.listColumns()
+    filas = data.toArray()
+    const csvContent = "data:text/csv;charset=utf-8," + columnas.join(",") + "\n" + filas.map(row => row.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "daily_routines.csv");
+    document.body.appendChild(link);
+    link.click();
+}
+
+const downloadButton = document.querySelector("#download-button");
+downloadButton.addEventListener("click", function(e) {
+    downloadCSV(data);
+});
 
 
 /*CODIGO PARA SECCIÓN TRES*/

@@ -53,10 +53,11 @@
         <section id="daily-routines" class="section">
             <div class="routine-assignment">
                 <h2>Daily Routines</h2>
-                <p>Here you have to indicate from what time to what time the user is in one room or another. </p>
+                <p><b>You can press Enter to Add Activity</b></p>
+                <p>Here you have to put unique types of days that users do,  from what time to what time the user is in one room or another. </p>
                 <div class="time-inputs">
                   <label for="startTime">Hora Inicio</label>
-                  <input type="text" id="startTime" placeholder="HH:MM">
+                  <input type="text" id="startTime" value="00:00" readonly>
               
                   <label for="endTime">Hora Fin</label>
                   <input type="text" id="endTime" placeholder="HH:MM">
@@ -71,7 +72,8 @@
               
                 <div class="buttons-daily">
                   <button id="reset-daily">Reset</button>
-                  <button id="add-daily">Add Daily</button>
+                  <button id="add-activity">Add Activity</button>
+                  <button id="add-daily">New Day</button>
                   <button id="complete-daily">Complete Routine</button>
                 </div>
                 <div id="table-daily-routines"></div>
