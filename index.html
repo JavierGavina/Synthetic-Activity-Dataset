@@ -80,68 +80,20 @@
               </div>
         </section>
 
-        <section id="weekly-routines" class="section">
-            <h2>Weekly Routines</h2>
-            <div id="routine-assignment-weekly" class="routine-assignment">
-                <div id="explain-parameters-weekly" class="explain">
-                    <h2>Explanation</h2>
-                    <p>Here you have to indicate from what time to what time the user is in one room or another. </p>
-                    <h3>Meaning of each field:</h3>
-                    <ul>
-                        <li><b>Weekly Day</b>: Means the day of the week</li>
-                        <li><b>Proportion</b>: The proportion of times that the user does the activity per month: 
-                            <ul>
-                                <li><b>25</b>: One time per month</li>
-                                <li><b>50</b>: Two times per month</li>
-                                <li><b>75</b>: Three times per month</li>
-                                <li><b>100</b>: All weekly days per month</li>
-                            </ul>
-                        </li>
-                        <li><b>Room</b>: Room where the user is</li>
-                        <li><b>Start Time</b>: Time when the user enters the room</li>
-                        <li><b>End Time</b>: Time when the user leaves the room</li>
-                    </ul>
-                </div>
-                <div id="weekly-parameters" class="time-inputs">
-                        
-                    <select id="weekly-day" class="room-controls">
-                        <option value="" disabled selected id="default-week">--Select a day--</option>
-                        <option value="monday">Monday</option>
-                        <option value="tuesday">Tuesday</option>
-                        <option value="wednesday">Wednesday</option>
-                        <option value="thursday">Thursday</option>
-                        <option value="friday">Friday</option>
-                        <option value="saturday">Saturday</option>
-                        <option value="sunday">Sunday</option>
-                    </select>
-    
-                    <select id="proportion" class="room-controls">
-                        <option value="" disabled selected id="default-week">--Select a proportion--</option>
-                        <option value="25">25%</option>
-                        <option value="50">50%</option>
-                        <option value="75">75%</option>
-                        <option value="100">100%</option>
-                    </select>
-    
-                    <select id="room-weekly" class="room-controls">
-                        <option value="" disabled selected id="default-week">--Select a room--</option>
-                        <!-- Se añadirán las opciones con DOM -->
-                    </select>
+        <section id="schedule-routines" class="section">
+            <h2>Schedule Routines</h2>
+            <div class="schedule-container">
+                <div id="defined-days" class="defined-days">
+                    <h3>Defined Days</h3>
                     
-                    <label for="startTime-weekly">Hora Inicio</label>
-                    <input type="text" id="startTime-weekly" placeholder="HH:MM">
-                    <label for="endTime-weekly">Hora Fin</label>
-                    <input type="text" id="endTime-weekly" placeholder="HH:MM">
-
-                    <div>
-                        <button id="reset-weekly">Reset</button>
-                        <button id="add-weekly">Add Weekly</button>
-                        <button id="complete-weekly">Complete Routine</button>
-                    </div>
                 </div>
-            </div>
-            <div id="table-weekly-routines"></div>
+                <div id="calendar-container" class="calendar-container">
+                    <h3>Calendar</h3>
+                </div>
         </section>
+
+        
+        
 
     <script src="script.js"></script>
     </body>

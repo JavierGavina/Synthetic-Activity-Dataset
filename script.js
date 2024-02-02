@@ -2,16 +2,14 @@ var DataFrame = dfjs.DataFrame;
 
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
 var daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
-var weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
 
 const seccion2 = document.querySelector("#daily-routines")
-const seccion3 = document.querySelector("#weekly-routines")
+const seccion3 = document.querySelector("#schedule-routines")
 seccion2.style.display = "none"
 seccion3.style.display = "none"
 
 room_selector = document.querySelector(".room-controls")
 daily_room_selector = document.querySelector("#room-daily")
-weekly_room_selector = document.querySelector("#room-weekly")
 var count = 0
 
 room_selector.addEventListener("change", function(e) {
@@ -116,10 +114,8 @@ reset.addEventListener("click", function(e) {
     /*RESTART ALL DATAFRAMES, TABLES AND COUNTERS*/
     rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
     daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
-    weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
     document.querySelector("#table-rooms").innerHTML = ""
     document.querySelector("#table-daily-routines").innerHTML = ""
-    document.querySelector("#table-weekly-routines").innerHTML = ""
     document.querySelector("#startTime").value = ""
     document.querySelector("#endTime").value = ""
     document.querySelector("#startTime").removeAttribute("readonly")
@@ -150,7 +146,6 @@ finish_room.addEventListener("click", function(e) {
                     newOption.value = room;
                     newOption.text = room[0].toUpperCase() + room.slice(1).toLowerCase();
                     daily_room_selector.appendChild(newOption);
-                    weekly_room_selector.appendChild(newOption.cloneNode(true)); /*BORRAR*/
             
             })
         } 
@@ -232,12 +227,27 @@ daily_room_selector.addEventListener("keydown", function(e) {
     }
 })
 
+const downloadCSV = (data) => {
+    columnas = data.listColumns()
+    filas = data.toArray()
+    const csvContent = "data:text/csv;charset=utf-8," + columnas.join(",") + "\n" + filas.map(row => row.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "daily_routines.csv");
+    document.body.appendChild(link);
+    link.click();
+}
+
+// const downloadButton = document.querySelector("#download-button");
+// downloadButton.addEventListener("click", function(e) {
+//     downloadCSV(data);
+// });
+
 reset_daily.addEventListener("click", function(e) {
     count_daily = 1
     daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
-    weekly_routines = new DataFrame({}, ["Weekly-Day", "Proportion-Month", "Start-Time", "End-Time", "Room"]);
     document.querySelector("#table-daily-routines").innerHTML = ""
-    document.querySelector("#table-weekly-routines").innerHTML = ""
     start_daily.value = "00:00"
     end_daily.value = ""
     end_daily.removeAttribute("readonly")
@@ -317,32 +327,67 @@ complete_daily.addEventListener("click", function(e) {
     end_daily.value=""
     start_daily.setAttribute("readonly", "readonly")
     end_daily.setAttribute("readonly", "readonly")
-    window.location.href = "#weekly-routines";
-    downloadCSV(daily_routines);
-    
+    window.location.href = "#schedule-container";
+    const respuesta = window.confirm("¿Deseas descargar un csv con las rutinas diarias?")
+    if (respuesta){
+        downloadCSV(daily_routines);
+    }
 })
 
-const downloadCSV = (data) => {
-    columnas = data.listColumns()
-    filas = data.toArray()
-    const csvContent = "data:text/csv;charset=utf-8," + columnas.join(",") + "\n" + filas.map(row => row.join(",")).join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "daily_routines.csv");
-    document.body.appendChild(link);
-    link.click();
+
+
+
+/*CODIGO PARA SECCIÓN CALENDARIO*/
+
+// Automatizar creación de calendario
+
+const getCalendarArray = function(year, month){
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    const lastDate = new Date(year, month, 0).getDate();
+    const weeks = Math.ceil((firstDay + lastDate) / 7);
+    const calendar = [];
+    let date = 1;
+    for (let i = 0; i < weeks; i++) {
+        calendar[i] = [];
+        for (let j = 0; j < 7; j++) {
+        if (i === 0 && j < firstDay) {
+            calendar[i][j] = '';
+        } else if (date > lastDate) {
+            calendar[i][j] = '';
+            date++;
+        } else {
+            calendar[i][j] = date++;
+        }
+        }
+    }
+    return calendar;
 }
 
-const downloadButton = document.querySelector("#download-button");
-downloadButton.addEventListener("click", function(e) {
-    downloadCSV(data);
-});
+const DOMCalendar = function(year, month){
+    const months_names = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    const calendarArray = getCalendarArray(year, month);
+    const tbody = document.querySelector('#calendar-container');
+    tbody.innerHTML = '';
+    const title = document.createElement('h3');
+    title.textContent = `${year}, ${months_names[month-1]}`;
+    tbody.appendChild(title);
+    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(function(day){
+        const th = document.createElement('th');
+        th.textContent = day;
+        tbody.appendChild(th);
+    })
+    for (let i = 0; i < calendarArray.length; i++) {
+        const tr = document.createElement('tr');
+        for (let j = 0; j < calendarArray[i].length; j++) {
+            const td = document.createElement('td');
+            td.textContent = calendarArray[i][j];
+            if (td.textContent != '') {
+                td.id = `day-${calendarArray[i][j]}`
+            }
+            tr.appendChild(td);
+            }
+        tbody.appendChild(tr);
+    }
+}
 
-
-/*CODIGO PARA SECCIÓN TRES*/
-
-
-
-
-
+DOMCalendar(2024, 2)
