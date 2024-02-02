@@ -321,7 +321,7 @@ add_daily.addEventListener("click", function(e) {
     newContent.textContent = `routine day ${count_daily-1}`
     newContent.id = `routine-day-${count_daily-1}`
     newContent.classList.add("dragable-day") // Add the class "dragable-day"
-    defined_days.appendChild(newContent)
+    defined_days.insertBefore(newContent, defined_days.querySelector("button"))
 })
 
 
@@ -351,20 +351,20 @@ complete_daily.addEventListener("click", function(e) {
     dragables = document.querySelectorAll(".dragable-day")
 
     dragables.forEach((dragable) => {
+        dragable.draggable = true
         dragable.addEventListener("click", function(e) {
             count_daily = parseInt(dragable.textContent.split(" ")[2])
             show_table_daily(daily_routines)
             // move with a scroll to #table-daily-routines
             window.location.href = "#daily-routines"
-
+        })
+        dragable.addEventListener("dragstart", function(e) {
+            e.dataTransfer.setData("text/plain", dragable.id);
         })
 
     
     })
 })
-
-
-
 
 /*CODIGO PARA SECCIÓN CALENDARIO*/
 
@@ -434,6 +434,76 @@ month_selector.addEventListener("change", function(e) {
     year_value = year_selector.value
     month_value = month_selector.value
     DOMCalendar(year_value, month_value)
+})
+
+
+/*INTENTO DE HACER EL DRAGABLE*/
+
+// Suponiendo que tienes un objeto para almacenar la información de las rutinas asignadasç
+var assignedRoutines = {};
+
+// Asegúrate de que tus dragable-days tengan el atributo draggable="true"
+// y de que cada celda del calendario tenga un id único.
+
+// Función para manejar el inicio del arrastre
+// function dragStart(event) {
+//     window.alert(event.target.id)
+//     event.dataTransfer.setData("text/plain", event.target.id);
+// }
+
+// Función para manejar la caída
+function drop(event) {
+    event.preventDefault();
+    const dragableDayId = event.dataTransfer.getData("text");
+    const dragableDayElement = document.getElementById(dragableDayId);
+    const routineName = dragableDayElement.textContent;
+    const dayCell = event.target;
+    const date = dayCell.textContent;
+
+    // Cambiar el color de la celda a verde
+    dayCell.style.backgroundColor = 'green';
+
+    // Agregar la información al objeto JSON
+    DayOfRoutine = routineName.split(" ")[2]
+    aux = daily_routines.filter(row => row.get("Day") == DayOfRoutine)
+    starts = aux.select("Start-Time").toArray().flat()
+    ends = aux.select("End-Time").toArray().flat()
+    hours_array = starts.map((start, index) => [start, ends[index]])
+    rooms_array = aux.select("Room").toArray().flat()
+    assignedRoutines[`${year_selector.value}-${month.value}-${date}`] = {
+        typeDate: DayOfRoutine,
+        intervals: hours_array,
+        rooms: rooms_array
+    };
+}
+
+// Añadir los manejadores de eventos a los dragable-days
+document.querySelectorAll('.dragable-day').forEach(dragable => {
+    dragable.addEventListener('dragstart', dragStart);
+});
+
+// Añadir los manejadores de eventos a las celdas del calendario
+document.querySelectorAll('#calendar-container td').forEach(dayCell => {
+    // Asegúrate de que solo las celdas con días puedan recibir el drop
+    if (dayCell.id.startsWith('day-')) {
+        dayCell.addEventListener('drop', drop);
+        dayCell.addEventListener('dragover', (event) => event.preventDefault()); // Necesario para permitir el drop
+    }
+}); 
+
+
+const export_routines = document.querySelector("#export-routines")
+export_routines.addEventListener("click", function(e) {
+    const routines = JSON.stringify(assignedRoutines);
+    const blob = new Blob([routines], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "assigned_routines.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 })
 
 
