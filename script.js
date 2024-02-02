@@ -116,15 +116,21 @@ reset.addEventListener("click", function(e) {
     daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
     document.querySelector("#table-rooms").innerHTML = ""
     document.querySelector("#table-daily-routines").innerHTML = ""
-    document.querySelector("#startTime").value = ""
+    document.querySelector("#startTime").value = "00:00"
     document.querySelector("#endTime").value = ""
-    document.querySelector("#startTime").removeAttribute("readonly")
     document.querySelector("#endTime").removeAttribute("readonly")
     count = 0
 
     room_selector.disabled = false;
+    daily_room_selector.disabled = false;
+
 
     count_daily = 1
+    const definedDays = document.querySelector("#defined-days")
+    document.querySelectorAll(".dragable-day").forEach(function(day) {
+        definedDays.removeChild(day)
+    })
+
 
     // Restaurar evento finish_room
 }) 
@@ -254,6 +260,10 @@ reset_daily.addEventListener("click", function(e) {
 
     seccion3.style.display = "none"
     daily_room_selector.disabled = false;
+    const definedDays = document.querySelector("#defined-days")
+    document.querySelectorAll(".dragable-day").forEach(function(day) {
+        definedDays.removeChild(day)
+    })
 })
 
 add_activity.addEventListener("click", function(e) {
@@ -306,6 +316,12 @@ add_daily.addEventListener("click", function(e) {
     start_daily.value="00:00"
     end_daily.value=""
     end_daily.removeAttribute("readonly")
+    const defined_days = document.querySelector("#defined-days")
+    const newContent = document.createElement("div")
+    newContent.textContent = `routine day ${count_daily-1}`
+    newContent.id = `routine-day-${count_daily-1}`
+    newContent.classList.add("dragable-day") // Add the class "dragable-day"
+    defined_days.appendChild(newContent)
 })
 
 
