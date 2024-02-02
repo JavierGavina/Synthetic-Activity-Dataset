@@ -391,3 +391,18 @@ const DOMCalendar = function(year, month){
 }
 
 DOMCalendar(2024, 2)
+
+const year_selector = document.querySelector("#year")
+const month_selector = document.querySelector("#month")
+
+year_selector.addEventListener("change", function(e) {
+    year_value = year_selector.value
+    month_value = month_selector.value
+    DOMCalendar(year_value, month_value)
+})
+
+month_selector.addEventListener("change", function(e) {
+    year_value = year_selector.value
+    month_value = month_selector.value
+    DOMCalendar(year_value, month_value)
+})

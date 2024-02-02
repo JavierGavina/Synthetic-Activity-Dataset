@@ -87,8 +87,19 @@
                     <h3>Defined Days</h3>
                     
                 </div>
-                <div id="calendar-container" class="calendar-container">
-                    <h3>Calendar</h3>
+                <div id="calendar-dragable-area" class="calendar-dragable-area">
+                    <div id="calendar-container" class="calendar-container">
+                        <h3>Calendar</h3>
+                    </div>
+                    <div id="params-calendar">
+                        <h3>Select Year and Month</h3>
+                        <div class="year-monthselect">
+                            <label for="year">Year:</label>
+                            <input type="number" id="year" name="year" min="2000" value="2024">
+                            <label for="month">Month:</label>
+                            <input type="number" id="month" name="month" min="1" max="12" value="2">
+                        </div>
+                    </div>
                 </div>
         </section>
 

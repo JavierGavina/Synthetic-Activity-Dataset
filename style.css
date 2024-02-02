@@ -281,6 +281,19 @@ button:hover {
 
 
 /*SECCIÓN CALENDARIO*/
+
+#schedule-routines{
+    width: 100%;
+    max-width: 1700px; /* Ajusta este valor según tus preferencias de diseño */
+    margin: 20px auto; /* Esto centrará la sección horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Esto centrará los elementos hijos horizontalmente */
+    justify-content: center; /* Esto centrará los elementos hijos verticalmente si la altura es definida */
+
+}
+
+
 .schedule-container {
     display: flex;
     justify-content: space-between;
@@ -288,7 +301,45 @@ button:hover {
     padding: 20px;
 }
 
-.defined-days, .calendar-container {
+#defined-days{
+    width: 70%;
+}
+
+
+#calendar-dragable-area {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+}
+
+#calendar-container {
+    flex: 1;
+}
+
+#params-calendar {
+    flex: 1;
+    flex-direction: column;
+    grid-column: repeat(2, 1fr);
+    margin-left: 10px;
+}
+
+.year-monthselect {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+}
+
+.year-monthselect label,
+.year-monthselect input {
+    margin-bottom: 10px; /* Add space between the elements */
+}
+
+/* If you want to align the labels to the left of their inputs */
+.year-monthselect label {
+    align-self: flex-start;
+}
+
+
+.defined-days, .calendar-container .params-calendar{
     flex: 1;
     margin: 10px;
     padding: 20px;
