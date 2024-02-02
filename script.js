@@ -121,6 +121,7 @@ reset.addEventListener("click", function(e) {
     document.querySelector("#startTime").value = ""
     document.querySelector("#endTime").value = ""
     document.querySelector("#startTime").removeAttribute("readonly")
+    document.querySelector("#endTime").removeAttribute("readonly")
     count = 0
 
     room_selector.disabled = false;
