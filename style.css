@@ -1,3 +1,6 @@
+html{
+    scroll-behavior: smooth;
+}
 body, html {
     margin: 0;
     padding: 0;
@@ -302,18 +305,37 @@ button:hover {
 }
 
 #defined-days{
-    width: 70%;
+    width: 40%;
+    padding: 10px;
+    gap: 10px;
+    margin: 10px;
 }
+
+.dragable-day{
+    color: white;
+    background-color: #007bff;
+    border-radius: 5px;
+    width: 20%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dragable-day:hover{
+    background-color: #053a73;
+}
+
 
 
 #calendar-dragable-area {
     display: flex;
     flex-direction: row;
-    width: 30%;
+    width: 60%;
+    margin-left: 40px;
 }
 
 #calendar-container {
     flex: 1;
+    width: 60%;
 }
 
 #params-calendar {
@@ -321,6 +343,7 @@ button:hover {
     flex-direction: column;
     grid-column: repeat(2, 1fr);
     margin-left: 10px;
+    width: 40%;
 }
 
 .year-monthselect {
@@ -339,7 +362,7 @@ button:hover {
 }
 
 
-.defined-days, .calendar-container .params-calendar{
+.defined-days, .calendar-container {
     flex: 1;
     margin: 10px;
     padding: 20px;

@@ -343,11 +343,24 @@ complete_daily.addEventListener("click", function(e) {
     end_daily.value=""
     start_daily.setAttribute("readonly", "readonly")
     end_daily.setAttribute("readonly", "readonly")
-    window.location.href = "#schedule-container";
+    window.location.href = "#schedule-routines"
     const respuesta = window.confirm("¿Deseas descargar un csv con las rutinas diarias?")
     if (respuesta){
         downloadCSV(daily_routines);
     }
+    dragables = document.querySelectorAll(".dragable-day")
+
+    dragables.forEach((dragable) => {
+        dragable.addEventListener("click", function(e) {
+            count_daily = parseInt(dragable.textContent.split(" ")[2])
+            show_table_daily(daily_routines)
+            // move with a scroll to #table-daily-routines
+            window.location.href = "#daily-routines"
+
+        })
+
+    
+    })
 })
 
 
@@ -422,3 +435,6 @@ month_selector.addEventListener("change", function(e) {
     month_value = month_selector.value
     DOMCalendar(year_value, month_value)
 })
+
+
+
