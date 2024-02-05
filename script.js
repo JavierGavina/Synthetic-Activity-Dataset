@@ -168,7 +168,7 @@ reset.addEventListener("click", function(e) {
 finish_room.addEventListener("click", function(e) {
     if (rooms_ids.count() === 0){
         room_selector.focus()
-        window.alert("Tienes que asignar al menos una habitación")
+        window.alert("You have to assign at least one room")
         return
     }
     if (room_selector.disabled === false){
@@ -204,13 +204,13 @@ const validarHoras = function(element){
     if (hora.length != 2 || minuto.length != 2){
         element.value=""
         element.focus()
-        window.alert("Las hora tienen que tener el formato HH:MM")
+        window.alert("Times must be in HH:MM format.")
         return false
     }
     if ((hora > 23 || minuto > 59) || (hora < 0 || minuto < 0)){
         element.value=""
         element.focus()
-        window.alert("Las horas tienen que ir desde 00:00 hasta 23:59")
+        window.alert("The times must be from 00:00 to 23:59.")
         return false
     }
 
@@ -311,17 +311,17 @@ add_activity.addEventListener("click", function(e) {
         if (convertToSeconds(start_daily.value) > convertToSeconds(end_daily.value)){
             end_daily.value=""
             end_daily.focus()
-            window.alert("La hora de inicio no puede ser mayor a la hora de fin")
+            window.alert("The start time cannot be greater than the end time.")
             return
         }
         if (daily_room_selector.value === ""){
             daily_room_selector.focus()
-            window.alert("Tienes que seleccionar una habitación")
+            window.alert("You have to select a room")
             return
         }
 
         if (end_daily.hasAttribute("readonly")){
-            window.alert("Dia completo")
+            window.alert("Day completed.")
             return
         }
 
@@ -344,12 +344,12 @@ add_activity.addEventListener("click", function(e) {
 add_daily.addEventListener("click", function(e) {
     if (daily_routines.count() === 0){
         end_daily.focus()
-        window.alert("Tienes que asignar al menos una actividad diaria")
+        window.alert("You have to assign at least one daily activity")
         return
     }
     if (end_daily.value != "23:59"){
         end_daily.focus()
-        window.alert("Tienes que asignar al menos una actividad")
+        window.alert("You have to assign at least one activity")
         return
     }
     count_daily++
@@ -370,7 +370,7 @@ add_daily.addEventListener("click", function(e) {
 complete_daily.addEventListener("click", function(e) {
     if (daily_routines.count() === 0){
         start_daily.focus()
-        window.alert("Tienes que asignar al menos una rutina diaria")
+        window.alert("You have to assing at least one daily activity")
         return
     }
 
@@ -385,7 +385,7 @@ complete_daily.addEventListener("click", function(e) {
     start_daily.setAttribute("readonly", "readonly")
     end_daily.setAttribute("readonly", "readonly")
     window.location.href = "#schedule-routines"
-    const respuesta = window.confirm("¿Deseas descargar un csv con las rutinas diarias?")
+    const respuesta = window.confirm("Do you want to download a csv with your daily routines?")
     if (respuesta){
         downloadCSV(daily_routines);
     }
