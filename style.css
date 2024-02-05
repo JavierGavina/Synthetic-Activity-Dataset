@@ -37,9 +37,54 @@ header {
 .nav-menu a {
     color: white;
     text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 10px;
     transition: color 0.3s ease;
 }
 
 .nav-menu a:hover {
     color: #ddd;
+    background: #062d57;
 }
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    grid-template-rows: repeat(2, 1fr); /* Dos filas */
+    gap: 20px; /* Espaciado constante entre los boxes */
+    padding: 20px; /* Padding para no pegar los elementos a los bordes */
+    justify-items: center; /* Centra los elementos horizontalmente en su celda */
+    align-items: center; /* Centra los elementos verticalmente en su celda */
+    width: 80%; /* Ocupa el 80% del ancho del viewport */
+    height: 80vh; /* Ocupa el 80% del alto del viewport */
+    margin-top: 100px; /* Espacio para el header fijo */
+    max-width: 1600px; /* Máximo ancho posible para el container */
+    max-height: 800px; /* Máximo altura posible para el container */
+    margin-left: auto; /* Centra el container horizontalmente */
+    margin-right: auto; /* Centra el container horizontalmente */
+  }
+  
+  .box {
+    background-color: #147ff2;
+    text-align: center;
+    color: #fff;
+    border-radius: 20px;
+    width: 100%; /* Ocupa el 100% del ancho de su celda en el grid */
+    height: 100%; /* Ocupa el 100% del alto de su celda en el grid */
+  }
+
+  .box:hover{
+    background-color: #062d57;
+  }
+
+  .content p {
+    margin: 20px;
+    padding: 20px;
+    text-align: justify;
+  }
+
+  img {
+    width: 70%;
+    height: 70%;
+    margin-bottom: 40px;
+  }

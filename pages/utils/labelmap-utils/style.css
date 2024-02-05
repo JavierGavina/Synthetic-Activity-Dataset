@@ -37,9 +37,16 @@ header {
 .nav-menu a {
     color: white;
     text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 10px;
     transition: color 0.3s ease;
 }
 
 .nav-menu a:hover {
     color: #ddd;
+    background: #062d57;
 }
+
+
+
+
