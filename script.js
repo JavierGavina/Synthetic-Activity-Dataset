@@ -460,7 +460,44 @@ const DOMCalendar = function(year, month){
     }
 }
 
-DOMCalendar(2024, 2)
+function addDraggableEvents() {
+    document.querySelectorAll('.dragable-day').forEach(dragable => {
+        dragable.addEventListener('dragstart', dragStart);
+    });
+}
+
+function addDropEvents() {
+    document.querySelectorAll('#calendar-container td').forEach(dayCell => {
+        if (dayCell.id.startsWith('day-')) {
+            dayCell.addEventListener('drop', drop);
+            dayCell.addEventListener('dragover', (event) => event.preventDefault()); // Necesario para permitir el drop
+            dayCell.addEventListener("dblclick", dayDoubleClick); // Manejar doble click en cada celda del día
+        }
+    });
+}
+
+function dayDoubleClick(e) {
+    const dayCell = e.target;
+    if (dayCell.style.backgroundColor != '') {
+        dayCell.style.backgroundColor = ''; // Quita el color de fondo
+        delete assignedRoutines[`${year_selector.value}-${month.value}-${dayCell.textContent}`];
+    }
+}
+
+// Función para manejar el inicio del arrastre
+function dragStart(event) {
+    event.dataTransfer.setData("text/plain", event.target.id);
+}
+
+
+function updateCalendar(year, month) {
+    DOMCalendar(year, month);
+    addDraggableEvents(); // Vuelve a aplicar eventos dragstart a los dragables
+    addDropEvents();      // Vuelve a aplicar eventos drop a las celdas del calendario
+}
+
+// Llamar a updateCalendar inicialmente
+updateCalendar(2024, 2);
 
 const year_selector = document.querySelector("#year")
 const month_selector = document.querySelector("#month")
@@ -468,29 +505,16 @@ const month_selector = document.querySelector("#month")
 year_selector.addEventListener("change", function(e) {
     year_value = year_selector.value
     month_value = month_selector.value
-    DOMCalendar(year_value, month_value)
+    updateCalendar(year_value, month_value)
 })
 
 month_selector.addEventListener("change", function(e) {
     year_value = year_selector.value
     month_value = month_selector.value
-    DOMCalendar(year_value, month_value)
+    updateCalendar(year_value, month_value)
 })
 
 
-/*INTENTO DE HACER EL DRAGABLE*/
-
-// Suponiendo que tienes un objeto para almacenar la información de las rutinas asignadasç
-
-
-// Asegúrate de que tus dragable-days tengan el atributo draggable="true"
-// y de que cada celda del calendario tenga un id único.
-
-// Función para manejar el inicio del arrastre
-// function dragStart(event) {
-//     window.alert(event.target.id)
-//     event.dataTransfer.setData("text/plain", event.target.id);
-// }
 
 // Función para manejar la caída
 function drop(event) {
@@ -519,19 +543,11 @@ function drop(event) {
     };
 }
 
-// Añadir los manejadores de eventos a los dragable-days
-document.querySelectorAll('.dragable-day').forEach(dragable => {
-    dragable.addEventListener('dragstart', dragStart);
-});
 
-// Añadir los manejadores de eventos a las celdas del calendario
-document.querySelectorAll('#calendar-container td').forEach(dayCell => {
-    // Asegúrate de que solo las celdas con días puedan recibir el drop
-    if (dayCell.id.startsWith('day-')) {
-        dayCell.addEventListener('drop', drop);
-        dayCell.addEventListener('dragover', (event) => event.preventDefault()); // Necesario para permitir el drop
-    }
-}); 
+
+
+
+
 
 
 const export_routines = document.querySelector("#export-routines")
@@ -559,17 +575,6 @@ reset_calendar.addEventListener("click", function(e) {
     assignedRoutines = {};
 })
 
-// Añadir una opción en la que si hago doble click directamente sobre el dia del calendario, se deselecciona esa opción y se elimina del json
-document.querySelectorAll('#calendar-container td').forEach(dayCell => {
-    if (dayCell.id.startsWith('day-')) {
-        dayCell.addEventListener("dblclick", function(e) {
-            if (dayCell.style.backgroundColor != '') {
-                dayCell.style.backgroundColor = ''; // Quita el color de fondo
-                delete assignedRoutines[`${year_selector.value}-${month.value}-${dayCell.textContent}`];
-            }
-        });
-    }
-});
 
 
 
