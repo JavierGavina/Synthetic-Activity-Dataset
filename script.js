@@ -458,6 +458,25 @@ const DOMCalendar = function(year, month){
             }
         tbody.appendChild(tr);
     }
+
+    // Después de generar el calendario, restaura los colores basándote en assignedRoutines
+    for (let date in assignedRoutines) {
+        if (assignedRoutines.hasOwnProperty(date)) {
+            const dateInfo = date.split('-');
+            const routineYear = dateInfo[0];
+            const routineMonth = dateInfo[1];
+            const routineDay = dateInfo[2];
+
+            // Si el año y el mes coinciden con la fecha actual del calendario
+            if (routineYear == year && routineMonth == month) {
+                const dayCell = document.getElementById(`day-${routineDay}`);
+                if (dayCell) {
+                    // Aplica el color guardado en assignedRoutines a la celda correspondiente
+                    dayCell.style.backgroundColor = colores_routines[assignedRoutines[`${routineYear}-${routineMonth}-${routineDay}`]["typeDate"]]; // Asegúrate de que 'color' es una propiedad guardada en assignedRoutines
+                }
+            }
+        }
+    }
 }
 
 function addDraggableEvents() {
@@ -541,14 +560,10 @@ function drop(event) {
         intervals: hours_array,
         rooms: rooms_array
     };
+
+    
+
 }
-
-
-
-
-
-
-
 
 const export_routines = document.querySelector("#export-routines")
 export_routines.addEventListener("click", function(e) {
