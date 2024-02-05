@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <link rel="stylesheet" href="./utils/labelmap-utils/style.css">
+        <script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>
+
     </head>
     <body>
         <header>
@@ -18,6 +20,39 @@
                 </ul>
             </nav>
         </header>
+
+        <section id="intro">
+            <div class="page-description-div">
+                <h1 class="page-description">Routine Simulation</h1>
+                <p class="page-description">In this section, you have to drag a descriptive file of routines of a user, and by modifying the threshold parameter (which determines the variability of the time slots of the routines), you can obtain a file in which for each minute of the day you have noted in which room a user is in.</p>
+                <p class="page-description" id="second-paragraph">This file can be obtained in the <a href="./routines.html">Routines Definition section.</a></p>
+            </div>
+            <div class="dragable">
+                <h1>Select or drag a file to process it and continue working with the web page.</h1>
+                <div id="drag-area">Drag files here or click to select</div>
+            </div>
+        </section>
+
+        <section id="visualization-labelmap">
+
+        </section>
+
+        <section id="labelmap">
+
+        </section>
+
+        <footer>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="../index.html">Introduction</a></li>
+                    <li><a href="./pages/routines.html">Routine Definition</a></li>
+                    <li><a href="./pages/labelmap.html">Routine Simulation</a></li>
+                    <!-- Agrega aquí más elementos de navegación si es necesario -->
+                </ul>
+            </nav>
+            <p>© 2024 - Synthetic Routines Dataset Nursery Home</p>
+        </footer>
+
         <script src="./utils/labelmap-utils/script.js"></script>
     </body>
 </html>

@@ -7,6 +7,10 @@ body, html {
     font-family: 'Arial', sans-serif;
 }
 
+/* body{
+    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
+} */
+
 /*COSILLAS PARA EL TÍTULO Y EL MENÚ DE LA CABECERA*/
 header {
     background-color: #007bff;
@@ -47,6 +51,75 @@ header {
     background: #062d57;
 }
 
+#intro .page-description-div{
+    margin-left: 300px;
+    margin-right: 300px;
+    margin-top: 50px;
+}
 
+.dragable{
+    margin: 300px;
+    margin-top: 100px;
+}
+
+/*DRAGABLE STYLES*/
+#drag-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px; /* Adjust the height as needed */
+    border: 2px dashed #ccc;
+    background-color: #f9f9f9;
+    color: #999;
+    font-size: 18px;
+  }
+  
+  
+  /* Estilos para cuando el ratón está encima */
+  /*Lo puedes reutilizar en JavaScript con el método .classList*/
+  #drag-area:hover {
+    background-color: #f0f0f0;
+    border-color: #333;
+  }
+  /* Estilos para cuando un fichero está siendo arrastrado encima */
+  /*Lo puedes reutilizar en JavaScript con el método .classList*/
+  #drag-area.dragover {
+    background-color: #e8f4ff;
+    border-color: #007bff;
+    border-style: solid;
+    height: 230px; /* Aumentamos el tamaño */
+  }
+
+
+
+
+
+/*PIE DE PÁGINA*/
+footer {
+    margin-top: 100px;
+    width: 100%;
+    background: #007bff;
+    padding: 20px 0;
+    position: relative; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
+    text-align: center;
+    bottom: 0; /* Espacio después de la última sección */
+  }
+  
+  /* footer nav ul li img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+  
+  footer#pie-dash nav ul li {
+    margin: 0 10px;
+  }
+  
+  footer#pie-dash nav ul li a {
+    padding: 0.5rem 1rem;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+  } */
 
 

@@ -7,6 +7,10 @@ body, html {
     font-family: 'Arial', sans-serif;
 }
 
+/* body{
+    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
+} */
+
 /*COSILLAS PARA EL TÍTULO Y EL MENÚ DE LA CABECERA*/
 header {
     background-color: #007bff;
@@ -216,77 +220,6 @@ button:hover {
     margin-bottom: 20px;
 }
 
-/*COSILLAS GENERALES SECCIÓN WEEKLY*/
-
-/* #weekly-routines { */
-    /* display: flex; Esto permite que los hijos se alineen horizontalmente */
-    /* flex-wrap: wrap; Esto permite que los elementos se envuelvan si no hay espacio suficiente */
-    /* justify-content: space-between; Esto separará los dos bloques a cada lado */
-    /* align-items: flex-start; Esto alinea los elementos al inicio de la sección */
-    /* max-width: 800px; */
-    /* margin: 20px auto; */
-    /* padding: 20px; */
-    /* flex-direction: column; */
-    /* box-shadow: 0 2px 5px rgba(0,0,0,0.2); */
-/* } */
-
-
-
-/* #routine-assignment-weekly { */
-    /* width: 100%; Establece el ancho al 80% del contenedor padre */
-    /* margin: auto; Centra el div en el contenedor */
-    /* display: flex; Habilita flexbox para los hijos directos */
-    /* flex-direction: row; Alinea los elementos hijos en fila */
-    /* justify-content: space-between; Separa los elementos hijos */
-    /* align-items: flex-start; Alinea los elementos hijos al comienzo de su contenedor */
-    /* padding: 20px; */
-    /* box-shadow: 0 2px 5px rgba(0,0,0,0.2); */
-/* } */
-
-
-/* #explain-parameters-weekly, #weekly-parameters { */
-    /* width: calc(50% - 40px); Cada div hijo ocupará la mitad del ancho del contenedor padre */
-    /* margin: auto; */
-/* } */
-
-/* Asegúrate de que los elementos internos de #weekly-parameters no estén demasiado apretados */
-/* #weekly-parameters select,  */
-/* #weekly-parameters input, */
-/* #weekly-parameters label { */
-    /* margin-bottom: 10px; Añade un margen inferior para evitar que los elementos estén demasiado juntos */
-/* } */
-
-/* #explain-parameters-weekly { */
-    /* flex: 1; Esto permite que el bloque tome el espacio necesario */
-    /* max-width: 500px; Ajusta el ancho máximo según tu preferencia */
-    /* margin-right: 20px; Agrega un margen derecho para separar de los parámetros */
-    /* padding: 20px; */
-    /* text-align: left; */
-    /* border-right: 2px solid #ddd; Agrega una línea divisoria */
-/* } */
-
-/* #weekly-parameters { */
-   /* flex: 1; Esto permite que el bloque tome el espacio necesario */
-   /* max-width: 500px; Ajusta el ancho máximo según tu preferencia */
-   /* padding: 20px; */
-   /* display: flex; Para alinear verticalmente los inputs y selects */
-   /* flex-direction: column; */
-/* } */
-
-/* Ajustes para que la selección y entrada de tiempo se alinee correctamente */
-/* #routine-assignment-weekly .time-inputs { */
-    /* display: flex; */
-    /* flex-direction: column;  */
-/* } */
-
-/* Asegúrate de que los labels estén alineados con sus respectivos inputs */
-/* #routine-assignment-weekly .time-inputs label { */
-    /* margin-bottom: 5px; */
-/* } */
-
-/* Estilos adicionales para responsividad */
-
-
 /*SECCIÓN CALENDARIO*/
 
 #schedule-routines{
@@ -387,3 +320,15 @@ td {
     border: 1px solid #ccc;
     padding: 10px;
 }
+
+
+/*ESTILOS PIE DE PÁGINA*/
+footer {
+    margin-top: 100px;
+    width: 100%;
+    background: #007bff;
+    padding: 20px 0;
+    position: relative; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
+    text-align: center;
+    bottom: 0; /* Espacio después de la última sección */
+  }
