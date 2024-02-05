@@ -1,5 +1,34 @@
 var DataFrame = dfjs.DataFrame;
-
+const colores_routines = ["#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
+                          "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
+                          "#831445", "#800000", "#00FFFF", "#008080",
+                          "#800080", "#FF7F50", "#87CEEB", "#00FF00",
+                          "#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
+                          "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
+                          "#831445", "#800000", "#00FFFF", "#008080",
+                          "#800080", "#FF7F50", "#87CEEB", "#00FF00",
+                          "#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
+                          "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
+                          "#831445", "#800000", "#00FFFF", "#008080",
+                          "#800080", "#FF7F50", "#87CEEB", "#00FF00",
+                          "#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
+                          "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
+                          "#831445", "#800000", "#00FFFF", "#008080",
+                          "#800080", "#FF7F50", "#87CEEB", "#00FF00",
+                          "#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
+                          "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
+                          "#831445", "#800000", "#00FFFF", "#008080",
+                          "#800080", "#FF7F50", "#87CEEB", "#00FF00",
+                          "#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
+                          "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
+                          "#831445", "#800000", "#00FFFF", "#008080",
+                          "#800080", "#FF7F50", "#87CEEB", "#00FF00",
+                          "#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
+                          "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
+                          "#831445", "#800000", "#00FFFF", "#008080",
+                          "#800080", "#FF7F50", "#87CEEB", "#00FF00"
+                        ]
+                          
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
 var daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
 var assignedRoutines = {};
@@ -332,6 +361,7 @@ add_daily.addEventListener("click", function(e) {
     newContent.textContent = `routine day ${count_daily-1}`
     newContent.id = `routine-day-${count_daily-1}`
     newContent.classList.add("dragable-day") // Add the class "dragable-day"
+    newContent.style.backgroundColor = colores_routines[count_daily-1]
     defined_days.insertBefore(newContent, defined_days.querySelector("button"))
 })
 
@@ -471,8 +501,9 @@ function drop(event) {
     const dayCell = event.target;
     const date = dayCell.textContent;
 
-    // Cambiar el color de la celda a verde
-    dayCell.style.backgroundColor = 'green';
+    // Cambiar el color de la celda al color del draggable
+    const color = dragableDayElement.style.backgroundColor;
+    dayCell.style.backgroundColor = color
 
     // Agregar la información al objeto JSON
     DayOfRoutine = routineName.split(" ")[2]
@@ -532,7 +563,7 @@ reset_calendar.addEventListener("click", function(e) {
 document.querySelectorAll('#calendar-container td').forEach(dayCell => {
     if (dayCell.id.startsWith('day-')) {
         dayCell.addEventListener("dblclick", function(e) {
-            if (dayCell.style.backgroundColor === 'green') {
+            if (dayCell.style.backgroundColor != '') {
                 dayCell.style.backgroundColor = ''; // Quita el color de fondo
                 delete assignedRoutines[`${year_selector.value}-${month.value}-${dayCell.textContent}`];
             }
