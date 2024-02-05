@@ -2,111 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Synthetic Routines Dataset Nursery Home</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href=".style.css">
 </head>
-    <body>
-        <header>
-            <h1 class="page-title">Synthetic Routines Dataset Nursery Home</h1>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="#room-introduction">Assign rooms</a></li>
-                    <li><a href="#daily-routines">Daily Routines</a></li>
-                    <li><a href="#weekly-routines">Weekly Routines</a></li>
-                    <!-- Agrega aquí más elementos de navegación si es necesario -->
-                </ul>
-            </nav>
-        </header>
-
-        <section id="room-introduction" class="section">
-            <div id="assign-rooms">
-                <h2>Create ID associated with each room</h2>
-                <p>You have to select all the places that you want to include in your study for generating a dataset representing the typical routines</p>
-                <select id="room-intro" name="room" class="room-controls">
-                    <option value="" disabled selected id="default">--Select a room--</option>
-                    <option value="" style="display: none;">--Select a room--</option>
-                    <option value="room">Room</option>
-                    <option value="kitchen">Kitchen</option>
-                    <option value="corridors">Corridors</option>
-                    <option value="bathroom">Bathroom</option>
-                    <option value="bedroom">Bedroom</option>
-                    <option value="living-room">Living Room</option>
-                    <option value="tv-room">TV Room</option>
-                    <option value="dining-room">Dining Room</option>
-                    <option value="garage">Garage</option>
-                    <option value="garden">Garden</option>
-                    <option value="pool">Pool</option>
-                    <option value="terrace">Terrace</option>
-                    <option value="therapy">Therapy Room</option>
-                </select>
-                <div id="table-rooms"></div>
+<body>
+    <header>
+        <h1 class="page-title">Synthetic Routines Dataset Nursery Home</h1>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Introduction</a></li>
+                <li><a href="./pages/routines.html">Routine Definition</a></li>
+                <li><a href="./pages/labelmap.html">Routine Simulation</a></li>
+                <!-- Agrega aquí más elementos de navegación si es necesario -->
+            </ul>
+        </nav>
+    </header>
+    <section id="intro">
+        <div class="container">
+            <div id="definition-box" class="box">
+                <div class="content">
+                    <h2>Routine Definition</h2>
+                    <p>In this section you can interactively define the routines followed by a user and obtain a descriptive file of routines in JSON format.</p>
+                </div>
+                <div class="imgBx">
+                    <!-- <img src="../imgs/pages/dashboard/icono-grafica.jpg" alt="redirección a página con gráficas de la tabla insertada"> -->
+                </div>
             </div>
-            <div id="finish-rooms">
-                <button id="reset">Reset</button>
-                <button id="finish-rooms-button">Finish Rooms File</button>
+            <div id = "simulation-box" class="box">
+                <div class="content">
+                    <h2>Routine Simulation</h2>
+                    <p>In this section you can put a descriptive file of routines in JSON format, which you can define previously in the previous section, and by means of a simulation algorithm, obtain a file in which it indicates in a year in which rooms the user is in each minute of the day.</p>
+                </div>
+                <div class="imgBx">
+                    <!-- <img src="../imgs/pages/dashboard/icono-tabla.png" alt="redirección a página con la tabla insertada"> -->
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
+    <section id="about-us">
 
-        <section id="daily-routines" class="section">
-            <div class="routine-assignment">
-                <h2>Daily Routines</h2>
-                <p><b>You can press Enter to Add Activity</b></p>
-                <p>Here you have to put unique types of days that users do,  from what time to what time the user is in one room or another. </p>
-                <div class="time-inputs">
-                  <label for="startTime">Start Hour</label>
-                  <input type="text" id="startTime" value="00:00" readonly>
-              
-                  <label for="endTime">End Hour</label>
-                  <input type="text" id="endTime" placeholder="HH:MM">
-                </div>
-                
-                <div class="room-selection">
-                  <select id="room-daily" class="room-controls">
-                    <option value="" disabled selected id="default">--Select a room--</option>
-                    <!-- Se añadirán las opciones con DOM -->
-                  </select>
-                </div>
-              
-                <div class="buttons-daily">
-                  <button id="reset-daily">Reset</button>
-                  <button id="add-activity">Add Activity</button>
-                  <button id="add-daily">New Day</button>
-                  <button id="complete-daily">Complete Routine</button>
-                </div>
-                <div id="table-daily-routines"></div>
-              </div>
-        </section>
-
-        <section id="schedule-routines" class="section">
-            <h2>Schedule Routines</h2>
-
-            <p>In this section you can create routines by <b>dragging the routines defined on the left</b> to the corresponding day in the calendar. You can <b>undo a routine selection by double-clicking</b> on the day in the calendar. You also have the option to clear all selections with the <b>Reset button</b>. At the end, you can export the routines to a JSON with the <b>Export to JSON</b> button.</p>
-            <div class="schedule-container">
-                <div id="defined-days" class="defined-days">
-                    <h3>Defined Days</h3>
-                    <button id="export-routines" class="export-routines">Export Routines as JSON</button>
-                    
-                </div>
-                <div id="calendar-dragable-area" class="calendar-dragable-area">
-                    <div id="calendar-container" class="calendar-container">
-                        <h3>Calendar</h3>
-                    </div>
-                    <div id="params-calendar">
-                        <h3>Select Year and Month</h3>
-                        <div class="year-monthselect">
-                            <label for="year">Year:</label>
-                            <input type="number" id="year" name="year" min="2000" value="2024">
-                            <label for="month">Month:</label>
-                            <input type="number" id="month" name="month" min="1" max="12" value="2">
-                        </div>
-                        <button id="reset-calendar">Reset</button>
-                    </div>
-                </div>
-        </section>
-
-    <script src="script.js"></script>
-    </body>
+    </section>
+    <footer>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Introduction</a></li>
+                <li><a href="./pages/routines.html">Routine Definition</a></li>
+                <li><a href="./pages/labelmap.html">Routine Simulation</a></li>
+                <!-- Agrega aquí más elementos de navegación si es necesario -->
+            </ul>
+        </nav>
+    </footer>
+</body>
 </html>
