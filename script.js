@@ -2,6 +2,7 @@ var DataFrame = dfjs.DataFrame;
 
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
 var daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
+var assignedRoutines = {};
 
 const seccion2 = document.querySelector("#daily-routines")
 const seccion3 = document.querySelector("#schedule-routines")
@@ -264,6 +265,16 @@ reset_daily.addEventListener("click", function(e) {
     document.querySelectorAll(".dragable-day").forEach(function(day) {
         definedDays.removeChild(day)
     })
+
+    document.querySelectorAll('#calendar-container td').forEach(dayCell => {
+        if (dayCell.id.startsWith('day-')) {
+            dayCell.style.backgroundColor = ''; // Quita el color de fondo
+            // También puedes eliminar otros estilos que hayas aplicado (e.g., texto, bordes)
+        }
+    });
+
+    // Resetear la variable JSON assignedRoutines
+    assignedRoutines = {};
 })
 
 add_activity.addEventListener("click", function(e) {
@@ -440,7 +451,7 @@ month_selector.addEventListener("change", function(e) {
 /*INTENTO DE HACER EL DRAGABLE*/
 
 // Suponiendo que tienes un objeto para almacenar la información de las rutinas asignadasç
-var assignedRoutines = {};
+
 
 // Asegúrate de que tus dragable-days tengan el atributo draggable="true"
 // y de que cada celda del calendario tenga un id único.
@@ -505,6 +516,29 @@ export_routines.addEventListener("click", function(e) {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 })
+
+const reset_calendar = document.querySelector("#reset-calendar")
+reset_calendar.addEventListener("click", function(e) {
+    document.querySelectorAll('#calendar-container td').forEach(dayCell => {
+        if (dayCell.id.startsWith('day-')) {
+            dayCell.style.backgroundColor = ''; // Quita el color de fondo
+            // También puedes eliminar otros estilos que hayas aplicado (e.g., texto, bordes)
+        }
+    });
+    assignedRoutines = {};
+})
+
+// Añadir una opción en la que si hago doble click directamente sobre el dia del calendario, se deselecciona esa opción y se elimina del json
+document.querySelectorAll('#calendar-container td').forEach(dayCell => {
+    if (dayCell.id.startsWith('day-')) {
+        dayCell.addEventListener("dblclick", function(e) {
+            if (dayCell.style.backgroundColor === 'green') {
+                dayCell.style.backgroundColor = ''; // Quita el color de fondo
+                delete assignedRoutines[`${year_selector.value}-${month.value}-${dayCell.textContent}`];
+            }
+        });
+    }
+});
 
 
 
