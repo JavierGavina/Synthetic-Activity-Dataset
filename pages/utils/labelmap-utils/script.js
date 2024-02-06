@@ -81,9 +81,8 @@ const getLabelmap = (json) => {
     dates_labelmap = Object.keys(json);
     dates_labelmap.forEach((date) => {
         let sequence = [];
-        console.log(date)
-        console.log(date.split('-'))
         let [year, month, day] = date.split('-');
+        
         init = convertToMinutes(json[date].start_time);
         end = convertToMinutes(json[date].end_time);
         room = json[date].room;
