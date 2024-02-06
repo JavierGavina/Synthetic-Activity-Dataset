@@ -42,7 +42,8 @@
                     <div class="visualization-labelmap-div-1">
                         <h2>Threshold</h2>
                         <p>You can adjust the randomization on time intervals (in minutes).</p>
-                        <input type="range" min="0" max="30" value="0" step="1" class="slider" id="threshold" onchange="document.getElementById('threshold-value').value = value" list="tickmarks">
+                        <input type="range" min="0" max="30" value="0" step="1" class="slider" id="threshold" 
+                               onchange="document.getElementById('threshold-value').value = value" list="tickmarks">
                         <output for="threshold" id="threshold-value">0</output>
                         <datalist id="tickmarks">
                             <option value="0" label="0">

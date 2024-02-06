@@ -53,7 +53,7 @@ const mapValueToColor = (value) => {
 };
 
 /*GLOBALIZAR VARIABLE JSON*/
-
+var json;
 
 var DataFrame = dfjs.DataFrame;
 
@@ -63,8 +63,8 @@ var labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
 visualization_labelmap_section = document.querySelector('#visualization-labelmap');
 labelmap_section = document.querySelector('#labelmap');
 
-// visualization_labelmap_section.style.display = 'none';
-// labelmap_section.style.display = 'none';
+visualization_labelmap_section.style.display = 'none';
+labelmap_section.style.display = 'none';
 
 /*ANIMACIONES ZONA DRAGABLE*/
 dragArea = document.querySelector('#drag-area');
@@ -124,13 +124,17 @@ const processFile = (file) => {
     reader.onload = readerEvent => {
         const content = readerEvent.target.result;
         try {
-            const json = JSON.parse(content);
+            json = JSON.parse(content);
             visualization_labelmap_section.style.display = 'block';
             labelmap_section.style.display = 'block';
             labelMap = getLabelmap(json);
             if (window.confirm("Do you want to download the dictionary of rooms?")){
                 downloadDictionaryRooms(dictionary);
             }
+            visualization_labelmap_section.style.display = 'block';
+            labelmap_section.style.display = 'block';
+
+            window.location.href = "#visualization-labelmap";
             showPlot();
 
         } catch (error) {
@@ -147,12 +151,42 @@ const convertToMinutes = function(hour){
     return parseInt(hour.split(':')[0])*60 + parseInt(hour.split(':')[1]);
 }
 
-const getLabelmap = (json, threshold=0) => {
+const convertToHour = function(minutes){
+    let hours = Math.floor(minutes/60);
+    let mins = minutes % 60;
+    return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+}
+
+const aleatorizeIntervals = (intervals) => {
+    threshold = document.querySelector("#threshold").value
+    let new_intervals = [];
+    first_interval = 0;
+    for (let i = 0; i < intervals.length; i++){
+        // randomization from -threshold to +threshold
+        let random = Math.floor(Math.random() * (threshold*2 + 1)) - threshold;
+        var [start, end] = intervals[i];
+        if (i == 0){
+            end = convertToHour(convertToMinutes(end) + random);
+            new_intervals.push(["00:00", end]);
+        } else {
+            start = new_intervals[i-1][1];
+            if (i == intervals.length - 1){
+                end = "23:59";
+            } else {
+                end = convertToHour(convertToMinutes(end) + random);
+            }
+            new_intervals.push([start, end]);
+        }
+    }
+    return new_intervals
+}
+
+const getLabelmap = (json) => {
     dates_labelmap = Object.keys(json);
     dates_labelmap.forEach((date) => {
         let sequence = [];
         let [year, month, day] = date.split('-');
-        json[date].intervals.forEach((interval, index) => {
+        aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
             init = convertToMinutes(interval[0]);
             end = convertToMinutes(interval[1]);
             room = json[date].rooms[index];
@@ -183,7 +217,14 @@ const downloadCSV = (data) => {
 // THRESHOLD
 
 threshold_input = document.querySelector('#threshold');
-threshold_output = document.querySelector('#threshold-value');
+
+// Cada vez que cambiamos el threshold, volvemos a obtener el labelmap y mostramos el plot
+threshold_input.addEventListener("change", () => {
+    labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
+    labelMap = getLabelmap(json);
+    showPlot();
+})
+
 
 const getArrayDates = (df) => {
     let dates = df.select("Year", "Month", "Day").toArray().map(row => new Date(parseInt(row[0]), parseInt(row[1])-1, parseInt(row[2])));
@@ -227,7 +268,7 @@ const showPlot = () => {
         type: 'heatmap',
         x: array_mins,
         y: array_days,
-        z: sequences.flat().map(room => dictionary[room]), // 2D array
+        z: sequences.flat().map(room => dictionary[room]),
         text: sequences.flat(),
         colorscale: "Viridis",
         showscale: false,
