@@ -92,6 +92,7 @@ const processFile = (file) => {
             if (window.confirm("Do you want to download the dictionary of rooms?")){
                 downloadDictionaryRooms(dictionary);
             }
+            showPlot();
 
         } catch (error) {
             alert(error)
@@ -122,6 +123,7 @@ const getLabelmap = (json, threshold=0) => {
         })
         labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
     })
+    return labelMap
 }
 
 const downloadCSV = (data) => {
@@ -144,10 +146,77 @@ const downloadCSV = (data) => {
 threshold_input = document.querySelector('#threshold');
 threshold_output = document.querySelector('#threshold-value');
 
-threshold_input.addEventListener("change", () => {
-    threshold_output.textContent = parseInt(threshold_input.value);
-
+const getArrayDates = (df) => {
+    let dates = df.select("Year", "Month", "Day").toArray().map(row => new Date(parseInt(row[0]), parseInt(row[1])-1, parseInt(row[2])));
+    return dates
 }
 
 
+const getArraySequences = (df) => {
+    let sequences = df.select("Sequence").toArray().map(row => row[0]);
+    return sequences
+}
+
+
+const showPlot = () => {
+    parent = document.querySelector('.visualization-labelmap-div-2');
+    existent = document.querySelector('#labelmap-div');
+    new_div = document.createElement('div');
+    new_div.id = 'labelmap-div';
+
+    dates = getArrayDates(labelMap);
+    sequences = getArraySequences(labelMap);
+
+    console.log(sequences)
+    // crear array de 1 a 1440 que se repita por cada fecha
+    array_mins = []
+    for (let i = 0; i < dates.length; i++){
+        for (let j=0; j<1440; j++){
+            array_mins.push(j);
+        }
+    }
+
+    array_days = []
+    for (let i=0; i<dates.length; i++){
+        for (let j=0; j<1440; j++){
+            array_days.push(dates[i]);
+        }
+    }
+
+    // Process the data for Plotly
+    let trace = {
+        type: 'heatmap',
+        x: array_mins,
+        y: array_days,
+        z: sequences.flat().map(room => dictionary[room]), // 2D array
+        colorscale: 'Viridis',
+        showscale: true
+    };
+    
+    let data = [trace];
+    
+    let layout = {
+        title: 'Daily Room Activity',
+        xaxis: { title: 'Minute of Day' },
+        yaxis: { title: 'Day' },
+        // Add other layout properties as needed
+    };
+    
+    Plotly.newPlot(new_div, data, layout);
+    
+    parent.replaceChild(new_div, existent);
+    
+}
+
+
+
+// threshold_input.addEventListener("change", () => {
+//     threshold_output.textContent = parseInt(threshold_input.value);
+
+// })
+
+
+// threshold_input.addEventListener("onclick", () => {
+//     threshold_output.textContent = parseInt(threshold_input.value);
+// })
 
