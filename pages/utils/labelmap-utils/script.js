@@ -283,20 +283,10 @@ const showPlot = () => {
     };
     
     Plotly.newPlot(new_div, data, layout);
-    
     parent.replaceChild(new_div, existent);
-    
 }
 
-
-
-// threshold_input.addEventListener("change", () => {
-//     threshold_output.textContent = parseInt(threshold_input.value);
-
-// })
-
-
-// threshold_input.addEventListener("onclick", () => {
-//     threshold_output.textContent = parseInt(threshold_input.value);
-// })
-
+const downloadCSVButton = document.querySelector('#download-labelmap');
+downloadCSVButton.addEventListener('click', () => {
+    downloadCSV(labelMap);
+})
