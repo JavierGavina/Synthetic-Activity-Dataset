@@ -51,6 +51,8 @@ header {
     background: #062d57;
 }
 
+
+
 .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Dos columnas */
@@ -105,3 +107,44 @@ header {
     text-align: center;
     bottom: 0; /* Espacio después de la última sección */
   }
+
+
+
+  /*ABOUT US*/
+  /* Estilos para la sección About Us */
+  #about-us {
+    background-color: #fff; /* Cambia el fondo para contrastar con el cuerpo principal */
+    color: #000; /* Color de texto para contraste */
+    padding: 50px 20px; /* Espaciado adecuado */
+    text-align: center; /* Alineación del texto */
+  }
+  
+  .about-container {
+    display: flex; /* Utiliza flexbox para un diseño adaptable */
+    justify-content: center; /* Centra los elementos horizontalmente */
+    align-items: center; /* Centra los elementos verticalmente */
+    gap: 50px; /* Espacio entre el texto y la imagen */
+    max-width: 1200px; /* Controla el ancho máximo del contenedor */
+    margin: auto; /* Centra el contenedor en la página */
+  }
+  
+  .about-text {
+    flex: 1; /* Permite que el texto ocupe espacio flexible */
+  }
+  
+  .about-img {
+    flex: 1; /* Permite que la imagen ocupe espacio flexible */
+  }
+  
+  .about-img img {
+    max-width: 100%; /* Asegura que la imagen sea responsive */
+    border-radius: 10px; /* Añade bordes redondeados a la imagen */
+  }
+  
+  /* Media query para ajustar el diseño en pantallas más pequeñas */
+  @media (max-width: 768px) {
+    .about-container {
+        flex-direction: column; /* Cambia la dirección de flex a columna para dispositivos móviles */
+    }
+  }
+  
