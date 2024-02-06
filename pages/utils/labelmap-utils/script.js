@@ -1,4 +1,4 @@
-/*GLOBALIZAR VARIABLE JSON*/
+/*DEFINICIÓN DE CONSTANTES*/
 const dictionary = {
     "room": 1,
     "living-room":2,
@@ -14,6 +14,45 @@ const dictionary = {
     "garage":12,
     "pool":13,
 }
+
+const colorPalette = {
+    1: '#1f77b4', // room
+    2: '#ff7f0e', // living-room
+    3: '#2ca02c', // tv-room
+    4: '#d62728', // dining-room
+    5: '#9467bd', // garden
+    6: '#8c564b', // terrace
+    7: '#e377c2', // therapy
+    8: '#7f7f7f', // gym
+    9: '#bcbd22', // corridors
+    10: '#17becf', // bathroom
+    11: '#aec7e8', // bedroom
+    12: '#ffbb78', // garage
+    13: '#98df8a', // pool
+};
+
+colorScale = [
+    [0, '#1f77b4'], // room
+    [1/8, '#ff7f0e'], // living-room
+    [2/8, '#2ca02c'], // tv-room
+    [3/8, '#d62728'], // dining-room
+    [4/8, '#9467bd'], // garden
+    [5/8, '#8c564b'], // terrace
+    [6/8, '#e377c2'], // therapy
+    [7/8, '#7f7f7f'], // gym
+    [8/8, '#bcbd22'] // corridors
+    // [9/13, '#17becf'], // bathroom
+    // [10/13, '#aec7e8'], // bedroom
+    // [11/13, '#ffbb78'], // garage
+    // [12/13, '#98df8a'], // pool
+    // [1, '#ff7f0e'], // living-room
+]
+
+const mapValueToColor = (value) => {
+    return colorPalette[value] || '#000000'; // Devuelve un color negro si el valor no está definido
+};
+
+/*GLOBALIZAR VARIABLE JSON*/
 
 
 var DataFrame = dfjs.DataFrame;
@@ -171,14 +210,14 @@ const showPlot = () => {
     // crear array de 1 a 1440 que se repita por cada fecha
     array_mins = []
     for (let i = 0; i < dates.length; i++){
-        for (let j=0; j<1440; j++){
+        for (let j=1; j<1440; j++){
             array_mins.push(j);
         }
     }
 
     array_days = []
     for (let i=0; i<dates.length; i++){
-        for (let j=0; j<1440; j++){
+        for (let j=1; j<1440; j++){
             array_days.push(dates[i]);
         }
     }
@@ -189,8 +228,9 @@ const showPlot = () => {
         x: array_mins,
         y: array_days,
         z: sequences.flat().map(room => dictionary[room]), // 2D array
-        colorscale: 'Viridis',
-        showscale: true
+        text: sequences.flat(),
+        colorscale: "Viridis",
+        showscale: false,
     };
     
     let data = [trace];
@@ -199,7 +239,6 @@ const showPlot = () => {
         title: 'Daily Room Activity',
         xaxis: { title: 'Minute of Day' },
         yaxis: { title: 'Day' },
-        // Add other layout properties as needed
     };
     
     Plotly.newPlot(new_div, data, layout);
