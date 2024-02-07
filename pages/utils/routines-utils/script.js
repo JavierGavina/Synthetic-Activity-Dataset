@@ -306,6 +306,40 @@ reset_daily.addEventListener("click", function(e) {
     assignedRoutines = {};
 })
 
+/*MODIFICAR*/
+// add_activity.addEventListener("click", function(e) {
+//     if (validarHoras(start_daily) && validarHoras(end_daily)){
+//         if (convertToSeconds(start_daily.value) > convertToSeconds(end_daily.value)){
+//             end_daily.value=""
+//             end_daily.focus()
+//             window.alert("The start time cannot be greater than the end time.")
+//             return
+//         }
+//         if (daily_room_selector.value === ""){
+//             daily_room_selector.focus()
+//             window.alert("You have to select a room")
+//             return
+//         }
+
+//         if (end_daily.hasAttribute("readonly")){
+//             window.alert("Day completed.")
+//             return
+//         }
+
+//         if (end_daily.value != "23:59"){
+//             daily_routines = daily_routines.push({"Day": count_daily,  "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
+//             start_daily.value = end_daily.value
+//             end_daily.value = ""
+
+//         } else {
+//             end_daily.setAttribute("readonly", "readonly")
+//             daily_routines = daily_routines.push({"Day": count_daily,  "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
+//         }
+        
+//         show_table_daily(daily_routines)
+//     }
+// })
+
 add_activity.addEventListener("click", function(e) {
     if (validarHoras(start_daily) && validarHoras(end_daily)){
         if (convertToSeconds(start_daily.value) > convertToSeconds(end_daily.value)){
@@ -331,45 +365,26 @@ add_activity.addEventListener("click", function(e) {
             end_daily.value = ""
 
         } else {
-            end_daily.setAttribute("readonly", "readonly")
             daily_routines = daily_routines.push({"Day": count_daily,  "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
+            count_daily++
+            start_daily.value="00:00"
+            end_daily.value=""
+            const defined_days = document.querySelector("#defined-days")
+            const newContent = document.createElement("div")
+            newContent.textContent = `routine day ${count_daily-1}`
+            newContent.id = `routine-day-${count_daily-1}`
+            newContent.classList.add("dragable-day") // Add the class "dragable-day"
+            newContent.style.backgroundColor = colores_routines[count_daily-1]
+            defined_days.insertBefore(newContent, defined_days.querySelector("button"))
         }
         
         show_table_daily(daily_routines)
     }
 })
 
-
-
-add_daily.addEventListener("click", function(e) {
-    if (daily_routines.count() === 0){
-        end_daily.focus()
-        window.alert("You have to assign at least one daily activity")
-        return
-    }
-    if (end_daily.value != "23:59"){
-        end_daily.focus()
-        window.alert("You have to assign at least one activity")
-        return
-    }
-    count_daily++
-    start_daily.value="00:00"
-    end_daily.value=""
-    end_daily.removeAttribute("readonly")
-    const defined_days = document.querySelector("#defined-days")
-    const newContent = document.createElement("div")
-    newContent.textContent = `routine day ${count_daily-1}`
-    newContent.id = `routine-day-${count_daily-1}`
-    newContent.classList.add("dragable-day") // Add the class "dragable-day"
-    newContent.style.backgroundColor = colores_routines[count_daily-1]
-    defined_days.insertBefore(newContent, defined_days.querySelector("button"))
-})
-
-
-
 complete_daily.addEventListener("click", function(e) {
     if (daily_routines.count() === 0){
-        start_daily.focus()
+        end_daily.focus()
         window.alert("You have to assing at least one daily activity")
         return
     }
@@ -378,39 +393,42 @@ complete_daily.addEventListener("click", function(e) {
         seccion3.style.display = "block"
         selected_rooms = rooms_ids.select("Room").toArray().flat()
         } 
+
+    if (start_daily.value != "00:00" || end_daily.value != ""){
+        end_daily.focus()
+        window.alert("You have to complete the type of daily routine")
+    } else {
+        daily_room_selector.disabled = true;
+        start_daily.value=""
+        end_daily.value=""
+        start_daily.setAttribute("readonly", "readonly")
+        end_daily.setAttribute("readonly", "readonly")
+        window.location.href = "#schedule-routines"
+        const respuesta = window.confirm("Do you want to download a csv with your daily routines?")
+        if (respuesta){
+            downloadCSV(daily_routines);
+        }
+        dragables = document.querySelectorAll(".dragable-day")
     
-    daily_room_selector.disabled = true;
-    start_daily.value=""
-    end_daily.value=""
-    start_daily.setAttribute("readonly", "readonly")
-    end_daily.setAttribute("readonly", "readonly")
-    window.location.href = "#schedule-routines"
-    const respuesta = window.confirm("Do you want to download a csv with your daily routines?")
-    if (respuesta){
-        downloadCSV(daily_routines);
+        dragables.forEach((dragable) => {
+            dragable.draggable = true
+            dragable.addEventListener("click", function(e) {
+                count_daily = parseInt(dragable.textContent.split(" ")[2])
+                show_table_daily(daily_routines)
+                // move with a scroll to #table-daily-routines
+                window.location.href = "#daily-routines"
+            })
+            dragable.addEventListener("dragstart", function(e) {
+                e.dataTransfer.setData("text/plain", dragable.id);
+            })
+        })
     }
-    dragables = document.querySelectorAll(".dragable-day")
-
-    dragables.forEach((dragable) => {
-        dragable.draggable = true
-        dragable.addEventListener("click", function(e) {
-            count_daily = parseInt(dragable.textContent.split(" ")[2])
-            show_table_daily(daily_routines)
-            // move with a scroll to #table-daily-routines
-            window.location.href = "#daily-routines"
-        })
-        dragable.addEventListener("dragstart", function(e) {
-            e.dataTransfer.setData("text/plain", dragable.id);
-        })
-
-    
-    })
 })
+
 
 /*CODIGO PARA SECCIÓN CALENDARIO*/
 
 // Automatizar creación de calendario
-
 const getCalendarArray = function(year, month){
     const firstDay = new Date(year, month - 1, 1).getDay();
     const lastDate = new Date(year, month, 0).getDate();
@@ -516,10 +534,19 @@ function updateCalendar(year, month) {
 }
 
 // Llamar a updateCalendar inicialmente
-updateCalendar(2024, 2);
+
+// Obtener fecha actual
+const currentDate = new Date();
+const actualYear = currentDate.getFullYear();
+const actualMonth = currentDate.getMonth() + 1;
+
+updateCalendar(actualYear, actualMonth);
 
 const year_selector = document.querySelector("#year")
 const month_selector = document.querySelector("#month")
+
+year_selector.value = actualYear
+month_selector.value = actualMonth
 
 year_selector.addEventListener("change", function(e) {
     year_value = year_selector.value
