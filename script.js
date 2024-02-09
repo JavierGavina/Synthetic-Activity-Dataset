@@ -16,7 +16,7 @@ function onPlayerReady(event) {
     iframe.style.transition = "transform 0.3s ease";
 
     iframe.addEventListener('mouseover', function() {
-        iframe.style.transform = "scale(2)";
+        iframe.style.transform = "scale(1.5)";
         event.target.playVideo(); // Play video
     });
 
