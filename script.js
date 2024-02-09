@@ -1,3 +1,31 @@
+// This function creates an <iframe> (and YouTube player) after the API code downloads.
+var player;
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('video-box', {
+        height: '315',
+        width: '560',
+        videoId: 'rur1-0Pibx0',
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    const iframe = document.getElementById('video-box');
+    iframe.style.transition = "transform 0.3s ease";
+
+    iframe.addEventListener('mouseover', function() {
+        iframe.style.transform = "scale(1.5)";
+        event.target.playVideo(); // Play video
+    });
+
+    iframe.addEventListener('mouseleave', function() {
+        iframe.style.transform = "scale(1)";
+        event.target.pauseVideo(); // Pause video
+    });
+}
+
 const routines_definition = document.querySelector('#definition-box');
 const routines_simulation = document.querySelector('#simulation-box');
 
@@ -7,41 +35,4 @@ routines_definition.addEventListener('click', function() {
 
 routines_simulation.addEventListener('click', function() {
     window.location.href = "./pages/labelmap.html";
-});
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    
-    const introVideo = document.getElementById('intro-video');
-
-    function playVideo() {
-        introVideo.play()
-            .catch(error => console.error("Error trying to play the video:", error));
-        introVideo.style.transform = "scale(1.5)";
-    }
-
-    function stopVideo() {
-        introVideo.pause();
-        introVideo.style.transform = "scale(1)";
-    }
-
-    // Mute the video by default to allow it to play on hover
-    introVideo.muted = true;
-    introVideo.addEventListener('mouseover', playVideo);
-    introVideo.addEventListener('mouseleave', stopVideo);
-
-    // introVideo.addEventListener('click', function() {
-    //     // Toggle mute state on click
-    //     introVideo.muted = !introVideo.muted;
-
-    //     if (introVideo.paused) {
-    //         introVideo.play()
-    //             .catch(error => console.error("Error trying to play the video:", error));
-    //         // Remove the mouseover listener to prevent it from playing on hover after a click
-    //         introVideo.removeEventListener('mouseover', playVideo);
-    //     } else {
-    //         introVideo.pause();
-    //         // Add the mouseover listener back after pausing with a click
-    //         introVideo.addEventListener('mouseover', playVideo);
-    //     }
-    // });
 });
