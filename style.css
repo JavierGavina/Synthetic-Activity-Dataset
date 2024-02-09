@@ -7,6 +7,12 @@ body, html {
     font-family: 'Arial', sans-serif;
 }
 
+body, html {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 body{
     background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
 }
@@ -52,8 +58,39 @@ header {
 }
 
 
+/*ESTILO VIDEO*/
 
+#video-box {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+#video-box h1 {
+  margin-bottom: 0px
+}
+
+#intro-video {
+  margin-top: 10px;
+  transition: transform 0.3s ease;
+  margin-bottom: 40px;
+}
+
+#intro-video:hover {
+  transform: scale(1.5);
+}
+
+
+
+/*ESTILO CONTENEDOR*/
 .container {
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Dos columnas */
     grid-template-rows: repeat(2, 1fr); /* Dos filas */
@@ -62,7 +99,7 @@ header {
     justify-items: center; /* Centra los elementos horizontalmente en su celda */
     align-items: center; /* Centra los elementos verticalmente en su celda */
     width: 80%; /* Ocupa el 80% del ancho del viewport */
-    height: 80vh; /* Ocupa el 80% del alto del viewport */
+    /* height: 80vh; Ocupa el 80% del alto del viewport */
     margin-top: 100px; /* Espacio para el header fijo */
     max-width: 1600px; /* Máximo ancho posible para el container */
     max-height: 800px; /* Máximo altura posible para el container */
@@ -99,11 +136,10 @@ header {
 
   /*ESTILOS PIE DE PÁGINA*/
   footer {
-    margin-top: 100px;
+    margin-top: auto; /* Si quieres que el footer siempre esté en la parte inferior, añade 'margin-top: auto;' */
     width: 100%;
     background: #007bff;
     padding: 20px 0;
-    position: absolute; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
+    position: relative; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
     text-align: center;
-    bottom: 0; /* Espacio después de la última sección */
   }
