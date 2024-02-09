@@ -2,7 +2,7 @@
 var player;
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('video-box', {
-        height: '315',
+        height: '420',
         width: '560',
         videoId: 'rur1-0Pibx0',
         events: {
@@ -16,7 +16,7 @@ function onPlayerReady(event) {
     iframe.style.transition = "transform 0.3s ease";
 
     iframe.addEventListener('mouseover', function() {
-        iframe.style.transform = "scale(1.5)";
+        iframe.style.transform = "scale(2)";
         event.target.playVideo(); // Play video
     });
 
