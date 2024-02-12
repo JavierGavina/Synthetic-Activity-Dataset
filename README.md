@@ -8,4 +8,4 @@ Our website is available (for now) in the following link
 
 ## Use of the website Demo
 
-<iframe id="intro-video" width="560" height="420" src="https://www.youtube.com/embed/rur1-0Pibx0?si=jAcPXrK0ZPMuGE4y" title="Demo for the web page" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/rur1-0Pibx0/0.jpg)](https://www.youtube.com/watch?v=rur1-0Pibx0)
