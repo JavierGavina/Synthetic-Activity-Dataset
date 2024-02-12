@@ -1,3 +1,11 @@
-# syntheticDatasetNurseryHome
+# Synthetic Dataset Nursery Home
 
-The propose of the repository is to automatize the process of generating synthetic dataset from a file that represents routines of daily living of elderly people in a nursery home
+Welcome to our implementation of a framework that allows in a user-friendly way to design and simulate daily routines for users.
+
+Our website is available (for now) in the following link
+
+[Link to website](https://javiergavina.github.io/syntheticDatasetNurseryHome/)
+
+## Use of the website Demo
+
+<iframe id="intro-video" width="560" height="420" src="https://www.youtube.com/embed/rur1-0Pibx0?si=jAcPXrK0ZPMuGE4y" title="Demo for the web page" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
