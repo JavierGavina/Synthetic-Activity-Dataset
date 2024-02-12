@@ -93,11 +93,29 @@ header {
 
 
 /*ESTILO CONTENEDOR*/
-.container {
+/* .container { */
+    /* flex: 1; */
+    /* display: grid; */
+    /* grid-template-columns: repeat(2, 1fr); Dos columnas */
+    /* grid-template-rows: repeat(2, 1fr); Dos filas */
+    /* gap: 20px; Espaciado constante entre los boxes */
+    /* padding: 20px; Padding para no pegar los elementos a los bordes */
+    /* justify-items: center; Centra los elementos horizontalmente en su celda */
+    /* align-items: center; Centra los elementos verticalmente en su celda */
+    /* width: 80%; Ocupa el 80% del ancho del viewport */
+    /* height: 80vh; Ocupa el 80% del alto del viewport */
+    /* margin-top: 100px; Espacio para el header fijo */
+    /* max-width: 1600px; Máximo ancho posible para el container */
+    /* max-height: 800px; Máximo altura posible para el container */
+    /* margin-left: auto; Centra el container horizontalmente */
+    /* margin-right: auto; Centra el container horizontalmente */
+  /* } */
+
+  .container {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-    grid-template-rows: repeat(2, 1fr); /* Dos filas */
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    grid-template-rows: auto auto; /* Dos filas */
     gap: 20px; /* Espaciado constante entre los boxes */
     padding: 20px; /* Padding para no pegar los elementos a los bordes */
     justify-items: center; /* Centra los elementos horizontalmente en su celda */
@@ -109,6 +127,33 @@ header {
     max-height: 800px; /* Máximo altura posible para el container */
     margin-left: auto; /* Centra el container horizontalmente */
     margin-right: auto; /* Centra el container horizontalmente */
+  }
+
+  .container {
+    grid-template-areas:
+      "definition simulation"
+      "userguide userguide"
+  }
+
+  /* Style for User Guide icon */
+  .user-guide-icon {
+    width: 240px; /* Icon width */
+    height: 240px; /* Icon height */
+    margin-top: 5px; /* Space above the icon */
+    /* Adjust margin as needed to center the icon */
+    margin-bottom: 20px; /* Space below the icon if needed */
+  }
+
+  #user-guide-box {
+    /* Existing styles... */
+    /* Adjust padding and other styles to accommodate the icon */
+    grid-area: userguide;
+    display: flex; /* Use flexbox to center content */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    width: 30%;
+    height: 100%;
   }
   
 .box {
@@ -140,7 +185,7 @@ header {
 
   /*ESTILOS PIE DE PÁGINA*/
   footer {
-    margin-top: auto; /* Si quieres que el footer siempre esté en la parte inferior, añade 'margin-top: auto;' */
+    margin-top: 200px; 
     width: 100%;
     background: #007bff;
     padding: 20px 0;
