@@ -1,0 +1,76 @@
+html{
+    scroll-behavior: smooth;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body, html {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.page-title {
+    margin: 0;
+    font-size: 2em;
+}
+
+/* Estilos para el menú de navegación */
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.nav-menu li {
+    margin: 0 15px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #ddd;
+    background: #062d57;
+}
+
+#container{
+    margin-top: 2px;
+    margin-bottom: 30px;
+    width: 60%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*ESTILOS PIE DE PÁGINA*/
+footer {
+    margin-top: auto; /* Si quieres que el footer siempre esté en la parte inferior, añade 'margin-top: auto;' */
+    width: 100%;
+    background: #007bff;
+    padding: 20px 0;
+    position: relative; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
+    text-align: center;
+  }
