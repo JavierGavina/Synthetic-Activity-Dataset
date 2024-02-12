@@ -15,6 +15,23 @@ const dictionary = {
     "pool":13,
 }
 
+const dictionary_inverse = {
+    1: "room",
+    2: "living-room",
+    3: "tv-room",
+    4: "dinning-room",
+    5:"garden",
+    6:"terrace",
+    7:"therapy",
+    8:"gym",
+    9:"corridors",
+    10:"bathroom",
+    11:"bedroom",
+    12:"garage",
+    13:"pool",
+}
+
+
 const colorPalette = {
     1: '#1f77b4', // room
     2: '#ff7f0e', // living-room
@@ -189,7 +206,7 @@ const getLabelmap = (json) => {
         aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
             init = convertToMinutes(interval[0]);
             end = convertToMinutes(interval[1]);
-            room = json[date].rooms[index];
+            room = dictionary[json[date].rooms[index]];
             for (let i = init; i < end; i++){
                 sequence.push(room);
             }
@@ -247,7 +264,6 @@ const showPlot = () => {
     dates = getArrayDates(labelMap);
     sequences = getArraySequences(labelMap);
 
-    console.log(sequences)
     // crear array de 1 a 1440 que se repita por cada fecha
     array_mins = []
     for (let i = 0; i < dates.length; i++){
@@ -262,14 +278,13 @@ const showPlot = () => {
             array_days.push(dates[i]);
         }
     }
-
     // Process the data for Plotly
     let trace = {
         type: 'heatmap',
         x: array_mins,
         y: array_days,
-        z: sequences.flat().map(room => dictionary[room]),
-        text: sequences.flat(),
+        z: sequences.flat(),
+        text: sequences.flat().map(room => dictionary_inverse[room]),
         colorscale: "Viridis",
         showscale: false,
     };

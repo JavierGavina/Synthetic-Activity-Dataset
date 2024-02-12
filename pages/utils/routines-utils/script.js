@@ -1,4 +1,5 @@
 var DataFrame = dfjs.DataFrame;
+
 const colores_routines = ["#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
                           "#1D26A7", "#561DA7", "#B3D3E1", "#CEBAAC",
                           "#831445", "#800000", "#00FFFF", "#008080",
