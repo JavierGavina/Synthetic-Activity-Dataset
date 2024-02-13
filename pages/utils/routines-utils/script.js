@@ -588,14 +588,31 @@ function drop(event) {
         intervals: hours_array,
         rooms: rooms_array
     };
-
-    
-
 }
+
+convertToDateTime = function(date){
+    const [year, month, day] = date.split("-")
+    return new Date(year, month-1, day)
+}
+
+getArrayNativeDates = function(dates){
+    return dates.map(date => convertToDateTime(date))
+}
+
+reconvertToDateString = function(date){
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+}
+
 
 const export_routines = document.querySelector("#export-routines")
 export_routines.addEventListener("click", function(e) {
-    const routines = JSON.stringify(assignedRoutines);
+    // Order the object by date
+    const orderedRoutines = {};
+    getArrayNativeDates(Object.keys(assignedRoutines)).sort((a,b)=>a-b).forEach(function(key) {
+        date_string = reconvertToDateString(key)
+        orderedRoutines[date_string] = assignedRoutines[date_string];
+    });
+    const routines = JSON.stringify(orderedRoutines, null, 2);
     const blob = new Blob([routines], {type: "application/json"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
