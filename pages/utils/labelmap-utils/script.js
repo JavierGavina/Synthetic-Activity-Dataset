@@ -116,7 +116,7 @@ dragArea.addEventListener('click', () => {
 });
 
 const downloadDictionaryRooms = (dictionary) => {
-    const dictionary_export = JSON.stringify(dictionary);
+    const dictionary_export = JSON.stringify(dictionary, null, 5);
     const blob = new Blob([dictionary_export], {type: "application/json"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");

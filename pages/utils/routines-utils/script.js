@@ -612,7 +612,7 @@ export_routines.addEventListener("click", function(e) {
         date_string = reconvertToDateString(key)
         orderedRoutines[date_string] = assignedRoutines[date_string];
     });
-    const routines = JSON.stringify(orderedRoutines, null, 2);
+    const routines = JSON.stringify(orderedRoutines, null, 5);
     const blob = new Blob([routines], {type: "application/json"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
