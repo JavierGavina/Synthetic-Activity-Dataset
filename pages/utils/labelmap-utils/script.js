@@ -13,6 +13,7 @@ const dictionary = {
     "bedroom":11,
     "garage":12,
     "pool":13,
+    "kitchen":14,
 }
 
 const dictionary_inverse = {
@@ -29,6 +30,7 @@ const dictionary_inverse = {
     11:"bedroom",
     12:"garage",
     13:"pool",
+    14:"kitchen",
 }
 
 
@@ -46,6 +48,7 @@ const colorPalette = {
     11: '#aec7e8', // bedroom
     12: '#ffbb78', // garage
     13: '#98df8a', // pool
+    14: '#ff9896', // kitchen
 };
 
 colorScale = [
