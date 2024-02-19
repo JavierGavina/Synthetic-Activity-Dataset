@@ -90,39 +90,93 @@ const show_table = (df)=>{
 }
 
 const show_table_daily = (df)=> {
-    table = document.querySelector("#table-daily-routines")
+    const div = document.querySelector("#table-daily-routines")
+    const table = document.createElement("table")
     aux = df.filter(row => row.get("Day")==count_daily)
-    var data = [{
-        type: 'table',
-        header: {
-            values: df.listColumns(),
-            align: 'center',
-            line: {width: 1, color: 'black'},
-            fill: {color: '#f5f5f5'},
-            font: {family: 'Arial', size: 12, color: 'black'}
-        },
-        cells: {
-            values: [aux.select("Day").toArray().flat(),
-                     aux.select("Start-Time").toArray().flat(),
-                     aux.select("End-Time").toArray().flat(),
-                     aux.select("Room").toArray().flat()],
+    columnas = aux.listColumns()
+    valores = aux.toArray()
+    const headerRow = document.createElement("tr")
+    columnas.forEach(function(columna) {
+        const th = document.createElement("th")
+        th.textContent = columna
+        headerRow.appendChild(th)
+    })
 
-            align: 'center',
-            line: {color: 'black', width: 1},
-            font: {family: 'Arial', size: 11, color: ['black']}
+    table.appendChild(headerRow)
+    index = 0
+    valores.forEach(function(fila) {
+        const tr = document.createElement("tr")
+        fila.forEach(function(valor) {
+            const td = document.createElement("td")
+            td.textContent = valor
+            tr.appendChild(td)
+        })
+        if (index === valores.length - 1) {
+            const td = document.createElement("td")
+            td.innerHTML = `<img src="../../../imgs/cancelar.png" alt="delete" class="delete-row"/>`
+            tr.appendChild(td)
         }
-    }];
+
+        table.appendChild(tr)
+        index++
+    })
     
-    var layout = {
-        title: `Routines Day ${count_daily}`,
-        height: 400,
-        width: 600
-    };
-    
-    Plotly.newPlot(table, data, layout);
-    document.querySelector(".routine-assignment").replaceChild(table, document.querySelector("#table-daily-routines"))
-    
+    div.innerHTML = table.outerHTML
+    document.querySelectorAll(".delete-row").forEach(function(deleteButton) {
+        deleteButton.style.width = "20px"
+        deleteButton.style.height = "20px"
+        deleteButton.style.cursor = "pointer"
+        deleteButton.addEventListener("click", function(e) {
+            const row = e.target.parentElement.parentElement
+            const day = row.children[0].textContent
+            const start = row.children[1].textContent
+            const end = row.children[2].textContent
+            const room = row.children[3].textContent
+            daily_routines = daily_routines.filter(row => row.get("Day") != day || row.get("Start-Time") != start || row.get("End-Time") != end || row.get("Room") != room)
+            start_daily.value = daily_routines.select("End-Time").toArray().flat().pop()
+            end_daily.value = ""
+            show_table_daily(daily_routines)
+        })
+
+    })
 }
+
+
+
+// const show_table_daily = (df)=> {
+//     table = document.querySelector("#table-daily-routines")
+//     aux = df.filter(row => row.get("Day")==count_daily)
+//     var data = [{
+//         type: 'table',
+//         header: {
+//             values: df.listColumns(),
+//             align: 'center',
+//             line: {width: 1, color: 'black'},
+//             fill: {color: '#f5f5f5'},
+//             font: {family: 'Arial', size: 12, color: 'black'}
+//         },
+//         cells: {
+//             values: [aux.select("Day").toArray().flat(),
+//                      aux.select("Start-Time").toArray().flat(),
+//                      aux.select("End-Time").toArray().flat(),
+//                      aux.select("Room").toArray().flat()],
+
+//             align: 'center',
+//             line: {color: 'black', width: 1},
+//             font: {family: 'Arial', size: 11, color: ['black']}
+//         }
+//     }];
+    
+//     var layout = {
+//         title: `Routines Day ${count_daily}`,
+//         height: 400,
+//         width: 600
+//     };
+    
+//     Plotly.newPlot(table, data, layout);
+//     document.querySelector(".routine-assignment").replaceChild(table, document.querySelector("#table-daily-routines"))
+    
+// }
 
 const reset = document.querySelector("#reset")
 const finish_room = document.querySelector("#finish-rooms-button")
