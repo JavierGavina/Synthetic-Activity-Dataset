@@ -178,42 +178,50 @@ const reset = document.querySelector("#reset")
 const finish_room = document.querySelector("#finish-rooms-button")
 
 reset.addEventListener("click", function(e) {
-    var options = rooms_ids.select("Room").toArray().flat();
-    
-    options.forEach(function(option) {
-        var newOption = document.createElement("option");
-        newOption.value = option;
-        newOption.text = option;
-        room_selector.appendChild(newOption);
-    });
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You will restart all the rooms assigned if you accept",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, restart it',
+        cancelButtonText: 'No, keep it',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var options = rooms_ids.select("Room").toArray().flat();
+            
+            options.forEach(function(option) {
+                var newOption = document.createElement("option");
+                newOption.value = option;
+                newOption.text = option;
+                room_selector.appendChild(newOption);
+            });
 
-    seccion2.style.display = "none"
-    seccion3.style.display = "none"
-    daily_room_selector.innerHTML = `<option value="" disabled selected id="default">--Select a room--</option>`
-
-
-    /*RESTART ALL DATAFRAMES, TABLES AND COUNTERS*/
-    rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
-    daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
-    document.querySelector("#table-rooms").innerHTML = ""
-    document.querySelector("#table-daily-routines").innerHTML = ""
-    document.querySelector("#startTime").value = "00:00"
-    document.querySelector("#endTime").value = ""
-    document.querySelector("#endTime").removeAttribute("readonly")
-    count = 0
-
-    room_selector.disabled = false;
-    daily_room_selector.disabled = false;
+            seccion2.style.display = "none"
+            seccion3.style.display = "none"
+            daily_room_selector.innerHTML = `<option value="" disabled selected id="default">--Select a room--</option>`
 
 
-    count_daily = 1
-    const definedDays = document.querySelector("#defined-days")
-    document.querySelectorAll(".dragable-day").forEach(function(day) {
-        definedDays.removeChild(day)
+            /*RESTART ALL DATAFRAMES, TABLES AND COUNTERS*/
+            rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
+            daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
+            document.querySelector("#table-rooms").innerHTML = ""
+            document.querySelector("#table-daily-routines").innerHTML = ""
+            document.querySelector("#startTime").value = "00:00"
+            document.querySelector("#endTime").value = ""
+            document.querySelector("#endTime").removeAttribute("readonly")
+            count = 0
+
+            room_selector.disabled = false;
+            daily_room_selector.disabled = false;
+
+
+            count_daily = 1
+            const definedDays = document.querySelector("#defined-days")
+            document.querySelectorAll(".dragable-day").forEach(function(day) {
+                definedDays.removeChild(day)
+            })
+        }
     })
-
-
-    // Restaurar evento finish_room
 }) 
 
 finish_room.addEventListener("click", function(e) {
@@ -342,29 +350,40 @@ const downloadCSV = (data) => {
 // });
 
 reset_daily.addEventListener("click", function(e) {
-    count_daily = 1
-    daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
-    document.querySelector("#table-daily-routines").innerHTML = ""
-    start_daily.value = "00:00"
-    end_daily.value = ""
-    end_daily.removeAttribute("readonly")
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You will restart all the daily routines if you accept",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, restart it',
+        cancelButtonText: 'No, keep it',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            count_daily = 1
+            daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
+            document.querySelector("#table-daily-routines").innerHTML = ""
+            start_daily.value = "00:00"
+            end_daily.value = ""
+            end_daily.removeAttribute("readonly")
 
-    seccion3.style.display = "none"
-    daily_room_selector.disabled = false;
-    const definedDays = document.querySelector("#defined-days")
-    document.querySelectorAll(".dragable-day").forEach(function(day) {
-        definedDays.removeChild(day)
-    })
+            seccion3.style.display = "none"
+            daily_room_selector.disabled = false;
+            const definedDays = document.querySelector("#defined-days")
+            document.querySelectorAll(".dragable-day").forEach(function(day) {
+                definedDays.removeChild(day)
+            })
 
-    document.querySelectorAll('#calendar-container td').forEach(dayCell => {
-        if (dayCell.id.startsWith('day-')) {
-            dayCell.style.backgroundColor = ''; // Quita el color de fondo
-            // También puedes eliminar otros estilos que hayas aplicado (e.g., texto, bordes)
+            document.querySelectorAll('#calendar-container td').forEach(dayCell => {
+                if (dayCell.id.startsWith('day-')) {
+                    dayCell.style.backgroundColor = ''; // Quita el color de fondo
+                    // También puedes eliminar otros estilos que hayas aplicado (e.g., texto, bordes)
+                }
+            });
+
+            // Resetear la variable JSON assignedRoutines
+            assignedRoutines = {};
         }
-    });
-
-    // Resetear la variable JSON assignedRoutines
-    assignedRoutines = {};
+    })
 })
 
 add_activity.addEventListener("click", function(e) {
@@ -718,33 +737,51 @@ reconvertToDateString = function(date){
 
 const export_routines = document.querySelector("#export-routines")
 export_routines.addEventListener("click", function(e) {
-    // Order the object by date
-    const orderedRoutines = {};
-    getArrayNativeDates(Object.keys(assignedRoutines)).sort((a,b)=>a-b).forEach(function(key) {
-        date_string = reconvertToDateString(key)
-        orderedRoutines[date_string] = assignedRoutines[date_string];
-    });
-    const routines = JSON.stringify(orderedRoutines, null, 5);
-    const blob = new Blob([routines], {type: "application/json"});
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "assigned_routines.json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    Swal.fire({
+        title: "Succesful",
+        text: "The routines have been scheduled successfully",
+        icon: "success",
+        confirmButtonText: 'Ok'
+    }).then(() => {
+        // Order the object by date
+        const orderedRoutines = {};
+        getArrayNativeDates(Object.keys(assignedRoutines)).sort((a,b)=>a-b).forEach(function(key) {
+            date_string = reconvertToDateString(key)
+            orderedRoutines[date_string] = assignedRoutines[date_string];
+        });
+        const routines = JSON.stringify(orderedRoutines, null, 5);
+        const blob = new Blob([routines], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "assigned_routines.json";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    })
 })
 
 const reset_calendar = document.querySelector("#reset-calendar")
 reset_calendar.addEventListener("click", function(e) {
-    document.querySelectorAll('#calendar-container td').forEach(dayCell => {
-        if (dayCell.id.startsWith('day-')) {
-            dayCell.style.backgroundColor = ''; // Quita el color de fondo
-            // También puedes eliminar otros estilos que hayas aplicado (e.g., texto, bordes)
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You will restart all the calendar if you accept",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, restart it',
+        cancelButtonText: 'No, keep it',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.querySelectorAll('#calendar-container td').forEach(dayCell => {
+                if (dayCell.id.startsWith('day-')) {
+                    dayCell.style.backgroundColor = ''; // Quita el color de fondo
+                    // También puedes eliminar otros estilos que hayas aplicado (e.g., texto, bordes)
+                }
+            });
+            assignedRoutines = {};
         }
-    });
-    assignedRoutines = {};
+    })
 })
 
 
