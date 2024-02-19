@@ -139,10 +139,11 @@ const show_table_daily = (df)=> {
             const room = row.children[3].textContent;
             daily_routines = daily_routines.filter(row => row.get("Day") != day || row.get("Start-Time") != start || row.get("End-Time") != end || row.get("Room") != room);
             start_daily.value = daily_routines.select("End-Time").toArray().flat().pop();
-            if (start_daily.value.split(":").length === 1){
+            end_daily.value = "";
+            clearTimeout(hoverTimer);
+            if (start_daily.value.split(":").length === 1 || start_daily.value === "23:59"){
                 start_daily.value = "00:00";
             }
-            end_daily.value = "";
             show_table_daily(daily_routines);
         });
     
@@ -172,43 +173,6 @@ const show_table_daily = (df)=> {
     });
     
 }
-
-
-
-// const show_table_daily = (df)=> {
-//     table = document.querySelector("#table-daily-routines")
-//     aux = df.filter(row => row.get("Day")==count_daily)
-//     var data = [{
-//         type: 'table',
-//         header: {
-//             values: df.listColumns(),
-//             align: 'center',
-//             line: {width: 1, color: 'black'},
-//             fill: {color: '#f5f5f5'},
-//             font: {family: 'Arial', size: 12, color: 'black'}
-//         },
-//         cells: {
-//             values: [aux.select("Day").toArray().flat(),
-//                      aux.select("Start-Time").toArray().flat(),
-//                      aux.select("End-Time").toArray().flat(),
-//                      aux.select("Room").toArray().flat()],
-
-//             align: 'center',
-//             line: {color: 'black', width: 1},
-//             font: {family: 'Arial', size: 11, color: ['black']}
-//         }
-//     }];
-    
-//     var layout = {
-//         title: `Routines Day ${count_daily}`,
-//         height: 400,
-//         width: 600
-//     };
-    
-//     Plotly.newPlot(table, data, layout);
-//     document.querySelector(".routine-assignment").replaceChild(table, document.querySelector("#table-daily-routines"))
-    
-// }
 
 const reset = document.querySelector("#reset")
 const finish_room = document.querySelector("#finish-rooms-button")
@@ -305,9 +269,16 @@ const validarHoras = function(element){
         return false
     }
     if ((hora > 23 || minuto > 59) || (hora < 0 || minuto < 0)){
-        element.value=""
-        element.focus()
-        window.alert("The times must be from 00:00 to 23:59.")
+        Swal.fire({
+            title: "Error!",
+            text: "The times must be from 00:00 to 23:59.",
+            icon: "error",
+            confirmButtonText: 'Ok'
+        }).then(()=>{setTimeout(()=>{
+            element.value=""
+            element.focus()
+        }, 300)})
+        
         return false
     }
 
@@ -341,22 +312,15 @@ end_daily.addEventListener("keyup", function(e) {
 
 end_daily.addEventListener("keydown", function(e){
     if (e.key === "Enter"){
-        if (end_daily.hasAttribute("readonly")){
-            add_daily.click()
-        } else {
-            add_activity.click()
-        }
+        e.preventDefault()
+        add_activity.click()
     }
 })
 
 daily_room_selector.addEventListener("keydown", function(e) {
     if (e.key === "Enter"){
         e.preventDefault()
-        if (end_daily.hasAttribute("readonly")){
-            add_daily.click()
-        } else {
-            add_activity.click()
-        }
+        add_activity.click()
     }
 })
 
@@ -403,51 +367,29 @@ reset_daily.addEventListener("click", function(e) {
     assignedRoutines = {};
 })
 
-/*MODIFICAR*/
-// add_activity.addEventListener("click", function(e) {
-//     if (validarHoras(start_daily) && validarHoras(end_daily)){
-//         if (convertToSeconds(start_daily.value) > convertToSeconds(end_daily.value)){
-//             end_daily.value=""
-//             end_daily.focus()
-//             window.alert("The start time cannot be greater than the end time.")
-//             return
-//         }
-//         if (daily_room_selector.value === ""){
-//             daily_room_selector.focus()
-//             window.alert("You have to select a room")
-//             return
-//         }
-
-//         if (end_daily.hasAttribute("readonly")){
-//             window.alert("Day completed.")
-//             return
-//         }
-
-//         if (end_daily.value != "23:59"){
-//             daily_routines = daily_routines.push({"Day": count_daily,  "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
-//             start_daily.value = end_daily.value
-//             end_daily.value = ""
-
-//         } else {
-//             end_daily.setAttribute("readonly", "readonly")
-//             daily_routines = daily_routines.push({"Day": count_daily,  "Start-Time": start_daily.value, "End-Time": end_daily.value, "Room": daily_room_selector.value})
-//         }
-        
-//         show_table_daily(daily_routines)
-//     }
-// })
-
 add_activity.addEventListener("click", function(e) {
     if (validarHoras(start_daily) && validarHoras(end_daily)){
-        if (convertToSeconds(start_daily.value) > convertToSeconds(end_daily.value)){
-            end_daily.value=""
-            end_daily.focus()
-            window.alert("The start time cannot be greater than the end time.")
+        if (convertToSeconds(start_daily.value) >= convertToSeconds(end_daily.value)){
+            Swal.fire({
+                title: 'Error!',
+                text: "The start time cannot be greater than the end time.",
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            }).then(() => {setTimeout(()=>{
+                end_daily.value=""
+                end_daily.focus()
+            }, 500)})
+           
             return
         }
         if (daily_room_selector.value === ""){
-            daily_room_selector.focus()
-            window.alert("You have to select a room")
+            Swal.fire({
+                title: 'Error!',
+                text: "You have to select a room",
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            }).then(() => {setTimeout(()=>{daily_room_selector.focus()}, 500)})
+            
             return
         }
 
@@ -472,6 +414,56 @@ add_activity.addEventListener("click", function(e) {
             newContent.id = `routine-day-${count_daily-1}`
             newContent.classList.add("dragable-day") // Add the class "dragable-day"
             newContent.style.backgroundColor = colores_routines[count_daily-1]
+            // Añadimos swal para mostrar la tabla tanto si hacemos click, como si dejamos el ratón dos segundos encima
+
+            let hoverTimer;
+
+            newContent.addEventListener("click", function(e) {
+                count_daily = parseInt(newContent.textContent.split(" ")[2])
+                show_table_daily(daily_routines)
+                document.querySelector("#table-daily-routines").querySelector("img").remove()
+                show_html = document.querySelector("#table-daily-routines").outerHTML
+                clearTimeout(hoverTimer);
+                Swal.fire({
+                    title: `Daily routine ${count_daily}`,
+                    html: show_html,
+                    confirmButtonText: 'Ok'
+                }).then(()=>{document.querySelector("#table-daily-routines").querySelector("img").remove()});
+            })
+
+            newContent.addEventListener("mouseover", function() {
+                
+                hoverTimer = setTimeout(function() {
+                    count_daily = parseInt(newContent.textContent.split(" ")[2])
+                    show_table_daily(daily_routines)
+                    document.querySelector("#table-daily-routines").querySelector("img").remove()
+                    show_html = document.querySelector("#table-daily-routines").outerHTML
+                    Swal.fire({
+                        title: `Daily routine ${count_daily}`,
+                        html: show_html,
+                        confirmButtonText: 'Ok'
+                    });
+                }, 2000); // 2000 milisegundos = 2 segundos
+            });
+
+            newContent.addEventListener("mouseout", function() {
+                clearTimeout(hoverTimer);
+            });
+
+            newContent.addEventListener("dragstart", function(e) {
+                clearTimeout(hoverTimer);
+            })
+
+            newContent.addEventListener("dragend", function(e) {
+                clearTimeout(hoverTimer);
+            })
+
+            newContent.addEventListener("dragover", function(e) {
+                clearTimeout(hoverTimer);
+            })
+
+            
+
             defined_days.insertBefore(newContent, defined_days.querySelector("button"))
         }
         
