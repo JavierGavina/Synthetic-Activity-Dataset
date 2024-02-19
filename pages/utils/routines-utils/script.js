@@ -34,61 +34,16 @@ var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
 var daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
 var assignedRoutines = {};
 
+const seccion1 = document.querySelector("#room-introduction")
 const seccion2 = document.querySelector("#daily-routines")
 const seccion3 = document.querySelector("#schedule-routines")
 seccion2.style.display = "none"
 seccion3.style.display = "none"
 
-room_selector = document.querySelector(".room-controls")
 daily_room_selector = document.querySelector("#room-daily")
 var count = 0
 
-room_selector.addEventListener("change", function(e) {
-    count++
-    defaultOption = document.querySelector('#default')
-    selectedOption = document.querySelector(`option[value="${room_selector.value}"]`)
 
-    rooms_ids = rooms_ids.push({Room: e.target.value, "ID-Room": count})
-    show_table(rooms_ids)
-
-    selectedOption.remove()
-    if (defaultOption) {
-        defaultOption.remove()
-    }
-
-})
-
-
-const show_table = (df)=>{
-    table = document.querySelector("#table-rooms")
-    var data = [{
-        type: 'table',
-        header: {
-            values: df.listColumns(),
-            align: 'center',
-            line: {width: 1, color: 'black'},
-            fill: {color: '#f5f5f5'},
-            font: {family: 'Arial', size: 12, color: 'black'}
-        },
-        cells: {
-            values: [df.select("Room").toArray().flat(),
-                     df.select("ID-Room").toArray().flat()],
-            align: 'center',
-            line: {color: 'black', width: 1},
-            font: {family: 'Arial', size: 11, color: ['black']}
-        }
-    }];
-    
-    var layout = {
-        title: 'Tabla Interactiva',
-        height: 400,
-        width: 600
-    };
-    
-    Plotly.newPlot(table, data, layout);
-    document.querySelector("#assign-rooms").replaceChild(table, document.querySelector("#table-rooms"))
-    
-}
 
 const show_table_daily = (df)=> {
     const div = document.querySelector("#table-daily-routines")
@@ -174,87 +129,86 @@ const show_table_daily = (df)=> {
     
 }
 
-const reset = document.querySelector("#reset")
-const finish_room = document.querySelector("#finish-rooms-button")
+/*CODIGO PARA EL DRAGABLE*/
+/*ANIMACIONES ZONA DRAGABLE*/
+dragArea = document.querySelector('#drag-area');
+// Evento para cuando un archivo está siendo arrastrado sobre el área
+dragArea.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dragArea.classList.add('dragover');
+});
 
-reset.addEventListener("click", function(e) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You will restart all the rooms assigned if you accept",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, restart it',
-        cancelButtonText: 'No, keep it',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            var options = rooms_ids.select("Room").toArray().flat();
-            
-            options.forEach(function(option) {
-                var newOption = document.createElement("option");
-                newOption.value = option;
-                newOption.text = option;
-                room_selector.appendChild(newOption);
-            });
+// Evento para cuando un archivo sale del área
+dragArea.addEventListener('dragleave', () => {
+    dragArea.classList.remove('dragover');
+});
 
-            seccion2.style.display = "none"
-            seccion3.style.display = "none"
-            daily_room_selector.innerHTML = `<option value="" disabled selected id="default">--Select a room--</option>`
+// Evento para cuando un archivo es soltado en el área
+dragArea.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dragArea.classList.remove('dragover');
+    const files = event.dataTransfer.files;
+    processFile(files[0]); // Procesa el primer archivo soltado
+});
 
+// Evento para cuando se hace clic en el área de arrastre
+dragArea.addEventListener('click', () => {
+    const fileInput = document.createElement('input');
+    fileInput.accept = '.json';
+    fileInput.type = 'file';
+    fileInput.click();
+    fileInput.addEventListener('change', () => {
+        processFile(fileInput.files[0]);
+    });
+});
 
-            /*RESTART ALL DATAFRAMES, TABLES AND COUNTERS*/
-            rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
-            daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);
-            document.querySelector("#table-rooms").innerHTML = ""
-            document.querySelector("#table-daily-routines").innerHTML = ""
-            document.querySelector("#startTime").value = "00:00"
-            document.querySelector("#endTime").value = ""
-            document.querySelector("#endTime").removeAttribute("readonly")
-            count = 0
-
-            room_selector.disabled = false;
-            daily_room_selector.disabled = false;
-
-
-            count_daily = 1
-            const definedDays = document.querySelector("#defined-days")
-            document.querySelectorAll(".dragable-day").forEach(function(day) {
-                definedDays.removeChild(day)
-            })
-        }
-    })
-}) 
-
-finish_room.addEventListener("click", function(e) {
-    if (rooms_ids.count() === 0){
-        
+const processFile = (file) => {
+    if (file.type != 'application/json') {
         Swal.fire({
             title: 'Error!',
-            text: "You have to assign at least one room",
+            text: "The file must be a JSON",
             icon: 'error',
             confirmButtonText: 'Ok'
-        }).then(() => {setTimeout(()=>{room_selector.focus()}, 500)})
-        return
+        })
+        return;
+    } else {
+        const reader = new FileReader();
+        reader.readAsText(file, 'UTF-8');
+        reader.onload = readerEvent => {
+            const content = readerEvent.target.result;
+            try {
+                json = JSON.parse(content);
+                rooms = Object.keys(json)
+                ids = Object.values(json)
+                rooms.forEach((room, index) => {
+                    rooms_ids = rooms_ids.push({"Room": room, "ID-Room": ids[index]})
+                    daily_room_selector.innerHTML += `<option value="${room}">${room}</option>`
+                })
+                
+                Swal.fire({
+                    title: "Succesful",
+                    text: "The rooms have been imported successfully",
+                    icon: "success",
+                    confirmButtonText: 'Ok'
+                }).then(() => {
+                    setTimeout(()=>{
+                        seccion2.style.display = "block"
+                        window.location.href = "#daily-routines"}, 500)
+                    })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    title: 'Error!',
+                    text: "The file is not a valid JSON",
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
+        }
     }
-    if (room_selector.disabled === false){
+}
 
-        seccion2.style.display = "block"
-        selected_rooms = rooms_ids.select("Room").toArray().flat()
-    
-        if (daily_room_selector.children.length === 1 || daily_room_selector.children.length === 0){
-            selected_rooms.forEach(function(room) {
-                    var newOption = document.createElement("option");
-                    newOption.value = room;
-                    newOption.text = room[0].toUpperCase() + room.slice(1).toLowerCase();
-                    daily_room_selector.appendChild(newOption);
-            
-            })
-        } 
-    }
 
-    // Impedimos que se puedan seleccionar más habitaciones
-    room_selector.disabled = true;
-    window.location.href = "#daily-routines";
-});
 
 
 
@@ -343,11 +297,6 @@ const downloadCSV = (data) => {
     document.body.appendChild(link);
     link.click();
 }
-
-// const downloadButton = document.querySelector("#download-button");
-// downloadButton.addEventListener("click", function(e) {
-//     downloadCSV(data);
-// });
 
 reset_daily.addEventListener("click", function(e) {
     Swal.fire({

@@ -66,32 +66,48 @@ header {
 
 #room-introduction {
     width: 100%;
-    max-width: 800px; /* Adjust this value based on your design preference */
+    max-width: 1200px; /* Adjust this value based on your design preference */
     margin: 20px auto; /* Esto centrará la sección horizontalmente */
     display: flex;
     flex-direction: column;
     align-items: center; /* Esto centrará los elementos hijos horizontalmente */
     justify-content: center; 
 }
+.dragable{
+    margin-right: 300px;
+    margin-left: 300px;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
 
-#assign-rooms, #daily-routines {
+/*DRAGABLE STYLES*/
+#drag-area {
+    display: flex;
     width: 100%;
-    max-width: 800px; /* Adjust this value based on your design preference */
-}
-
-#finish-rooms {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Crea dos columnas de igual anchura */
-    gap: 10px; /* Espacio entre las columnas */
-    width: 70%;
-    max-width: 500px; /* Asegúrate de que esto concuerde con el ancho de tus secciones */
-    margin-top: 20px; /* Espacio por encima del grid para separar de otros elementos */
-}
-
-#table-rooms, #results {
-    width: 100%;
-    overflow-x: auto; /* For small devices */
-}
+    justify-content: center;
+    align-items: center;
+    height: 200px; /* Adjust the height as needed */
+    border: 2px dashed #ccc;
+    background-color: #f9f9f9;
+    color: #999;
+    font-size: 18px;
+  }
+  
+  
+  /* Estilos para cuando el ratón está encima */
+  /*Lo puedes reutilizar en JavaScript con el método .classList*/
+  #drag-area:hover {
+    background-color: #f0f0f0;
+    border-color: #333;
+  }
+  /* Estilos para cuando un fichero está siendo arrastrado encima */
+  /*Lo puedes reutilizar en JavaScript con el método .classList*/
+  #drag-area.dragover {
+    background-color: #e8f4ff;
+    border-color: #007bff;
+    border-style: solid;
+    height: 230px; /* Aumentamos el tamaño */
+  }
 
 /* Responsive Design */
 @media (max-width: 768px) {
