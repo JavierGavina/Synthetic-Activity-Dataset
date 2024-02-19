@@ -58,6 +58,7 @@ room_selector.addEventListener("change", function(e) {
 
 })
 
+
 const show_table = (df)=>{
     table = document.querySelector("#table-rooms")
     var data = [{
@@ -123,22 +124,53 @@ const show_table_daily = (df)=> {
     
     div.innerHTML = table.outerHTML
     document.querySelectorAll(".delete-row").forEach(function(deleteButton) {
-        deleteButton.style.width = "20px"
-        deleteButton.style.height = "20px"
-        deleteButton.style.cursor = "pointer"
+        deleteButton.style.width = "20px";
+        deleteButton.style.height = "20px";
+        deleteButton.style.cursor = "pointer";
+    
+        // Inicializar una variable para almacenar el temporizador
+        let hoverTimer;
+    
         deleteButton.addEventListener("click", function(e) {
-            const row = e.target.parentElement.parentElement
-            const day = row.children[0].textContent
-            const start = row.children[1].textContent
-            const end = row.children[2].textContent
-            const room = row.children[3].textContent
-            daily_routines = daily_routines.filter(row => row.get("Day") != day || row.get("Start-Time") != start || row.get("End-Time") != end || row.get("Room") != room)
-            start_daily.value = daily_routines.select("End-Time").toArray().flat().pop()
-            end_daily.value = ""
-            show_table_daily(daily_routines)
-        })
-
-    })
+            const row = e.target.parentElement.parentElement;
+            const day = row.children[0].textContent;
+            const start = row.children[1].textContent;
+            const end = row.children[2].textContent;
+            const room = row.children[3].textContent;
+            daily_routines = daily_routines.filter(row => row.get("Day") != day || row.get("Start-Time") != start || row.get("End-Time") != end || row.get("Room") != room);
+            start_daily.value = daily_routines.select("End-Time").toArray().flat().pop();
+            if (start_daily.value.split(":").length === 1){
+                start_daily.value = "00:00";
+            }
+            end_daily.value = "";
+            show_table_daily(daily_routines);
+        });
+    
+        // Añadir el evento mouseover para iniciar el temporizador
+        deleteButton.addEventListener("mouseover", function() {
+            hoverTimer = setTimeout(function() {
+                Swal.fire({
+                    title: 'Delete last activity',
+                    text: "Do you want to delete the last activity?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it',
+                    cancelButtonText: 'No, keep it',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Simula un click en el botón de eliminar
+                        deleteButton.click();
+                    }
+                });
+            }, 2000); // 2000 milisegundos = 2 segundos
+        });
+    
+        // Añadir el evento mouseout para cancelar el temporizador si el usuario sale antes de 2 segundos
+        deleteButton.addEventListener("mouseout", function() {
+            clearTimeout(hoverTimer);
+        });
+    });
+    
 }
 
 
@@ -222,8 +254,13 @@ reset.addEventListener("click", function(e) {
 
 finish_room.addEventListener("click", function(e) {
     if (rooms_ids.count() === 0){
-        room_selector.focus()
-        window.alert("You have to assign at least one room")
+        
+        Swal.fire({
+            title: 'Error!',
+            text: "You have to assign at least one room",
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        }).then(() => {setTimeout(()=>{room_selector.focus()}, 500)})
         return
     }
     if (room_selector.disabled === false){
@@ -258,8 +295,13 @@ const validarHoras = function(element){
     const [hora, minuto] = element.value.split(":")
     if (hora.length != 2 || minuto.length != 2){
         element.value=""
-        element.focus()
-        window.alert("Times must be in HH:MM format.")
+        Swal.fire({
+            title: "Error!",
+            text: "Times must be in HH:MM format.",
+            icon: "error",
+            confirmButtonText: 'Ok'
+        }).then(()=>{setTimeout(()=>{element.focus()}, 500)})
+        
         return false
     }
     if ((hora > 23 || minuto > 59) || (hora < 0 || minuto < 0)){
@@ -440,7 +482,12 @@ add_activity.addEventListener("click", function(e) {
 complete_daily.addEventListener("click", function(e) {
     if (daily_routines.count() === 0){
         end_daily.focus()
-        window.alert("You have to assing at least one daily activity")
+        Swal.fire({
+            title: 'Error!',
+            text: "You have to assing at least one daily activity",
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
         return
     }
 
@@ -451,18 +498,37 @@ complete_daily.addEventListener("click", function(e) {
 
     if (start_daily.value != "00:00" || end_daily.value != ""){
         end_daily.focus()
-        window.alert("You have to complete the type of daily routine")
+        Swal.fire({
+            title: 'Error!',
+            text: "You have not finished the daily routine, you have to introduce the last interval as 23:59",
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
     } else {
         daily_room_selector.disabled = true;
         start_daily.value=""
         end_daily.value=""
         start_daily.setAttribute("readonly", "readonly")
         end_daily.setAttribute("readonly", "readonly")
-        window.location.href = "#schedule-routines"
-        const respuesta = window.confirm("Do you want to download a csv with your daily routines?")
-        if (respuesta){
-            downloadCSV(daily_routines);
-        }
+        
+        Swal.fire({
+            title: 'Daily routine completed!',
+            text: "Do you want to download a csv with your daily routines?",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, download it',
+            cancelButtonText: 'No, thanks',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                downloadCSV(daily_routines);
+            }
+        }).finally(() => {
+            setTimeout(()=>{window.location.href = "#schedule-routines"}, 500)
+        });
+        // const respuesta = window.confirm("Do you want to download a csv with your daily routines?")
+        // if (respuesta){
+        //     downloadCSV(daily_routines);
+        // }
         dragables = document.querySelectorAll(".dragable-day")
     
         dragables.forEach((dragable) => {
