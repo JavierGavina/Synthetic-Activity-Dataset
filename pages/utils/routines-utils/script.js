@@ -69,7 +69,7 @@ const show_table_daily = (df)=> {
         })
         if (index === valores.length - 1) {
             const td = document.createElement("td")
-            td.innerHTML = `<img src="../../imgs/cancelar.png" alt="delete" class="delete-row"/>`
+            td.innerHTML = `<img src="../imgs/cancelar.png" alt="delete" class="delete-row"/>`
             tr.appendChild(td)
         }
 
