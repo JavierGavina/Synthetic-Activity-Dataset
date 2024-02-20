@@ -1,10 +1,10 @@
 html{
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
 }
 
 body, html {
@@ -14,17 +14,24 @@ body, html {
 }
 
 body{
-    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
+  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
 }
 
 /*COSILLAS PARA EL TÍTULO Y EL MENÚ DE LA CABECERA*/
+
 header {
-    background-color: #007bff;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  background-color: #007bff;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1; /* Add this line */
 }
+
+
 
 .page-title {
     margin: 0;
@@ -62,7 +69,7 @@ header {
 
 #video-box {
   grid-area:videodemo;
-  margin-top: 20px;
+  margin-top: 240px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -153,4 +160,9 @@ header {
     padding: 20px 0;
     position: relative; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
     text-align: center;
+  }
+
+  #user-guide-box img {
+    max-width: 30%;
+    max-height: 30%;
   }
