@@ -63,6 +63,7 @@ reset_button.addEventListener("mouseout", function(e){
     reset_button.style.backgroundColor = "#DC1B1B"
 })
 
+
 finish_button.addEventListener("click", function(e){
     if (rooms_ids.count() === 0){
         
