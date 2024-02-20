@@ -26,6 +26,7 @@ function onPlayerReady(event) {
     });
 }
 
+const room_assigment = document.querySelector('#room-assignment-box');
 const routines_definition = document.querySelector('#definition-box');
 const routines_simulation = document.querySelector('#simulation-box');
 const user_guide = document.querySelector("#user-guide-box")
@@ -41,3 +42,7 @@ routines_simulation.addEventListener('click', function() {
 user_guide.addEventListener("click", function(){
     window.location.href = "./pages/user-guide.html"
 })
+
+room_assigment.addEventListener('click', function() {
+    window.location.href = "./pages/room-assignment.html";
+});
