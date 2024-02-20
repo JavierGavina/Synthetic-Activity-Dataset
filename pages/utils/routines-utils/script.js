@@ -72,6 +72,7 @@ const show_table_daily = (df)=> {
             td.innerHTML = `<img src="../imgs/cancelar.png" alt="delete" class="delete-row"/>`
             tr.appendChild(td)
         }
+        
 
         table.appendChild(tr)
         index++

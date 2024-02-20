@@ -146,6 +146,7 @@ document.querySelectorAll(".drag-area").forEach((dragArea) => {
             }
         }
     }
+
     
     function displayImage(dragArea) {
         // Remueve los eventos
@@ -325,7 +326,7 @@ const downloadCSV = (data) => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "labelmap.csv");
+    link.setAttribute("download", "activities-simulation.csv");
     document.body.appendChild(link);
     link.click();
 }

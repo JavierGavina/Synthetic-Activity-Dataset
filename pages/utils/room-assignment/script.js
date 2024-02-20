@@ -42,6 +42,7 @@ const show_table = (df)=>{
         }
     }];
     
+    
     var layout = {
         title: 'Tabla Interactiva',
         height: 400,
