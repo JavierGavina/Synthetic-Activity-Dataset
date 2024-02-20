@@ -55,6 +55,13 @@ const show_table = (df)=>{
 
 finish_button = document.querySelector("#finish-rooms-button")
 reset_button = document.querySelector("#reset")
+reset_button.style.backgroundColor = "#DC1B1B"
+reset_button.addEventListener("mouseover", function(e){
+    reset_button.style.backgroundColor = "#831414"
+})
+reset_button.addEventListener("mouseout", function(e){
+    reset_button.style.backgroundColor = "#DC1B1B"
+})
 
 finish_button.addEventListener("click", function(e){
     if (rooms_ids.count() === 0){

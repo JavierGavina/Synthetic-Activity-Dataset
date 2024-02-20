@@ -261,6 +261,14 @@ const add_activity = document.querySelector("#add-activity")
 const add_daily = document.querySelector("#add-daily")
 const complete_daily = document.querySelector("#complete-daily")
 
+reset_daily.style.backgroundColor = "#DC1B1B"
+reset_daily.addEventListener("mouseover", function(e){
+    reset_daily.style.backgroundColor = "#831414"
+})
+reset_daily.addEventListener("mouseout", function(e){
+    reset_daily.style.backgroundColor = "#DC1B1B"
+})
+
 
 end_daily.addEventListener("keyup", function(e) {
     input_char = end_daily.value 
@@ -725,6 +733,13 @@ export_routines.addEventListener("click", function(e) {
 })
 
 const reset_calendar = document.querySelector("#reset-calendar")
+reset_calendar.style.backgroundColor = "#DC1B1B"
+reset_calendar.addEventListener("mouseover", function(e){
+    reset_calendar.style.backgroundColor = "#831414"
+})
+reset_calendar.addEventListener("mouseout", function(e){
+    reset_calendar.style.backgroundColor = "#DC1B1B"
+})
 reset_calendar.addEventListener("click", function(e) {
     Swal.fire({
         title: 'Are you sure?',
@@ -738,7 +753,6 @@ reset_calendar.addEventListener("click", function(e) {
             document.querySelectorAll('#calendar-container td').forEach(dayCell => {
                 if (dayCell.id.startsWith('day-')) {
                     dayCell.style.backgroundColor = ''; // Quita el color de fondo
-                    // También puedes eliminar otros estilos que hayas aplicado (e.g., texto, bordes)
                 }
             });
             assignedRoutines = {};
