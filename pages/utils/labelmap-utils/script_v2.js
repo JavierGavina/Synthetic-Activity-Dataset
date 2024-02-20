@@ -153,7 +153,7 @@ document.querySelectorAll(".drag-area").forEach((dragArea) => {
         
         // Añade la imagen al dragArea
         const img = document.createElement('img');
-        img.src = '../../imgs/json-icon.png';
+        img.src = '../imgs/json-icon.png';
         img.alt = 'JSON File Icon';
         img.style.width = '100px'; // Establece el tamaño de la imagen
         dragArea.innerHTML = ''; // Limpia cualquier contenido anterior
