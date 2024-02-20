@@ -18,7 +18,12 @@ header {
     padding: 20px 0;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1; /* Add this line */
+  }
+
 
 .page-title {
     margin: 0;
@@ -68,6 +73,7 @@ header {
     width: 100%;
     max-width: 1200px; /* Adjust this value based on your design preference */
     margin: 20px auto; /* Esto centrará la sección horizontalmente */
+    margin-top: 120px;
     display: flex;
     flex-direction: column;
     align-items: center; /* Esto centrará los elementos hijos horizontalmente */

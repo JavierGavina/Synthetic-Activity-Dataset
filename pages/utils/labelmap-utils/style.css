@@ -18,7 +18,11 @@ header {
     padding: 20px 0;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1; /* Add this line */
+  }
 
 .page-title {
     margin: 0;
@@ -54,7 +58,7 @@ header {
 #intro .page-description-div{
     margin-left: 300px;
     margin-right: 300px;
-    margin-top: 50px;
+    margin-top: 150px;
 }
 
 .dragable{
