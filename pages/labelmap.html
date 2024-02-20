@@ -28,10 +28,21 @@
                 <h1 class="page-description">Routine Simulation</h1>
                 <p class="page-description">In this section, you have to drag a descriptive file of routines of a user, and by modifying the threshold parameter (which determines the variability of the time slots of the routines), you can obtain a file in which for each minute of the day you have noted in which room a user is in.</p>
                 <p class="page-description" id="second-paragraph">This file can be obtained in the <a href="./routines.html">Routines Definition section.</a></p>
+                <p class="page-description"><b>You can double-click for undo the uploading of a file</b></p>
             </div>
-            <div class="dragable">
-                <h1>Select or drag a file to process it and continue working with the web page.</h1>
-                <div id="drag-area">Drag files here or click to select</div>
+            <div class="dragables-container">
+                <div class="dragable" id="dragable-dictionary">
+                    <h1>Select or drag the <em>dictionary_rooms.json</em> file.</h1>
+                    <div id="dictionary-rooms" class="drag-area" nameFile="dictionary_rooms.json">Drag files here or click to select</div>
+                </div>
+                <div class="dragable" id="dragable-daily-activities">
+                    <h1>Select or drag the <em>daily_routines.json</em> file </h1>
+                    <div id="daily-activities" class="drag-area" nameFile="daily_routines.json">Drag files here or click to select</div>
+                </div>
+                <div class="dragable" id="dragable-assigned-routines">
+                    <h1>Select or drag the <em>assigned_routines.json</em> file </h1>
+                    <div id="assigned-routines" class="drag-area" nameFile="assigned_routines.json">Drag files here or click to select</div>
+                </div>
             </div>
         </section>
 
@@ -88,7 +99,7 @@
             <p>© 2024 - Synthetic Activities Dataset</p>
         </footer>
 
-        <script src="./utils/labelmap-utils/script.js"></script>
+        <script src="./utils/labelmap-utils/script_v2.js"></script>
         <script src="./utils/sweetalert2.min.js"></script>
 
     </body>

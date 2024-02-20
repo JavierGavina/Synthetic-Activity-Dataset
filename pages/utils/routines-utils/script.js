@@ -286,16 +286,25 @@ daily_room_selector.addEventListener("keydown", function(e) {
     }
 })
 
-const downloadCSV = (data) => {
-    columnas = data.listColumns()
-    filas = data.toArray()
-    const csvContent = "data:text/csv;charset=utf-8," + columnas.join(",") + "\n" + filas.map(row => row.join(",")).join("\n");
-    const encodedUri = encodeURI(csvContent);
+const downloadJSON = (data) => {
+    out_json = []
+    data.select("Day").dropDuplicates().toArray().flat().forEach(day => {
+        out_json.push({
+            "typeDate":day,
+            "intervals": data.filter(row => row.get("Day") == day).select("Start-Time", "End-Time").toArray(),
+            "rooms": data.filter(row => row.get("Day") == day).select("Room").toArray().flat()
+        })
+    })
+    const json = JSON.stringify(out_json, null, 5);
+    const blob = new Blob([json], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "daily_routines.csv");
+    link.href = url;
+    link.download = "daily_routines.json";
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
 
 reset_daily.addEventListener("click", function(e) {
@@ -444,7 +453,7 @@ complete_daily.addEventListener("click", function(e) {
         end_daily.focus()
         Swal.fire({
             title: 'Error!',
-            text: "You have to assing at least one daily activity",
+            text: "You have to assign at least one daily activity",
             icon: 'error',
             confirmButtonText: 'Ok'
         })
@@ -473,17 +482,13 @@ complete_daily.addEventListener("click", function(e) {
         
         Swal.fire({
             title: 'Daily routine completed!',
-            text: "Do you want to download a csv with your daily routines?",
+            text: "You will download the file daily_routes.json with the daily routines",
             icon: 'success',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, download it',
-            cancelButtonText: 'No, thanks',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                downloadCSV(daily_routines);
-            }
+            confirmButtonText: 'Ok'
+        }).then(() => {
+            setTimeout(()=>{downloadJSON(daily_routines)}, 500)
         }).finally(() => {
-            setTimeout(()=>{window.location.href = "#schedule-routines"}, 500)
+            setTimeout(()=>{window.location.href = "#schedule-routines"}, 1000)
         });
         // const respuesta = window.confirm("Do you want to download a csv with your daily routines?")
         // if (respuesta){
@@ -693,10 +698,13 @@ export_routines.addEventListener("click", function(e) {
         confirmButtonText: 'Ok'
     }).then(() => {
         // Order the object by date
-        const orderedRoutines = {};
+        const orderedRoutines = [];
         getArrayNativeDates(Object.keys(assignedRoutines)).sort((a,b)=>a-b).forEach(function(key) {
             date_string = reconvertToDateString(key)
-            orderedRoutines[date_string] = assignedRoutines[date_string];
+            orderedRoutines.push({
+                "date": date_string,
+                "typeDate": assignedRoutines[date_string]["typeDate"],
+            })
         });
         const routines = JSON.stringify(orderedRoutines, null, 5);
         const blob = new Blob([routines], {type: "application/json"});

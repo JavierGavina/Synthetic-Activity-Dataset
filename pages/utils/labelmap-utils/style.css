@@ -64,8 +64,29 @@ header {
     margin-bottom: 100px;
 }
 
+/* Container for dragables */
+.dragables-container {
+    display: flex; /* Use flexbox to arrange children side by side */
+    justify-content: space-around; /* Distribute space around the items */
+    margin: 100px 300px; /* Adjust the margin as needed */
+}
+
+/* Make each dragable take up equal space */
+.dragable {
+    flex: 1; /* Each dragable will grow equally */
+    margin: 0 10px; /* Add some space between columns */
+}
+
+/* Override styles for individual drag areas if needed */
+#dragable-dictionary .drag-area,
+#dragable-daily-activities .drag-area,
+#dragable-assigned-routines .drag-area {
+    height: 200px; /* Make sure all drag areas have the same height */
+    /* Other styles as needed */
+}
+
 /*DRAGABLE STYLES*/
-#drag-area {
+.drag-area {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,20 +97,18 @@ header {
     font-size: 18px;
   }
   
-  
   /* Estilos para cuando el ratón está encima */
   /*Lo puedes reutilizar en JavaScript con el método .classList*/
-  #drag-area:hover {
+  .drag-area:hover {
     background-color: #f0f0f0;
     border-color: #333;
   }
   /* Estilos para cuando un fichero está siendo arrastrado encima */
   /*Lo puedes reutilizar en JavaScript con el método .classList*/
-  #drag-area.dragover {
+  .drag-area.dragover {
     background-color: #e8f4ff;
     border-color: #007bff;
     border-style: solid;
-    height: 230px; /* Aumentamos el tamaño */
   }
 
 
