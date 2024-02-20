@@ -698,26 +698,30 @@ export_routines.addEventListener("click", function(e) {
         icon: "success",
         confirmButtonText: 'Ok'
     }).then(() => {
-        // Order the object by date
-        const orderedRoutines = [];
-        getArrayNativeDates(Object.keys(assignedRoutines)).sort((a,b)=>a-b).forEach(function(key) {
-            date_string = reconvertToDateString(key)
-            orderedRoutines.push({
-                "date": date_string,
-                "typeDate": assignedRoutines[date_string]["typeDate"],
-            })
-        });
-        const routines = JSON.stringify(orderedRoutines, null, 5);
-        const blob = new Blob([routines], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "assigned_routines.json";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    })
+        setTimeout(()=>{
+            // Order the object by date
+            const orderedRoutines = [];
+            getArrayNativeDates(Object.keys(assignedRoutines)).sort((a,b)=>a-b).forEach(function(key) {
+                date_string = reconvertToDateString(key)
+                orderedRoutines.push({
+                    "date": date_string,
+                    "typeDate": assignedRoutines[date_string]["typeDate"],
+                })
+            });
+            const routines = JSON.stringify(orderedRoutines, null, 5);
+            const blob = new Blob([routines], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "assigned_routines.json";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }, 500)
+    }).finally(() => {
+        setTimeout(()=>{window.location.href = "./labelmap.html"}, 2000)
+    });
 })
 
 const reset_calendar = document.querySelector("#reset-calendar")
