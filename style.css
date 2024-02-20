@@ -61,6 +61,7 @@ header {
 /*ESTILO VIDEO*/
 
 #video-box {
+  grid-area:videodemo;
   margin-top: 20px;
   text-align: center;
   display: flex;
@@ -89,49 +90,33 @@ header {
 #intro-video:hover {
   transform: scale(1.5);
 }
+/* Ajuste del contenedor principal para incluir el video y las cajas */
+#intro {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  padding: 20px;
+  width: 70%;
+  margin-top: 20px; /* Ajusta según sea necesario para el espacio del encabezado */
+  margin-left: auto;
+  margin-right: auto;
+}
 
-/*ESTILO CONTENEDOR*/
-  .container {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Dos columnas */
-    grid-template-rows: auto auto; /* Dos filas */
-    gap: 20px; /* Espaciado constante entre los boxes */
-    padding: 20px; /* Padding para no pegar los elementos a los bordes */
-    justify-items: center; /* Centra los elementos horizontalmente en su celda */
-    align-items: center; /* Centra los elementos verticalmente en su celda */
-    width: 80%; /* Ocupa el 80% del ancho del viewport */
-    /* height: 80vh; Ocupa el 80% del alto del viewport */
-    margin-top: 100px; /* Espacio para el header fijo */
-    max-width: 1600px; /* Máximo ancho posible para el container */
-    max-height: 800px; /* Máximo altura posible para el container */
-    margin-left: auto; /* Centra el container horizontalmente */
-    margin-right: auto; /* Centra el container horizontalmente */
-  }
+/* Estilo para el video que estará en la parte superior */
+#video-box {
+  width: 50%; /* Establece el ancho del video al ancho del contenedor */
+  /* No se necesita la propiedad grid-area aquí */
+}
 
-  .container {
-    grid-template-areas:
-      "definition simulation"
-      "userguide userguide"
-  }
-
-  /* Style for User Guide icon */
-  .user-guide-icon {
-    width: 240px; /* Icon width */
-    height: 240px; /* Icon height */
-    margin-top: 5px; /* Space above the icon */
-    margin-bottom: 20px; /* Space below the icon if needed */
-  }
-
-  #user-guide-box {
-    grid-area: userguide;
-    display: flex; /* Use flexbox to center content */
-    flex-direction: column; /* Stack children vertically */
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    width: 30%;
-    height: 100%;
-  }
+/* Estilo para el contenedor de las cajas */
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+  grid-template-rows: repeat(2, 1fr); /* Dos filas */
+  gap: 20px; /* Espacio entre las cajas */
+  align-content: start; /* Alinea las cajas al inicio del contenedor */
+}
   
 .box {
     background-color: #147ff2;
@@ -139,7 +124,7 @@ header {
     color: #fff;
     border-radius: 20px;
     width: 100%; /* Ocupa el 100% del ancho de su celda en el grid */
-    height: 100%; /* Ocupa el 100% del alto de su celda en el grid */
+    height: auto; /* Ocupa el 100% del alto de su celda en el grid */
     box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Añade una sombra */
 }
 
