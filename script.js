@@ -46,3 +46,46 @@ user_guide.addEventListener("click", function(){
 room_assigment.addEventListener('click', function() {
     window.location.href = "./pages/room-assignment.html";
 });
+
+
+
+document.querySelectorAll(".box").forEach((box) => {
+
+    
+    box.addEventListener("mouseover", () => {
+        element_id = "title-" + box.id.replace("-box", "")
+
+        const typewriter = new Typewriter(`#${element_id}`, {
+            loop: true,
+          });
+        
+      
+        typewriter.typeString(assign_text(element_id))
+              .pauseFor(1500)
+              .deleteAll()
+              .pauseFor(500)
+              .start();
+    })
+
+
+    box.addEventListener("mouseleave", () => {
+        element_id = "title-" + box.id.replace("-box", "")
+        document.querySelector(`#${element_id}`).textContent = assign_text(element_id)
+    })
+
+    
+})
+
+
+const assign_text = (element_id) => {
+    switch (element_id){
+        case "title-room-assignment":
+            return "Room Assignment";
+        case "title-definition":
+            return "Routine Definition";
+        case "title-simulation":
+            return "Routine Simulation";
+        case "title-user-guide":
+            return "User Guide";
+    }
+}
