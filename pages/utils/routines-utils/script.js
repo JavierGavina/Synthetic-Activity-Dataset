@@ -29,6 +29,18 @@ const colores_routines = ["#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
                           "#831445", "#800000", "#00FFFF", "#008080",
                           "#800080", "#FF7F50", "#87CEEB", "#00FF00"
                         ]
+
+/*ANIMACIÓN TEXTO TÍTULO*/
+const typewriter = new Typewriter('#typewriter', {
+    loop: true,
+  });
+
+  typewriter.typeString('Routine Definition')
+      .pauseFor(2500)
+      .deleteAll()
+      .pauseFor(500)
+      .start();
+
                           
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
 var daily_routines = new DataFrame({}, ["Day", "Start-Time", "End-Time", "Room"]);

@@ -1,5 +1,17 @@
 var DataFrame = dfjs.DataFrame;
 
+/* ANIMACIÓN TEXTO DEL TÍTULO */
+const typewriter = new Typewriter('#typewriter', {
+    loop: true,
+  });
+
+  typewriter.typeString('Room Assignment')
+      .pauseFor(2500)
+      .deleteAll()
+      .pauseFor(500)
+      .start();
+
+
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"])
 
 room_selector = document.querySelector(".room-controls")
