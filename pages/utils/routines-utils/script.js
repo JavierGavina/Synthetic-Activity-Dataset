@@ -175,6 +175,21 @@ dragArea.addEventListener('click', () => {
     });
 });
 
+function displayImage() {
+    
+    dragArea = document.querySelector('#drag-area');
+
+    // Añade la imagen al dragArea
+    const img = document.createElement('img');
+    img.src = '../imgs/json-icon.png';
+    img.alt = 'JSON File Icon';
+    img.style.width = '100px'; // Establece el tamaño de la imagen
+    dragArea.innerHTML = ''; // Limpia cualquier contenido anterior
+    dragArea.appendChild(img);
+    
+}
+
+
 const processFile = (file) => {
     if (file.type != 'application/json') {
         Swal.fire({
@@ -184,7 +199,15 @@ const processFile = (file) => {
             confirmButtonText: 'Ok'
         })
         return;
-    } else {
+    } 
+    // Crea una expresión regular que coincida con el nombre del fichero y una secuencia opcional de espacio y número entre paréntesis
+    const expectedFileName = "dictionary_rooms.json";
+    const expectedFileBaseName = "dictionary_rooms";
+
+    const regexPattern = new RegExp(`^${expectedFileBaseName}( \\(\\d+\\))?\\.json$`);
+    console.log(regexPattern)
+    if (regexPattern.test(file.name)) {
+        displayImage();
         const reader = new FileReader();
         reader.readAsText(file, 'UTF-8');
         reader.onload = readerEvent => {
@@ -218,6 +241,15 @@ const processFile = (file) => {
                 })
             }
         }
+    }
+    else {
+        Swal.fire({
+            title: 'Error!',
+            text: `The file must be named "${expectedFileName}"`,
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+        return;
     }
 }
 

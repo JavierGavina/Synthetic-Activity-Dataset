@@ -56,7 +56,7 @@ const show_table = (df)=>{
     
     
     var layout = {
-        title: 'Tabla Interactiva',
+        title: 'Rooms Assigned',
         height: 400,
         width: 600
     };
