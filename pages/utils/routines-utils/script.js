@@ -232,12 +232,18 @@ const processFile = (file) => {
                         window.location.href = "#daily-routines"}, 500)
                     })
             } catch (e) {
-                console.log(e);
+               
                 Swal.fire({
                     title: 'Error!',
                     text: "The file is not a valid JSON",
                     icon: 'error',
                     confirmButtonText: 'Ok'
+                }).then(() => {
+                    Swal.fire({
+                        title: "Error Message!",
+                        text: e.message,
+                        icon: "info",
+                    })
                 })
             }
         }
