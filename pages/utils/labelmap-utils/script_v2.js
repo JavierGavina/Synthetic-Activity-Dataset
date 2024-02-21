@@ -239,7 +239,7 @@ function processAllFiles(){
                 Swal.fire({
                     title: "Download the joined data?",
                     text: "Do you want to download the joined data?",
-                    icon: "warning",
+                    icon: "info",
                     showCancelButton: true,
                     confirmButtonText: "Yes, download it",
                     cancelButtonText: "No, thanks"
@@ -410,6 +410,7 @@ downloadCSVButton.addEventListener('click', () => {
     Swal.fire({
         title: "Download activities dataset",
         text: "Do you confirm to download the activity dataset simulated?",
+        icon: "info",
         showCancelButton: true,
         confirmButtonText: 'Yes, download it',
         cancelButtonText: 'No, maybe later',
