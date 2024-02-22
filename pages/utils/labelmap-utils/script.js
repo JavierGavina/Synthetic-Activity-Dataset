@@ -1,83 +1,39 @@
-/*DEFINICIÓN DE CONSTANTES*/
-const dictionary = {
-    "room": 1,
-    "living-room":2,
-    "tv-room":3,
-    "dining-room":4,
-    "garden":5,
-    "terrace":6,
-    "therapy":7,
-    "gym":8,
-    "corridors":9,
-    "bathroom":10,
-    "bedroom":11,
-    "garage":12,
-    "pool":13,
-    "kitchen":14,
-}
+/*ANIMACIÓN TEXTO TÍTULO*/
+const typewriter = new Typewriter('#typewriter', {
+    loop: true,
+  });
 
-const dictionary_inverse = {
-    1: "room",
-    2: "living-room",
-    3: "tv-room",
-    4: "dinning-room",
-    5:"garden",
-    6:"terrace",
-    7:"therapy",
-    8:"gym",
-    9:"corridors",
-    10:"bathroom",
-    11:"bedroom",
-    12:"garage",
-    13:"pool",
-    14:"kitchen",
-}
+  typewriter.typeString('Routine Simulation')
+      .pauseFor(2500)
+      .deleteAll()
+      .pauseFor(500)
+      .start();
 
-
-const colorPalette = {
-    1: '#1f77b4', // room
-    2: '#ff7f0e', // living-room
-    3: '#2ca02c', // tv-room
-    4: '#d62728', // dining-room
-    5: '#9467bd', // garden
-    6: '#8c564b', // terrace
-    7: '#e377c2', // therapy
-    8: '#7f7f7f', // gym
-    9: '#bcbd22', // corridors
-    10: '#17becf', // bathroom
-    11: '#aec7e8', // bedroom
-    12: '#ffbb78', // garage
-    13: '#98df8a', // pool
-    14: '#ff9896', // kitchen
-};
-
-colorScale = [
-    [0, '#1f77b4'], // room
-    [1/8, '#ff7f0e'], // living-room
-    [2/8, '#2ca02c'], // tv-room
-    [3/8, '#d62728'], // dining-room
-    [4/8, '#9467bd'], // garden
-    [5/8, '#8c564b'], // terrace
-    [6/8, '#e377c2'], // therapy
-    [7/8, '#7f7f7f'], // gym
-    [8/8, '#bcbd22'] // corridors
-    // [9/13, '#17becf'], // bathroom
-    // [10/13, '#aec7e8'], // bedroom
-    // [11/13, '#ffbb78'], // garage
-    // [12/13, '#98df8a'], // pool
-    // [1, '#ff7f0e'], // living-room
-]
-
-const mapValueToColor = (value) => {
-    return colorPalette[value] || '#000000'; // Devuelve un color negro si el valor no está definido
-};
-
-/*GLOBALIZAR VARIABLE JSON*/
-var json;
+/*TODAS LAS VARIABLES GLOBALES*/
+var json = {}; // JOINED DATA
 
 var DataFrame = dfjs.DataFrame;
 
 var labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
+var dictionary;
+var dictionary_inverse
+var daily_routines;
+var assigned_routines;
+
+// Objeto para mantener el estado de los archivos cargados
+const filesLoaded = {
+    "dictionary_rooms.json": false,
+    "daily_routines.json": false,
+    "assigned_routines.json": false
+}
+
+// Objeto para almacenar el contenido de los archivos cargados
+const fileContents = {
+    "dictionary_rooms.json": null,
+    "daily_routines.json": null,
+    "assigned_routines.json": null
+};
+
 
 /*OCULTAR INICIALMENTE LAS SECCIONES*/
 visualization_labelmap_section = document.querySelector('#visualization-labelmap');
@@ -86,86 +42,201 @@ labelmap_section = document.querySelector('#labelmap');
 visualization_labelmap_section.style.display = 'none';
 labelmap_section.style.display = 'none';
 
-/*ANIMACIONES ZONA DRAGABLE*/
-dragArea = document.querySelector('#drag-area');
-// Evento para cuando un archivo está siendo arrastrado sobre el área
-dragArea.addEventListener('dragover', (event) => {
-event.preventDefault();
-dragArea.classList.add('dragover');
+
+
+/*ANIMACIONES QUE COMPARTEN TODOS LOS DRAGABLES*/
+document.querySelectorAll(".drag-area").forEach((dragArea) => {
+    
+    const handleDragOver = function(e) {
+        e.preventDefault();
+        this.classList.add("dragover");
+    };
+    
+    const handleDragLeave = function(e) {
+        this.classList.remove("dragover");
+    };
+    
+    const handleDrop = function(e) {
+        e.preventDefault();
+        this.classList.remove("dragover");
+        handleFileUpload(e, this);
+    };
+    
+    const handleClick = function() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.json';
+        fileInput.onchange = function(e) {
+            handleFileUpload(e, dragArea);
+        };
+        fileInput.click();
+    };
+    
+    addEventListeners(dragArea)
+    
+    function addEventListeners(dragArea) {
+        dragArea.addEventListener("dragover", handleDragOver);
+        dragArea.addEventListener("dragleave", handleDragLeave);
+        dragArea.addEventListener("drop", handleDrop);
+        dragArea.addEventListener("click", handleClick);
+    }
+
+    function removeEventListeners(dragArea) {
+        dragArea.removeEventListener("dragover", handleDragOver);
+        dragArea.removeEventListener("dragleave", handleDragLeave);
+        dragArea.removeEventListener("drop", handleDrop);
+        dragArea.removeEventListener("click", handleClick);
+    }
+
+    function resetDragArea(dragArea) {
+        dragArea.innerHTML = "Drag files here or click to select";
+        addEventListeners(dragArea);
+    }
+    
+    function handleFileUpload(e, dragArea) {
+        const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+        if (files.length > 0) {
+            const file = files[0]; // Si se selecciona más de uno, solo se toma el primero
+            const expectedFileName = dragArea.getAttribute("nameFile"); // Obtiene el nombre de fichero esperado sin extension
+            const expectedFileBaseName = expectedFileName.replace('.json', ''); // Remove the extension for matching
+            
+            // Crea una expresión regular que coincida con el nombre del fichero y una secuencia opcional de espacio y número entre paréntesis
+            const regexPattern = new RegExp(`^${expectedFileBaseName}( \\(\\d+\\))?\\.json$`);
+            
+            if (regexPattern.test(file.name)) {
+                displayImage(dragArea);
+                filesLoaded[expectedFileName] = true;
+                readFileContent(file, expectedFileName);
+            } else {
+                Swal.fire({
+                    title: 'Invalid JSON',
+                    text: `The file must be "${expectedFileName}". Please, select the correct file.`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+            }
+        }
+    }
+
+    
+    function displayImage(dragArea) {
+        // Remueve los eventos
+        removeEventListeners(dragArea);
+        
+        // Añade la imagen al dragArea
+        const img = document.createElement('img');
+        img.src = '../imgs/json-icon.png';
+        img.alt = 'JSON File Icon';
+        img.style.width = '100px'; // Establece el tamaño de la imagen
+        dragArea.innerHTML = ''; // Limpia cualquier contenido anterior
+        dragArea.appendChild(img);
+        
+        dragArea.addEventListener("dblclick", function() {
+            resetDragArea(dragArea);
+            filesLoaded[dragArea.getAttribute("nameFile")] = false;
+        });
+    }
 });
 
-// Evento para cuando un archivo sale del área
-dragArea.addEventListener('dragleave', () => {
-    dragArea.classList.remove('dragover');
-});
 
-// Evento para cuando un archivo es soltado en el área
-dragArea.addEventListener('drop', (event) => {
-    event.preventDefault();
-    dragArea.classList.remove('dragover');
-    const files = event.dataTransfer.files;
-    processFile(files[0]); // Procesa el primer archivo soltado
-});
+function readFileContent(file, fileName) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        fileContents[fileName] = JSON.parse(e.target.result) // Almacena el contenido del archivo
+        
+        // Verifica si todos los archivos han sido cargados antes de procesar
+        if (checkAllFilesLoaded()) {
+            processAllFiles();
+        }
+    };
+    reader.onerror = (e) => {
+        Swal.fire({
+            title: 'Error',
+            text: `An error occurred while reading the file. \n ${e}`,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        })
+    };
+    reader.readAsText(file); // Lee el archivo como texto
+}
 
-// Evento para cuando se hace clic en el área de arrastre
-dragArea.addEventListener('click', () => {
-    const fileInput = document.createElement('input');
-    fileInput.accept = '.json';
-    fileInput.type = 'file';
-    fileInput.click();
-    fileInput.addEventListener('change', () => {
-        processFile(fileInput.files[0]);
-    });
-});
+function checkAllFilesLoaded() {
+    return Object.values(filesLoaded).every(isLoaded => isLoaded)
+}
 
-const downloadDictionaryRooms = (dictionary) => {
-    const dictionary_export = JSON.stringify(dictionary, null, 5);
-    const blob = new Blob([dictionary_export], {type: "application/json"});
+function processAllFiles(){
+    if (checkAllFilesLoaded()){
+        Object.keys(fileContents).forEach((fileName) => {
+            const fileContent = fileContents[fileName];
+            if (fileContent){
+                if (fileName == "dictionary_rooms.json"){
+                    dictionary = fileContent;
+                    dictionary_inverse = Object.fromEntries(Object.entries(dictionary).map(([key, value]) => [value, key]));
+                } else if (fileName == "daily_routines.json"){
+                    daily_routines = fileContent;
+                } else {
+                    assigned_routines = fileContent;
+                }
+            }
+    })
+    
+        assigned_routines.forEach((instance)=>{
+        daily_routines.forEach((routine)=>{
+            if (routine["typeDate"] == instance["typeDate"]){
+                json[instance["date"]] = {"typeDate": parseInt(instance["typeDate"]),
+                                          "intervals": routine["intervals"],
+                                          "rooms": routine["rooms"]}
+                }
+            })
+        })
+        Swal.fire({
+            title: 'Files loaded successfully',
+            text: 'The files have been loaded successfully. Click on "Continue" to visualize the labelmap',
+            icon: 'success',
+            confirmButtonText: 'Continue'
+        }).then(()=>{
+            setTimeout(() => {
+                visualization_labelmap_section.style.display = 'block';
+                labelmap_section.style.display = 'block';
+                labelMap = getLabelmap(json);
+                visualization_labelmap_section.style.display = 'block';
+                labelmap_section.style.display = 'block';
+
+                window.location.href = "#visualization-labelmap";
+                showPlot();
+            }, 500);
+        }).finally(()=>{
+            setTimeout(()=>{
+                Swal.fire({
+                    title: "Download the joined data?",
+                    text: "Do you want to download the joined data?",
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, download it",
+                    cancelButtonText: "No, thanks"
+                }).then((result) => {
+                    if (result.isConfirmed){
+                        downloadJSON(json);
+                    }
+                })
+            }, 1000)
+        })
+    };
+}
+
+downloadJSON = (json) => {
+    content = JSON.stringify(json, null, 5)
+    const blob = new Blob([content], {type: "application/json"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "dictionary_export.json";
+    link.download = "joined_data.json";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 }
 
-/*FUNCION PARA PROCESAR EL ARCHIVO JSON*/
-const processFile = (file) => {
-    // Comprobar que el archivo es un json
-    if (file.type != 'application/json') {
-        alert('The file must be a JSON');
-        return;
-    }
-    // Leer el archivo como texto
-    const reader = new FileReader();
-    reader.readAsText(file, 'UTF-8');
-    reader.onload = readerEvent => {
-        const content = readerEvent.target.result;
-        try {
-            json = JSON.parse(content);
-            visualization_labelmap_section.style.display = 'block';
-            labelmap_section.style.display = 'block';
-            labelMap = getLabelmap(json);
-            if (window.confirm("Do you want to download the dictionary of rooms?")){
-                downloadDictionaryRooms(dictionary);
-            }
-            visualization_labelmap_section.style.display = 'block';
-            labelmap_section.style.display = 'block';
-
-            window.location.href = "#visualization-labelmap";
-            showPlot();
-
-        } catch (error) {
-            alert(error)
-            alert('The JSON file is not valid');
-        }
-    };
-    reader.onerror = () => {
-        alert('Error while reading the file');
-    };
-}
 
 const convertToMinutes = function(hour){ 
     return parseInt(hour.split(':')[0])*60 + parseInt(hour.split(':')[1]);
@@ -226,7 +297,7 @@ const downloadCSV = (data) => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "labelmap.csv");
+    link.setAttribute("download", "activities-simulation.csv");
     document.body.appendChild(link);
     link.click();
 }
@@ -305,6 +376,18 @@ const showPlot = () => {
 }
 
 const downloadCSVButton = document.querySelector('#download-labelmap');
+
 downloadCSVButton.addEventListener('click', () => {
-    downloadCSV(labelMap);
+    Swal.fire({
+        title: "Download activities dataset",
+        text: "Do you confirm to download the activity dataset simulated?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: 'Yes, download it',
+        cancelButtonText: 'No, maybe later',
+    }).then((result) => {
+        if(result.isConfirmed){
+            downloadCSV(labelMap);
+        }
+    })
 })

@@ -120,21 +120,67 @@ document.querySelectorAll(".drag-area").forEach((dragArea) => {
 
     
     function displayImage(dragArea) {
-        // Remueve los eventos
+        // Remove event listeners
         removeEventListeners(dragArea);
-        
-        // Añade la imagen al dragArea
+    
+        // Clear any previous content
+        dragArea.innerHTML = '';
+    
+        // Create a container for the image and cancel icon
+        const container = document.createElement('div');
+        container.style.position = 'relative';
+        container.style.display = 'inline-block';
+    
+        // Add the image to the dragArea
         const img = document.createElement('img');
         img.src = '../imgs/json-icon.png';
         img.alt = 'JSON File Icon';
-        img.style.width = '100px'; // Establece el tamaño de la imagen
-        dragArea.innerHTML = ''; // Limpia cualquier contenido anterior
-        dragArea.appendChild(img);
-        
-        dragArea.addEventListener("dblclick", function() {
+        img.style.width = '100px';
+        container.appendChild(img);
+    
+        // Create and add the cancel icon
+        const cancelIcon = document.createElement('img');
+        cancelIcon.src = '../imgs/Cancelar.png'; // Path to your cancel icon image
+        cancelIcon.alt = 'Cancel';
+        cancelIcon.style.position = 'absolute';
+        cancelIcon.style.top = '0';
+        cancelIcon.style.right = '0';
+        cancelIcon.style.width = '20px'; // Adjust size as needed
+        cancelIcon.style.cursor = 'pointer';
+        cancelIcon.addEventListener('click', function() {
             resetDragArea(dragArea);
             filesLoaded[dragArea.getAttribute("nameFile")] = false;
         });
+
+        cancelIcon.addEventListener('mouseover', function() {
+            // appear a message below the image that says "Click to remove"
+            const message = document.createElement('p');
+            message.textContent = 'Click to remove';
+            message.style.position = 'absolute';
+            message.style.bottom = '0';
+            message.style.left = '50%';
+            message.style.transform = 'translateX(-50%)';
+            message.style.fontSize = '12px';
+            message.style.color = '#fff';
+            message.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            message.style.padding = '5px';
+            container.appendChild(message);
+        });
+
+        cancelIcon.addEventListener('mouseout', function(e) {
+            // remove the message
+            container.removeChild(container.lastChild);
+        });
+
+        cancelIcon.addEventListener('click', function(e) {
+            resetDragArea(dragArea);
+            filesLoaded[dragArea.getAttribute("nameFile")] = false;
+            e.stopPropagation();
+        });
+    
+        // Append both image and cancel icon to the container, then the container to the dragArea
+        container.appendChild(cancelIcon);
+        dragArea.appendChild(container);
     }
 });
 

@@ -1,10 +1,30 @@
+:root {
+    --prefered_background_color: #f0f0f0;
+    --prefered_secondary_background_color: #ffffff;
+    --prefered_text_color: #000;
+    --select_border_color: #4e4e4ea4;
+    --select_background_color: #fffefe;
+}
+
+@media(prefers-color-scheme: dark){
+    :root {
+        --prefered_text_color: #fff;
+        --prefered_background_color: #0f0f0f;
+        --prefered_secondary_background_color: #3d3d3d;
+        --select_border_color: #dfdfdfce;
+        --select_background_color: #4a4949;
+    }
+}
+
 html{
     scroll-behavior: smooth;
 }
+
 body, html {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
+    background-color: var(--prefered_background_color);
 }
 
 
@@ -59,6 +79,9 @@ header {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    background-color: var(--prefered_secondary_background_color);
+    color: var(--prefered_text_color);
+    margin-bottom: 200px;
 }
 
 #room-introduction {
@@ -83,6 +106,7 @@ header {
     width: 70%;
     max-width: 500px; /* Asegúrate de que esto concuerde con el ancho de tus secciones */
     margin-top: 20px; /* Espacio por encima del grid para separar de otros elementos */
+    margin-bottom: 20px; /* Espacio por debajo del grid para separar de otros elementos */
 }
 
 #table-rooms, #results {
@@ -99,106 +123,22 @@ header {
 
     .nav-menu li {
         margin: 5px 0;
-    }
-    #assign-rooms, #daily-routines {
-        width: 95%;
-    }
-
-    #weekly-routines {
-        flex-direction: column;
-    }
-
-    #explain-parameters-weekly, #weekly-parameters {
-        max-width: none;
-        margin-right: 0;
-        padding: 10px;
-    }
+    }  
 }
 
 /*COSILLAS GENERALES Y PARA LA PRIMERA SECCIÓN*/
 
 /* Further styling for select, buttons, etc. */
-select, button, input[type=range] {
+select, button {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 2px solid var(--select_border_color);
+    background-color: var(--select_background_color);
+    color: var(--prefered_text_color);
 }
 
-#daily-routines {
-    width: 100%; /* O un ancho fijo si prefieres un ancho específico */
-    max-width: 800px; /* Ajusta este valor según tus preferencias de diseño */
-    margin: 20px auto; /* Esto centrará la sección horizontalmente */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Esto centrará los elementos hijos horizontalmente */
-    justify-content: center; /* Esto centrará los elementos hijos verticalmente si la altura es definida */
-}
-
-.routine-assignment {
-    width: 100%; /* O un porcentaje específico para un ancho relativo */
-    max-width: 600px; /* Ajusta este valor para que coincida con el diseño deseado */
-    margin: auto; /* Centra horizontalmente dentro de #daily-routines */
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    text-align: center;
-}
-
-/* Asegurándose de que los elementos dentro de .routine-assignment también estén centrados si es necesario */
-.routine-assignment > * {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-  
-  .routine-assignment h2 {
-    margin-bottom: 10px;
-  }
-  
-  .routine-assignment p {
-    margin-bottom: 20px;
-  }
-  
-  .time-inputs {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  
-  .time-inputs label {
-    margin-right: 10px;
-  }
-  
-  .time-inputs input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .room-selection select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  .buttons-daily button {
-    padding: 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    background-color: #007bff;
-    cursor: pointer;
-  }
-  
-  .buttons-daily button:hover {
-    background-color: #0056b3;
-  }
-
-
-  
-/* 
 /* Button specific styles */
 button {
     background-color: #007bff;
@@ -213,117 +153,13 @@ button:hover {
 }
 
 
-
-
-/*SECCIÓN CALENDARIO*/
-
-#schedule-routines{
-    width: 100%;
-    max-width: 1700px; /* Ajusta este valor según tus preferencias de diseño */
-    margin: 20px auto; /* Esto centrará la sección horizontalmente */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Esto centrará los elementos hijos horizontalmente */
-    justify-content: center; /* Esto centrará los elementos hijos verticalmente si la altura es definida */
-
-}
-
-
-.schedule-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px;
-}
-
-#defined-days{
-    width: 40%;
-    padding: 10px;
-    gap: 10px;
-    margin: 10px;
-}
-
-.dragable-day{
-    color: white;
-    border-radius: 5px;
-    width: 20%;
-    text-align: center;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
-
-.dragable-day:hover{
-    background-color: #053a73;
-}
-
-
-
-#calendar-dragable-area {
-    display: flex;
-    flex-direction: row;
-    width: 60%;
-    margin-left: 40px;
-}
-
-#calendar-container {
-    flex: 1;
-    width: 60%;
-}
-
-#params-calendar {
-    flex: 1;
-    flex-direction: column;
-    grid-column: repeat(2, 1fr);
-    margin-left: 10px;
-    width: 40%;
-}
-
-.year-monthselect {
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
-}
-
-.year-monthselect label,
-.year-monthselect input {
-    margin-bottom: 10px; /* Add space between the elements */
-}
-
-/* If you want to align the labels to the left of their inputs */
-.year-monthselect label {
-    align-self: flex-start;
-}
-
-
-.defined-days, .calendar-container {
-    flex: 1;
-    margin: 10px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/*COSA RARA (A VER QUE TAL)*/
-#calendar-container{
-    text-align: center;
-    width: 20px;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-td {
-    border: 1px solid #ccc;
-    padding: 10px;
-}
-
-
 /*ESTILOS PIE DE PÁGINA*/
 footer {
     margin-top: 100px;
     width: 100%;
     background: #007bff;
     padding: 20px 0;
-    position: relative; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
+    position: absolute; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
     text-align: center;
     bottom: 0; /* Espacio después de la última sección */
   }

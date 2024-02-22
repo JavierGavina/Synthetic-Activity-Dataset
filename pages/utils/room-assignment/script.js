@@ -1,16 +1,27 @@
 var DataFrame = dfjs.DataFrame;
 
-/* ANIMACIÓN TEXTO DEL TÍTULO */
-const typewriter = new Typewriter('#typewriter', {
-    loop: true,
-  });
+const globalColorsLight = {
+    prefered_background_color: "#f0f0f0",
+    prefered_secondary_background_color: "#ffffff",
+    prefered_text_color: "#000",
+    select_border_color: "#4e4e4ea4",
+    select_background_color: "#fffefe"
+}
 
-  typewriter.typeString('Room Assignment')
-      .pauseFor(2500)
-      .deleteAll()
-      .pauseFor(500)
-      .start();
+const globalColorsDark = {
+    prefered_background_color : "#0f0f0f",
+    prefered_secondary_background_color : "#3d3d3d",
+    prefered_text_color : "#fff",
+    select_border_color : "#dfdfdfce",
+    select_background_color : "#4a4949"
+}
 
+/*ANIMACIÓN COLOR*/
+const prefersDarkColorScheme = () =>
+        window &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+        
 
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"])
 
@@ -25,6 +36,7 @@ room_selector.addEventListener("change", function(e) {
 
     rooms_ids = rooms_ids.push({Room: e.target.value, "ID-Room": count})
     show_table(rooms_ids)
+    document.querySelector("footer").style.position = "relative"
 
     selectedOption.remove()
     if (defaultOption) {
@@ -32,6 +44,12 @@ room_selector.addEventListener("change", function(e) {
     }
 
 })
+
+// Event listener for preferred color scheme change
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    show_table(rooms_ids);
+});
+
 
 
 const show_table = (df)=>{
@@ -41,22 +59,43 @@ const show_table = (df)=>{
         header: {
             values: df.listColumns(),
             align: 'center',
-            line: {width: 1, color: 'black'},
-            fill: {color: '#f5f5f5'},
-            font: {family: 'Arial', size: 12, color: 'black'}
+            line: {width: 1, 
+                   color: prefersDarkColorScheme() ? globalColorsLight.prefered_background_color :
+                                                     globalColorsDark.prefered_background_color},
+            fill: {color: prefersDarkColorScheme() ? "#9A9A9A" : "#EFEEEE"},
+            font: {family: 'Arial', size: 13,
+                   color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color :
+                                                     globalColorsLight.prefered_text_color}
         },
         cells: {
             values: [df.select("Room").toArray().flat(),
                      df.select("ID-Room").toArray().flat()],
             align: 'center',
-            line: {color: 'black', width: 1},
-            font: {family: 'Arial', size: 11, color: ['black']}
+            line: {color: prefersDarkColorScheme() ? globalColorsLight.prefered_background_color :
+                                                     globalColorsDark.prefered_background_color ,
+                   width: 1},
+            fill: prefersDarkColorScheme() ? {color: globalColorsDark.prefered_secondary_background_color} :
+                                                {color: globalColorsLight.prefered_secondary_background_color},
+            font: {family: 'Arial', size: 12,
+                   color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color :
+                                                     globalColorsLight.prefered_text_color
+            } 
         }
     }];
     
     
     var layout = {
-        title: 'Rooms Assigned',
+        title: {
+            text: "Rooms Assigned",
+            font: {
+                family: 'Arial',
+                size: 20,
+                color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : 
+                                                  globalColorsLight.prefered_text_color
+            }
+        },
+        paper_bgcolor: prefersDarkColorScheme() ? globalColorsDark.prefered_secondary_background_color : 
+                                                  globalColorsLight.prefered_secondary_background_color,
         height: 400,
         width: 600
     };
@@ -138,7 +177,8 @@ reset_button.addEventListener("click", function(e){
 
             rooms_ids = new DataFrame({}, ["Room", "ID-Room"])
             count = 0
-            show_table(rooms_ids)
+            document.querySelector("#table-rooms").innerHTML = ""
+            document.querySelector("footer").style.position = "absolute"
 
             Swal.fire('Deleted!', 'All rooms have been deleted', 'success')
         }
