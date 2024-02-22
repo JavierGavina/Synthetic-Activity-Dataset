@@ -97,8 +97,6 @@ const show_table_daily = (df)=> {
         deleteButton.style.cursor = "pointer";
     
         // Inicializar una variable para almacenar el temporizador
-        let hoverTimer;
-    
         deleteButton.addEventListener("click", function(e) {
             const row = e.target.parentElement.parentElement;
             const day = row.children[0].textContent;
@@ -108,35 +106,31 @@ const show_table_daily = (df)=> {
             daily_routines = daily_routines.filter(row => row.get("Day") != day || row.get("Start-Time") != start || row.get("End-Time") != end || row.get("Room") != room);
             start_daily.value = daily_routines.select("End-Time").toArray().flat().pop();
             end_daily.value = "";
-            clearTimeout(hoverTimer);
+           
             if (start_daily.value.split(":").length === 1 || start_daily.value === "23:59"){
                 start_daily.value = "00:00";
             }
             show_table_daily(daily_routines);
         });
-    
-        // Añadir el evento mouseover para iniciar el temporizador
-        deleteButton.addEventListener("mouseover", function() {
-            hoverTimer = setTimeout(function() {
-                Swal.fire({
-                    title: 'Delete last activity',
-                    text: "Do you want to delete the last activity?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it',
-                    cancelButtonText: 'No, keep it',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Simula un click en el botón de eliminar
-                        deleteButton.click();
-                    }
-                });
-            }, 2000); // 2000 milisegundos = 2 segundos
-        });
-    
-        // Añadir el evento mouseout para cancelar el temporizador si el usuario sale antes de 2 segundos
-        deleteButton.addEventListener("mouseout", function() {
-            clearTimeout(hoverTimer);
+
+        deleteButton.parentElement.addEventListener("mouseover", function(e) {
+           // I want that when mouse is over, appears a message right to the button that says "Delete"
+            const deleteMessage = document.createElement("p");
+            deleteMessage.textContent = "Delete";
+            deleteMessage.style.position = "inline-block";
+            deleteMessage.style.left = "50px";
+            deleteMessage.style.top = "0px";
+            deleteMessage.style.color = "white";
+            deleteMessage.style.fontSize = "12px";
+            deleteMessage.style.backgroundColor = "black";
+            deleteMessage.style.padding = "5px";
+            deleteMessage.style.borderRadius = "5px";
+            deleteButton.parentElement.appendChild(deleteMessage);
+        })
+
+        deleteButton.parentElement.addEventListener("mouseout", function(e) {
+            const deleteMessage = deleteButton.parentElement.querySelector("p");
+            deleteMessage.remove();
         });
     });
     

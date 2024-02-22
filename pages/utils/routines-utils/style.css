@@ -1,3 +1,23 @@
+:root {
+    --prefered_background_color: #f0f0f0;
+    --prefered_secondary_background_color: #ffffff;
+    --prefered_text_color: #000;
+    --select_border_color: #aeaeae;
+    --select_background_color: #fffefe;
+    --prefered_fill_plot: #f0f0f0;
+}
+
+@media(prefers-color-scheme: dark){
+    :root {
+        --prefered_text_color: #fff;
+        --prefered_background_color: #0f0f0f;
+        --prefered_secondary_background_color: #3d3d3d;
+        --select_border_color: #c9c9c9;
+        --select_background_color: #4a4949;
+        --prefered_fill_plot: #1A1A1A;
+    }
+}
+
 html{
     scroll-behavior: smooth;
 }
@@ -5,12 +25,9 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
+    background-color: var(--prefered_background_color);
+    color: var(--prefered_text_color);
 }
-
-/* body{
-    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
-} */
 
 /*COSILLAS PARA EL TÍTULO Y EL MENÚ DE LA CABECERA*/
 header {
@@ -65,9 +82,10 @@ header {
     justify-content: center;
     margin: 20px;
     padding: 20px;
+    background-color: var(--prefered_fill_plot);
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
 }
 
 #room-introduction {
@@ -95,7 +113,7 @@ header {
     align-items: center;
     height: 200px; /* Adjust the height as needed */
     border: 2px dashed #ccc;
-    background-color: #f9f9f9;
+    background-color: var(--prefered_secondary_background_color);
     color: #999;
     font-size: 18px;
   }
@@ -168,7 +186,10 @@ select, button, input[type=range] {
     margin: auto; /* Centra horizontalmente dentro de #daily-routines */
     padding: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    text-align: center;
+    background-color: var(--prefered_secondary_background_color);
+    border-radius: 8px;
+    text-align: justify;
+    border: 1px solid #ddd;
 }
 
 /* Asegurándose de que los elementos dentro de .routine-assignment también estén centrados si es necesario */
@@ -180,6 +201,7 @@ select, button, input[type=range] {
   
   .routine-assignment h2 {
     margin-bottom: 10px;
+    text-align: center;
   }
   
   .routine-assignment p {
@@ -198,14 +220,18 @@ select, button, input[type=range] {
   
   .time-inputs input {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 2px solid var(--select_border_color);
     border-radius: 5px;
+    background-color: var(--select_background_color);
+    color: var(--prefered_text_color);
   }
   
   .room-selection select {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 2px solid var(--select_border_color);
     border-radius: 5px;
+    background-color: var(--select_background_color);
+    color: var(--prefered_text_color);
   }
 
   .buttons-daily button {
@@ -221,8 +247,6 @@ select, button, input[type=range] {
   .buttons-daily button:hover {
     background-color: #0056b3;
   }
-
-
   
 /* 
 /* Button specific styles */
@@ -236,6 +260,22 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+tr th {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: var(--prefered_background_color);
+}
+
+tr {
+    text-align: center;
 }
 
 
@@ -267,6 +307,7 @@ button:hover {
     padding: 10px;
     gap: 10px;
     margin: 10px;
+    background-color: var(--prefered_secondary_background_color);
 }
 
 .dragable-day{
@@ -294,6 +335,7 @@ button:hover {
 #calendar-container {
     flex: 1;
     width: 60%;
+    background-color: var(--prefered_secondary_background_color);
 }
 
 #params-calendar {
@@ -302,6 +344,15 @@ button:hover {
     grid-column: repeat(2, 1fr);
     margin-left: 10px;
     width: 40%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 0;
+    margin-bottom: 10px;
+    background-color: var(--prefered_secondary_background_color);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ccc;
 }
 
 .year-monthselect {
