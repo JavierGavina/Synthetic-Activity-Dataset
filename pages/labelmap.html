@@ -7,17 +7,16 @@
         <link rel="stylesheet" href="./utils/labelmap-utils/style.css">
         <script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>
         <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
-        <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     </head>
     <body>
         <header>
-            <h1 class="page-title">Synthetic Activities Dataset: <span id="typewriter"></span></h1>
+            <h1 class="page-title">Synthetic Activities Dataset: Activity Simulation</h1>
             <nav>
                 <ul class="nav-menu">
                     <li><a href="../index.html">Introduction</a></li>
                     <li><a href="./room-assignment.html">Room Assignment</a></li>
-                    <li><a href="./routines.html">Routine Definition</a></li>
-                    <li><a href="./labelmap.html">Routine Simulation</a></li>
+                    <li><a href="./routines.html">Activity Definition</a></li>
+                    <li><a href="./labelmap.html">Activity Simulation</a></li>
                     <li><a href="./user-guide.html">User Guide</a></li>
                 </ul>
             </nav>
@@ -25,10 +24,9 @@
 
         <section id="intro">
             <div class="page-description-div">
-                <h1 class="page-description">Routine Simulation</h1>
-                <p class="page-description">In this section, you have to drag a descriptive file of routines of a user, and by modifying the threshold parameter (which determines the variability of the time slots of the routines), you can obtain a file in which for each minute of the day you have noted in which room a user is in.</p>
-                <p class="page-description" id="second-paragraph">This file can be obtained in the <a href="./routines.html">Routines Definition section.</a></p>
-                <p class="page-description"><b>You can double-click for undo the uploading of a file</b></p>
+                <h1 class="page-description">Activity Simulation</h1>
+                <p class="page-description">In this section, you have to drag the files with room description, definition of activities, and the assigned activities. After that, by modifying the threshold parameter (which determines the variability of the time slots of each activity), you can obtain a file in which for each minute of the day you have noted in which room a user is in.</p>
+                <p class="page-description" id="second-paragraph">This file can be obtained in the <a href="./routines.html">Activities Definition section.</a></p>
             </div>
             <div class="dragables-container">
                 <div class="dragable" id="dragable-dictionary">
@@ -36,12 +34,12 @@
                     <div id="dictionary-rooms" class="drag-area" nameFile="dictionary_rooms.json">Drag files here or click to select</div>
                 </div>
                 <div class="dragable" id="dragable-daily-activities">
-                    <h1>Select or drag the <em>daily_routines.json</em> file </h1>
-                    <div id="daily-activities" class="drag-area" nameFile="daily_routines.json">Drag files here or click to select</div>
+                    <h1>Select or drag the <em>daily_activities.json</em> file </h1>
+                    <div id="daily-activities" class="drag-area" nameFile="daily_activities.json">Drag files here or click to select</div>
                 </div>
                 <div class="dragable" id="dragable-assigned-routines">
-                    <h1>Select or drag the <em>assigned_routines.json</em> file </h1>
-                    <div id="assigned-routines" class="drag-area" nameFile="assigned_routines.json">Drag files here or click to select</div>
+                    <h1>Select or drag the <em>assigned_activities.json</em> file </h1>
+                    <div id="assigned-routines" class="drag-area" nameFile="assigned_activities.json">Drag files here or click to select</div>
                 </div>
             </div>
         </section>
@@ -49,7 +47,7 @@
         <section id="visualization-labelmap">
             <div class="visualization-labelmap">
                 <h1>Visualization of the activities</h1>
-                <p>Here you can see the activity simulation of the user's routines.</p>
+                <p>Here you can see the activity simulation of the user's activities.</p>
                 <div class="visualization-labelmap-div">
                     <div class="visualization-labelmap-div-1">
                         <h2>Threshold</h2>
@@ -79,7 +77,7 @@
         <section id="labelmap">
             <div class="labelmap">
                 <h1>Activity Simulation</h1>
-                <p>Here you can download the activity simulation of the user's routines.</p>
+                <p>Here you can download the activity simulation of the users.</p>
                 <div class="labelmap-div">
                     <button id="download-labelmap" class="buttons">Download Simulation</button>
                 </div>
@@ -91,8 +89,8 @@
                 <ul class="nav-menu">
                     <li><a href="../index.html">Introduction</a></li>
                     <li><a href="./room-assignment.html">Room Assignment</a></li>
-                    <li><a href="./routines.html">Routine Definition</a></li>
-                    <li><a href="./labelmap.html">Routine Simulation</a></li>
+                    <li><a href="./routines.html">Activity Definition</a></li>
+                    <li><a href="./labelmap.html">Activity Simulation</a></li>
                     <li><a href="./user-guide.html">User Guide</a></li>
                 </ul>
             </nav>

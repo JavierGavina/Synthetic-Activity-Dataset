@@ -27,15 +27,15 @@ function onPlayerReady(event) {
 }
 
 const room_assigment = document.querySelector('#room-assignment-box');
-const routines_definition = document.querySelector('#definition-box');
-const routines_simulation = document.querySelector('#simulation-box');
+const activities_definition = document.querySelector('#definition-box');
+const activities_simulation = document.querySelector('#simulation-box');
 const user_guide = document.querySelector("#user-guide-box")
 
-routines_definition.addEventListener('click', function() {
+activities_definition.addEventListener('click', function() {
     window.location.href = "./pages/routines.html";
 });
 
-routines_simulation.addEventListener('click', function() {
+activities_simulation.addEventListener('click', function() {
     window.location.href = "./pages/labelmap.html";
 });
 
@@ -47,11 +47,8 @@ room_assigment.addEventListener('click', function() {
     window.location.href = "./pages/room-assignment.html";
 });
 
-
-
 document.querySelectorAll(".box").forEach((box) => {
 
-    
     box.addEventListener("mouseover", () => {
         element_id = "title-" + box.id.replace("-box", "")
 
@@ -67,24 +64,20 @@ document.querySelectorAll(".box").forEach((box) => {
               .start();
     })
 
-
     box.addEventListener("mouseleave", () => {
         element_id = "title-" + box.id.replace("-box", "")
         document.querySelector(`#${element_id}`).textContent = assign_text(element_id)
     })
-
-    
 })
-
 
 const assign_text = (element_id) => {
     switch (element_id){
         case "title-room-assignment":
             return "Room Assignment";
         case "title-definition":
-            return "Routine Definition";
+            return "Activity Definition";
         case "title-simulation":
-            return "Routine Simulation";
+            return "Activity Simulation";
         case "title-user-guide":
             return "User Guide";
     }

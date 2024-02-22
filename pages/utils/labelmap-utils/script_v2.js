@@ -1,13 +1,13 @@
 /*ANIMACIÓN TEXTO TÍTULO*/
-const typewriter = new Typewriter('#typewriter', {
-    loop: true,
-  });
+// const typewriter = new Typewriter('#typewriter', {
+//     loop: true,
+//   });
 
-  typewriter.typeString('Routine Simulation')
-      .pauseFor(2500)
-      .deleteAll()
-      .pauseFor(500)
-      .start();
+//   typewriter.typeString('Routine Simulation')
+//       .pauseFor(2500)
+//       .deleteAll()
+//       .pauseFor(500)
+//       .start();
 
 /*TODAS LAS VARIABLES GLOBALES*/
 var json = {}; // JOINED DATA
@@ -17,21 +17,21 @@ var DataFrame = dfjs.DataFrame;
 var labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
 var dictionary;
 var dictionary_inverse
-var daily_routines;
-var assigned_routines;
+var daily_activities;
+var assigned_activities;
 
 // Objeto para mantener el estado de los archivos cargados
 const filesLoaded = {
     "dictionary_rooms.json": false,
-    "daily_routines.json": false,
-    "assigned_routines.json": false
+    "daily_activities.json": false,
+    "assigned_activities.json": false
 }
 
 // Objeto para almacenar el contenido de los archivos cargados
 const fileContents = {
     "dictionary_rooms.json": null,
-    "daily_routines.json": null,
-    "assigned_routines.json": null
+    "daily_activities.json": null,
+    "assigned_activities.json": null
 };
 
 
@@ -218,20 +218,20 @@ function processAllFiles(){
                 if (fileName == "dictionary_rooms.json"){
                     dictionary = fileContent;
                     dictionary_inverse = Object.fromEntries(Object.entries(dictionary).map(([key, value]) => [value, key]));
-                } else if (fileName == "daily_routines.json"){
-                    daily_routines = fileContent;
+                } else if (fileName == "daily_activities.json"){
+                    daily_activities = fileContent;
                 } else {
-                    assigned_routines = fileContent;
+                    assigned_activities = fileContent;
                 }
             }
     })
     
-        assigned_routines.forEach((instance)=>{
-        daily_routines.forEach((routine)=>{
-            if (routine["typeDate"] == instance["typeDate"]){
+        assigned_activities.forEach((instance)=>{
+        daily_activities.forEach((daily)=>{
+            if (daily["typeDate"] == instance["typeDate"]){
                 json[instance["date"]] = {"typeDate": parseInt(instance["typeDate"]),
-                                          "intervals": routine["intervals"],
-                                          "rooms": routine["rooms"]}
+                                          "intervals": daily["intervals"],
+                                          "rooms": daily["rooms"]}
                 }
             })
         })

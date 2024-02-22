@@ -31,15 +31,15 @@ const colores_routines = ["#1D90A7", "#1DA724", "#9BA71D", "#A72F1D",
                         ]
 
 /*ANIMACIÓN TEXTO TÍTULO*/
-const typewriter = new Typewriter('#typewriter', {
-    loop: true,
-  });
+// const typewriter = new Typewriter('#typewriter', {
+//     loop: true,
+//   });
 
-  typewriter.typeString('Routine Definition')
-      .pauseFor(2500)
-      .deleteAll()
-      .pauseFor(500)
-      .start();
+//   typewriter.typeString('Routine Definition')
+//       .pauseFor(2500)
+//       .deleteAll()
+//       .pauseFor(500)
+//       .start();
 
                           
 var rooms_ids = new DataFrame({}, ["Room", "ID-Room"]);
@@ -359,7 +359,7 @@ const downloadJSON = (data) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "daily_routines.json";
+    link.download = "daily_activities.json";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -369,7 +369,7 @@ const downloadJSON = (data) => {
 reset_daily.addEventListener("click", function(e) {
     Swal.fire({
         title: 'Are you sure?',
-        text: "You will restart all the daily routines if you accept",
+        text: "You will restart all the daily activities if you accept",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes, restart it',
@@ -446,8 +446,8 @@ add_activity.addEventListener("click", function(e) {
             end_daily.value=""
             const defined_days = document.querySelector("#defined-days")
             const newContent = document.createElement("div")
-            newContent.textContent = `routine day ${count_daily-1}`
-            newContent.id = `routine-day-${count_daily-1}`
+            newContent.textContent = `activity day ${count_daily-1}`
+            newContent.id = `activity-day-${count_daily-1}`
             newContent.classList.add("dragable-day") // Add the class "dragable-day"
             newContent.style.backgroundColor = colores_routines[count_daily-1]
             // Añadimos swal para mostrar la tabla tanto si hacemos click, como si dejamos el ratón dos segundos encima
@@ -461,7 +461,7 @@ add_activity.addEventListener("click", function(e) {
                 show_html = document.querySelector("#table-daily-routines").outerHTML
                 clearTimeout(hoverTimer);
                 Swal.fire({
-                    title: `Daily routine ${count_daily}`,
+                    title: `Daily Activity ${count_daily}`,
                     html: show_html,
                     confirmButtonText: 'Ok'
                 }).then(()=>{document.querySelector("#table-daily-routines").querySelector("img").remove()});
@@ -475,7 +475,7 @@ add_activity.addEventListener("click", function(e) {
                     document.querySelector("#table-daily-routines").querySelector("img").remove()
                     show_html = document.querySelector("#table-daily-routines").outerHTML
                     Swal.fire({
-                        title: `Daily routine ${count_daily}`,
+                        title: `Daily Activity ${count_daily}`,
                         html: show_html,
                         confirmButtonText: 'Ok'
                     });
@@ -528,7 +528,7 @@ complete_daily.addEventListener("click", function(e) {
         end_daily.focus()
         Swal.fire({
             title: 'Error!',
-            text: "You have not finished the daily routine, you have to introduce the last interval as 23:59",
+            text: "You have not finished the daily activity, you have to introduce the last interval as 23:59",
             icon: 'error',
             confirmButtonText: 'Ok'
         })
@@ -540,8 +540,8 @@ complete_daily.addEventListener("click", function(e) {
         end_daily.setAttribute("readonly", "readonly")
         
         Swal.fire({
-            title: 'Daily routine completed!',
-            text: "You will download the file daily_routes.json with the daily routines",
+            title: 'Daily activities completed!',
+            text: "You will download the file daily_activities.json with each daily activity defined",
             icon: 'success',
             confirmButtonText: 'Ok'
         }).then(() => {
@@ -549,10 +549,7 @@ complete_daily.addEventListener("click", function(e) {
         }).finally(() => {
             setTimeout(()=>{window.location.href = "#schedule-routines"}, 1000)
         });
-        // const respuesta = window.confirm("Do you want to download a csv with your daily routines?")
-        // if (respuesta){
-        //     downloadCSV(daily_routines);
-        // }
+        
         dragables = document.querySelectorAll(".dragable-day")
     
         dragables.forEach((dragable) => {
@@ -752,7 +749,7 @@ const export_routines = document.querySelector("#export-routines")
 export_routines.addEventListener("click", function(e) {
     Swal.fire({
         title: "Succesful",
-        text: "The routines have been scheduled successfully",
+        text: "The daily activities have been scheduled successfully",
         icon: "success",
         confirmButtonText: 'Ok'
     }).then(() => {
@@ -771,7 +768,7 @@ export_routines.addEventListener("click", function(e) {
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = "assigned_routines.json";
+            link.download = "assigned_activities.json";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
