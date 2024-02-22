@@ -563,7 +563,6 @@ complete_daily.addEventListener("click", function(e) {
 
 
 /*CODIGO PARA SECCIÓN CALENDARIO*/
-
 // Automatizar creación de calendario
 const getCalendarArray = function(year, month){
     const firstDay = new Date(year, month - 1, 1).getDay();
@@ -800,7 +799,3 @@ reset_calendar.addEventListener("click", function(e) {
         }
     })
 })
-
-
-
-

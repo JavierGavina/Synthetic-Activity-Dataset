@@ -158,7 +158,7 @@ document.querySelectorAll(".drag-area").forEach((dragArea) => {
     
         // Create and add the cancel icon
         const cancelIcon = document.createElement('img');
-        cancelIcon.src = '../imgs/Cancelar.png'; // Path to your cancel icon image
+        cancelIcon.src = '../imgs/cancelar.png'; // Path to your cancel icon image
         cancelIcon.alt = 'Cancel';
         cancelIcon.style.position = 'absolute';
         cancelIcon.style.top = '0';
