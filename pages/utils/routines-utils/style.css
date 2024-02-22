@@ -21,6 +21,7 @@
 html{
     scroll-behavior: smooth;
 }
+
 body, html {
     margin: 0;
     padding: 0;
@@ -42,7 +43,6 @@ header {
     z-index: 1; /* Add this line */
   }
 
-
 .page-title {
     margin: 0;
     font-size: 2em;
@@ -60,7 +60,6 @@ header {
 .nav-menu li {
     margin: 0 15px;
 }
-
 
 .nav-menu a {
     color: white;
@@ -98,6 +97,7 @@ header {
     align-items: center; /* Esto centrará los elementos hijos horizontalmente */
     justify-content: center; 
 }
+
 .dragable{
     margin-right: 300px;
     margin-left: 300px;
@@ -118,15 +118,12 @@ header {
     font-size: 18px;
   }
   
-  
   /* Estilos para cuando el ratón está encima */
-  /*Lo puedes reutilizar en JavaScript con el método .classList*/
   #drag-area:hover {
     background-color: #f0f0f0;
     border-color: #333;
   }
   /* Estilos para cuando un fichero está siendo arrastrado encima */
-  /*Lo puedes reutilizar en JavaScript con el método .classList*/
   #drag-area.dragover {
     background-color: #e8f4ff;
     border-color: #007bff;
@@ -197,44 +194,43 @@ select, button, input[type=range] {
     margin-left: auto;
     margin-right: auto;
 }
-
   
-  .routine-assignment h2 {
+.routine-assignment h2 {
     margin-bottom: 10px;
     text-align: center;
-  }
+}
   
-  .routine-assignment p {
+.routine-assignment p {
     margin-bottom: 20px;
-  }
+}
   
-  .time-inputs {
+.time-inputs {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
-  }
+}
   
-  .time-inputs label {
+.time-inputs label {
     margin-right: 10px;
-  }
+}
   
-  .time-inputs input {
+.time-inputs input {
     padding: 10px;
     border: 2px solid var(--select_border_color);
     border-radius: 5px;
     background-color: var(--select_background_color);
     color: var(--prefered_text_color);
-  }
+}
   
-  .room-selection select {
+.room-selection select {
     padding: 10px;
     border: 2px solid var(--select_border_color);
     border-radius: 5px;
     background-color: var(--select_background_color);
     color: var(--prefered_text_color);
-  }
+}
 
-  .buttons-daily button {
+.buttons-daily button {
     padding: 20px;
     margin: 10px;
     border: none;
@@ -242,13 +238,12 @@ select, button, input[type=range] {
     color: white;
     background-color: #007bff;
     cursor: pointer;
-  }
+}
   
-  .buttons-daily button:hover {
+.buttons-daily button:hover {
     background-color: #0056b3;
-  }
+}
   
-/* 
 /* Button specific styles */
 button {
     background-color: #007bff;
@@ -278,11 +273,7 @@ tr {
     text-align: center;
 }
 
-
-
-
 /*SECCIÓN CALENDARIO*/
-
 #schedule-routines{
     width: 100%;
     max-width: 1700px; /* Ajusta este valor según tus preferencias de diseño */
@@ -291,9 +282,7 @@ tr {
     flex-direction: column;
     align-items: center; /* Esto centrará los elementos hijos horizontalmente */
     justify-content: center; /* Esto centrará los elementos hijos verticalmente si la altura es definida */
-
 }
-
 
 .schedule-container {
     display: flex;
@@ -322,8 +311,6 @@ tr {
 .dragable-day:hover{
     background-color: #053a73;
 }
-
-
 
 #calendar-dragable-area {
     display: flex;
@@ -370,7 +357,6 @@ tr {
     align-self: flex-start;
 }
 
-
 .defined-days, .calendar-container {
     flex: 1;
     margin: 10px;
@@ -393,7 +379,6 @@ td {
     padding: 10px;
 }
 
-
 /*ESTILOS PIE DE PÁGINA*/
 footer {
     margin-top: 100px;
@@ -403,4 +388,4 @@ footer {
     position: relative; /* Si quieres que el footer siempre esté en la parte inferior, usa 'absolute' y añade 'bottom: 0;' */
     text-align: center;
     bottom: 0; /* Espacio después de la última sección */
-  }
+}
