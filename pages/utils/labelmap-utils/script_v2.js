@@ -1,13 +1,31 @@
-/*ANIMACIÓN TEXTO TÍTULO*/
-// const typewriter = new Typewriter('#typewriter', {
-//     loop: true,
-//   });
+/*VARIABLES COLOR*/
+const globalColorsLight = {
+    prefered_background_color: "#f0f0f0",
+    prefered_secondary_background_color: "#ffffff",
+    prefered_text_color: "#000",
+    select_border_color: "#4e4e4ea4",
+    select_background_color: "#fffefe",
+    prefered_fill_plot: "#f0f0f0"
+}
 
-//   typewriter.typeString('Routine Simulation')
-//       .pauseFor(2500)
-//       .deleteAll()
-//       .pauseFor(500)
-//       .start();
+const globalColorsDark = {
+    prefered_background_color : "#0f0f0f",
+    prefered_secondary_background_color : "#3d3d3d",
+    prefered_text_color : "#fff",
+    select_border_color : "#dfdfdfce",
+    select_background_color : "#4a4949",
+    prefered_fill_plot: "#1A1A1A",
+}
+
+
+/*ANIMACIÓN COLOR*/
+const prefersDarkColorScheme = () =>
+        window &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+
+
+        
 
 /*TODAS LAS VARIABLES GLOBALES*/
 var json = {}; // JOINED DATA
@@ -224,7 +242,7 @@ function processAllFiles(){
                     assigned_activities = fileContent;
                 }
             }
-    })
+        })
     
         assigned_activities.forEach((instance)=>{
         daily_activities.forEach((daily)=>{
@@ -250,6 +268,9 @@ function processAllFiles(){
 
                 window.location.href = "#visualization-labelmap";
                 showPlot();
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                    showPlot();
+                });
             }, 500);
         }).finally(()=>{
             setTimeout(()=>{
@@ -415,10 +436,49 @@ const showPlot = () => {
         title: 'Daily Room Activity',
         xaxis: { title: 'Minute of Day' },
         yaxis: { title: 'Day' },
+        font: {
+            family: 'Arial',
+            size: 12,
+            color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color,
+            title: {
+                font: {
+                    size: 16,
+                    color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+                }
+            },
+            xaxis: {
+                title: {
+                    font: {
+                        size: 14,
+                        color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    font: {
+                        size: 14,
+                        color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+                    }
+                }
+            },
+
+            xtickfont: {
+                size: 10,
+                color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+            },
+            ytickfont: {
+                size: 10,
+                color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+            }
+        },
     };
     
     Plotly.newPlot(new_div, data, layout);
     parent.replaceChild(new_div, existent);
+    document.querySelector(".main-svg")
+            .style.backgroundColor = prefersDarkColorScheme() ? globalColorsDark.prefered_fill_plot :
+                                                                globalColorsLight.prefered_fill_plot;
 }
 
 const downloadCSVButton = document.querySelector('#download-labelmap');

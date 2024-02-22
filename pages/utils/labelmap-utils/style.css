@@ -1,3 +1,23 @@
+:root {
+    --prefered_background_color: #f0f0f0;
+    --prefered_secondary_background_color: #ffffff;
+    --prefered_text_color: #000;
+    --select_border_color: #4e4e4ea4;
+    --select_background_color: #fffefe;
+    --prefered_fill_plot: #f0f0f0;
+}
+
+@media(prefers-color-scheme: dark){
+    :root {
+        --prefered_text_color: #fff;
+        --prefered_background_color: #0f0f0f;
+        --prefered_secondary_background_color: #3d3d3d;
+        --select_border_color: #dfdfdfce;
+        --select_background_color: #4a4949;
+        --prefered_fill_plot: #1A1A1A;
+    }
+}
+
 html{
     scroll-behavior: smooth;
 }
@@ -5,7 +25,8 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
+    background-color: var(--prefered_background_color);
+    color: var(--prefered_text_color);
 }
 
 /* body{
@@ -87,7 +108,6 @@ header {
 #dragable-daily-activities .drag-area,
 #dragable-assigned-routines .drag-area {
     height: 200px; /* Make sure all drag areas have the same height */
-    /* Other styles as needed */
 }
 
 /*DRAGABLE STYLES*/
@@ -97,7 +117,7 @@ header {
     align-items: center;
     height: 200px; /* Adjust the height as needed */
     border: 2px dashed #ccc;
-    background-color: #f9f9f9;
+    background-color: var(--prefered_secondary_background_color);
     color: #999;
     font-size: 18px;
   }
@@ -119,7 +139,7 @@ header {
 
   /*ESTILOS PARA LA SECCIÓN DE VISUALIZACIÓN DE DATOS*/
   #visualization-labelmap {
-    background-color: #f2f2f2;
+    background-color: var(--prefered_secondary_background_color);
     padding: 10px;
     margin-left: 300px;
     margin-right: 300px;
@@ -128,14 +148,14 @@ header {
 }
 
 .visualization-labelmap h1 {
-    color: #333;
+    color: var(--prefered_text_color);
     font-size: 24px;
     margin-bottom: 10px;
     text-align: center;
 }
 
 .visualization-labelmap p {
-    color: #666;
+    color: var(--prefered_text_color); 
     font-size: 16px;
     margin-bottom: 20px;
     text-align: center;
@@ -163,7 +183,7 @@ header {
 
 .visualization-labelmap-div-1 h2,
 .visualization-labelmap-div-2 h2 {
-    color: #333;
+    color: var(--prefered_text_color);
     font-size: 18px;
     margin-bottom: 10px;
 }
@@ -172,9 +192,8 @@ header {
     width: 70%;
 }
 
-
 .visualization-labelmap-div-1 p {
-    color: #666;
+    color: var(--prefered_text_color);
     font-size: 14px;
     margin-bottom: 10px;
     text-align: justify;
@@ -183,8 +202,8 @@ header {
 #labelmap-div {
     width: 100%;
     height: 450px;
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color:var(--prefered_fill_plot);
+    border: 2px solid var(--prefered_secondary_background_color);
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
@@ -208,13 +227,11 @@ header {
   margin-left: 300px;
 }
 
-
 #labelmap button {
     display: block;
     margin: 0 auto;
     margin-top: 20px;
 }
-  
 
 /*PIE DE PÁGINA*/
 footer {
@@ -226,22 +243,4 @@ footer {
     text-align: center;
     bottom: 0; /* Espacio después de la última sección */
   }
-  
-  /* footer nav ul li img {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
-  }
-  
-  footer#pie-dash nav ul li {
-    margin: 0 10px;
-  }
-  
-  footer#pie-dash nav ul li a {
-    padding: 0.5rem 1rem;
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-  } */
-
 
