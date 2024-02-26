@@ -51,7 +51,7 @@
                 <div class="visualization-labelmap-div">
                     <div class="visualization-labelmap-div-1">
                         <div class="params-labelmap" id="threshold-param">
-                            <h2>Threshold</h2>
+                            <h2>Time intervals randomization</h2>
                             <p>You can adjust the randomization on time intervals (in minutes).</p>
                             <input type="range" min="0" max="30" value="0" step="1" class="slider" id="threshold" 
                                    onchange="document.getElementById('threshold-value').value = value" list="tickmarks">
@@ -64,6 +64,26 @@
                                 <option value="20" label="20">
                                 <option value="25" label="25">
                                 <option value="30" label="30">
+                            </datalist>
+                        </div>
+                        <div class="params-labelmap" id="na-param">
+                            <h2>Data elimination rate</h2>
+                            <p>You can adjust the rate of data elimination (in probability).</p>
+                            <input type="range" min="0" max="1" value="0" step="0.05" class="slider" id="na" 
+                                   onchange="document.getElementById('na-value').value = value" list="tickmarks-na">
+                            <output for="na" id="na-value">0</output>
+                            <datalist id="tickmarks-na">
+                                <option value="0" label="0">
+                                <option value="0.1" label="0.1">
+                                <option value="0.2" label="0.2">
+                                <option value="0.3" label="0.3">
+                                <option value="0.4" label="0.4">
+                                <option value="0.5" label="0.5">
+                                <option value="0.6" label="0.6">
+                                <option value="0.7" label="0.7">
+                                <option value="0.8" label="0.8">
+                                <option value="0.9" label="0.9">
+                                <option value="1" label="1">
                             </datalist>
                         </div>
                         <div class="params-labelmap" id="emptyrows-param">

@@ -339,6 +339,11 @@ const aleatorizeIntervals = (intervals) => {
     return new_intervals
 }
 
+const probability_data_drop = () => {
+    let na_rate = Number(document.querySelector('#na').value);
+    return Math.random() > na_rate;
+}
+
 const getLabelmap = (json) => {
     dates_labelmap = Object.keys(json);
     dates_labelmap.forEach((date) => {
@@ -349,7 +354,7 @@ const getLabelmap = (json) => {
             end = convertToMinutes(interval[1]);
             room = dictionary[json[date].rooms[index]];
             for (let i = init; i < end; i++){
-                sequence.push(room);
+                probability_data_drop() ? sequence.push(room): sequence.push(undefined);
             }
         })
         labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
@@ -363,7 +368,6 @@ const getDates = (start, stop) => {
     let stopDate = new Date(stop.split('-')[0], stop.split('-')[1]-1, stop.split('-')[2]);
     let dateArray = [];
     let currentDate = startDate;
-    console.log(startDate, stopDate)
     while (currentDate <= stopDate) {
         dateArray.push(new Date (currentDate));
         currentDate.setDate(currentDate.getDate() + 1);
@@ -372,6 +376,7 @@ const getDates = (start, stop) => {
     string_date = dateArray.map(date => `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`);
     return string_date;
 }
+
 
 const getLabelmapWithEmptyRows = (json) => {
     
@@ -387,7 +392,7 @@ const getLabelmapWithEmptyRows = (json) => {
                 end = convertToMinutes(interval[1]);
                 room = dictionary[json[date].rooms[index]];
                 for (let j = init; j < end; j++){
-                    sequence.push(room);
+                    probability_data_drop() ? sequence.push(room): sequence.push(undefined);
                 }
             })
         } else {
@@ -415,26 +420,29 @@ const downloadCSV = (data) => {
 
 
 /*CÓDIGO PARA LA SECCIÓN DE VISUALIZACIÓN*/
-const show_empty_rows = true;
+var show_empty_rows = true;
 const show_button = document.querySelector('#show-rows');
 const drop_button = document.querySelector('#drop-rows');
+const na_rate = document.querySelector('#na');
+
+const update_labelmap_and_plot = () => {
+    labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
+    show_empty_rows ? labelMap = getLabelmapWithEmptyRows(json) : labelMap = getLabelmap(json);
+    showPlot();
+}
 
 show_button.addEventListener("change", () => {
-    if (show_empty_rows){
-        labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
-        labelMap = getLabelmapWithEmptyRows(json);
-        showPlot();
-    }
     show_empty_rows = !show_empty_rows;
+    update_labelmap_and_plot();
 })
 
 drop_button.addEventListener("change", () => {
-    if (show_empty_rows){
-        labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
-        labelMap = getLabelmap(json);
-        showPlot();
-    }
     show_empty_rows = !show_empty_rows;
+    update_labelmap_and_plot();
+})
+
+na_rate.addEventListener("change", () => {
+    update_labelmap_and_plot();
 })
 
 // THRESHOLD
@@ -442,13 +450,7 @@ threshold_input = document.querySelector('#threshold');
 
 // Cada vez que cambiamos el threshold, volvemos a obtener el labelmap y mostramos el plot
 threshold_input.addEventListener("change", () => {
-    labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
-    if (show_empty_rows){
-        labelMap = getLabelmapWithEmptyRows(json);
-    } else {
-        labelMap = getLabelmap(json);
-    }
-    showPlot();
+    update_labelmap_and_plot();
 })
 
 
