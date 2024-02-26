@@ -50,20 +50,36 @@
                 <p>Here you can see the activity simulation of the user's activities.</p>
                 <div class="visualization-labelmap-div">
                     <div class="visualization-labelmap-div-1">
-                        <h2>Threshold</h2>
-                        <p>You can adjust the randomization on time intervals (in minutes).</p>
-                        <input type="range" min="0" max="30" value="0" step="1" class="slider" id="threshold" 
-                               onchange="document.getElementById('threshold-value').value = value" list="tickmarks">
-                        <output for="threshold" id="threshold-value">0</output>
-                        <datalist id="tickmarks">
-                            <option value="0" label="0">
-                            <option value="5" label="5">
-                            <option value="10" label="10">
-                            <option value="15" label="15">
-                            <option value="20" label="20">
-                            <option value="25" label="25">
-                            <option value="30" label="30">
-                        </datalist>
+                        <div class="params-labelmap" id="threshold-param">
+                            <h2>Threshold</h2>
+                            <p>You can adjust the randomization on time intervals (in minutes).</p>
+                            <input type="range" min="0" max="30" value="0" step="1" class="slider" id="threshold" 
+                                   onchange="document.getElementById('threshold-value').value = value" list="tickmarks">
+                            <output for="threshold" id="threshold-value">0</output>
+                            <datalist id="tickmarks">
+                                <option value="0" label="0">
+                                <option value="5" label="5">
+                                <option value="10" label="10">
+                                <option value="15" label="15">
+                                <option value="20" label="20">
+                                <option value="25" label="25">
+                                <option value="30" label="30">
+                            </datalist>
+                        </div>
+                        <div class="params-labelmap" id="emptyrows-param">
+                            <h2>Empty rows</h2>
+                            <fieldset>
+                                <legend>Do you want to drop empty days?</legend>
+                                <div>
+                                    <input type="radio" id="show-rows" name="emptyrows" value="show" checked>
+                                    <label for="show">Show empty days</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="drop-rows" name="emptyrows" value="drop">
+                                    <label for="drop">Drop empty days</label>
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
                     <div class="visualization-labelmap-div-2">
                         <h2>Activities Simulation</h2>

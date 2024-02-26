@@ -262,7 +262,7 @@ function processAllFiles(){
             setTimeout(() => {
                 visualization_labelmap_section.style.display = 'block';
                 labelmap_section.style.display = 'block';
-                labelMap = getLabelmap(json);
+                labelMap = getLabelmapWithEmptyRows(json);
                 visualization_labelmap_section.style.display = 'block';
                 labelmap_section.style.display = 'block';
 
@@ -357,6 +357,50 @@ const getLabelmap = (json) => {
     return labelMap
 }
 
+// Crear una función que cree un array de fechas desde la primera fecha hasta la última
+const getDates = (start, stop) => {
+    let startDate = new Date(start.split('-')[0], start.split('-')[1]-1, start.split('-')[2]);
+    let stopDate = new Date(stop.split('-')[0], stop.split('-')[1]-1, stop.split('-')[2]);
+    let dateArray = [];
+    let currentDate = startDate;
+    console.log(startDate, stopDate)
+    while (currentDate <= stopDate) {
+        dateArray.push(new Date (currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    // convertir a string
+    string_date = dateArray.map(date => `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`);
+    return string_date;
+}
+
+const getLabelmapWithEmptyRows = (json) => {
+    
+    dates_labelmap = Object.keys(json);
+    first_date = dates_labelmap[0]
+    last_date = dates_labelmap[dates_labelmap.length-1]
+    for (date of getDates(first_date, last_date)){
+        let [year, month, day] = date.split('-');
+        let sequence = [];
+        if (dates_labelmap.includes(date)){
+            aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
+                init = convertToMinutes(interval[0]);
+                end = convertToMinutes(interval[1]);
+                room = dictionary[json[date].rooms[index]];
+                for (let j = init; j < end; j++){
+                    sequence.push(room);
+                }
+            })
+        } else {
+            for (let i = 0; i < 1440; i++){
+                sequence.push(undefined);
+            }
+        }
+        labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
+    }
+
+    return labelMap
+}
+
 const downloadCSV = (data) => {
     columnas = data.listColumns()
     filas = data.toArray()
@@ -371,15 +415,39 @@ const downloadCSV = (data) => {
 
 
 /*CÓDIGO PARA LA SECCIÓN DE VISUALIZACIÓN*/
+const show_empty_rows = true;
+const show_button = document.querySelector('#show-rows');
+const drop_button = document.querySelector('#drop-rows');
+
+show_button.addEventListener("change", () => {
+    if (show_empty_rows){
+        labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
+        labelMap = getLabelmapWithEmptyRows(json);
+        showPlot();
+    }
+    show_empty_rows = !show_empty_rows;
+})
+
+drop_button.addEventListener("change", () => {
+    if (show_empty_rows){
+        labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
+        labelMap = getLabelmap(json);
+        showPlot();
+    }
+    show_empty_rows = !show_empty_rows;
+})
 
 // THRESHOLD
-
 threshold_input = document.querySelector('#threshold');
 
 // Cada vez que cambiamos el threshold, volvemos a obtener el labelmap y mostramos el plot
 threshold_input.addEventListener("change", () => {
     labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
-    labelMap = getLabelmap(json);
+    if (show_empty_rows){
+        labelMap = getLabelmapWithEmptyRows(json);
+    } else {
+        labelMap = getLabelmap(json);
+    }
     showPlot();
 })
 

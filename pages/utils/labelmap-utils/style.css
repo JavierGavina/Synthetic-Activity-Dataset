@@ -21,6 +21,7 @@
 html{
     scroll-behavior: smooth;
 }
+
 body, html {
     margin: 0;
     padding: 0;
@@ -171,6 +172,10 @@ header {
 .visualization-labelmap-div-1,
 .visualization-labelmap-div-2 {
     padding: 10px;
+}
+
+#emptyrows-param{
+    width: 80%;
 }
 
 .visualization-labelmap-div-1 {
