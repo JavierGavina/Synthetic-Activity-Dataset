@@ -357,6 +357,7 @@ const getLabelmap = (json) => {
                 probability_data_drop() ? sequence.push(room): sequence.push(undefined);
             }
         })
+        sequence = drop_consecutive_na_sequence(sequence);
         labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
     })
     return labelMap
@@ -375,6 +376,32 @@ const getDates = (start, stop) => {
     // convertir a string
     string_date = dateArray.map(date => `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`);
     return string_date;
+}
+
+const get_randomized_to_drop = () => {
+    const to_drop = document.querySelector("#consecutive-drop").value;
+    if (to_drop==0) return 0;
+    return Math.floor(Math.random() * to_drop);
+}
+
+const drop_consecutive_na_sequence = (sequence) => {
+    if (document.querySelector("#consecutive-drop").value > 0){
+        new_sequence = []
+        sequence.forEach((room, index) => {
+            if (room == undefined && index > new_sequence.length-1){
+                end_index = Math.min(index + get_randomized_to_drop(), sequence.length);
+                for (let i = index; i < end_index; i++){
+                    new_sequence.push(undefined);
+                }
+            } else {
+                if (room != undefined && index > new_sequence.length) new_sequence.push(room);
+            }
+        })
+    
+        return new_sequence
+    } else {
+        return sequence
+    }
 }
 
 
@@ -400,6 +427,7 @@ const getLabelmapWithEmptyRows = (json) => {
                 sequence.push(undefined);
             }
         }
+        sequence = drop_consecutive_na_sequence(sequence);
         labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
     }
 
@@ -424,6 +452,7 @@ var show_empty_rows = true;
 const show_button = document.querySelector('#show-rows');
 const drop_button = document.querySelector('#drop-rows');
 const na_rate = document.querySelector('#na');
+const consecutive_drop = document.querySelector('#consecutive-drop');
 
 const update_labelmap_and_plot = () => {
     labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
@@ -442,6 +471,10 @@ drop_button.addEventListener("change", () => {
 })
 
 na_rate.addEventListener("change", () => {
+    update_labelmap_and_plot();
+})
+
+consecutive_drop.addEventListener("change", () => {
     update_labelmap_and_plot();
 })
 

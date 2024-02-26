@@ -1,13 +1,31 @@
-/*ANIMACIÓN TEXTO TÍTULO*/
-const typewriter = new Typewriter('#typewriter', {
-    loop: true,
-  });
+/*VARIABLES COLOR*/
+const globalColorsLight = {
+    prefered_background_color: "#f0f0f0",
+    prefered_secondary_background_color: "#ffffff",
+    prefered_text_color: "#000",
+    select_border_color: "#4e4e4ea4",
+    select_background_color: "#fffefe",
+    prefered_fill_plot: "#f0f0f0"
+}
 
-  typewriter.typeString('Routine Simulation')
-      .pauseFor(2500)
-      .deleteAll()
-      .pauseFor(500)
-      .start();
+const globalColorsDark = {
+    prefered_background_color : "#0f0f0f",
+    prefered_secondary_background_color : "#3d3d3d",
+    prefered_text_color : "#fff",
+    select_border_color : "#dfdfdfce",
+    select_background_color : "#4a4949",
+    prefered_fill_plot: "#1A1A1A",
+}
+
+
+/*ANIMACIÓN COLOR*/
+const prefersDarkColorScheme = () =>
+        window &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+
+
+        
 
 /*TODAS LAS VARIABLES GLOBALES*/
 var json = {}; // JOINED DATA
@@ -17,21 +35,21 @@ var DataFrame = dfjs.DataFrame;
 var labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
 var dictionary;
 var dictionary_inverse
-var daily_routines;
-var assigned_routines;
+var daily_activities;
+var assigned_activities;
 
 // Objeto para mantener el estado de los archivos cargados
 const filesLoaded = {
     "dictionary_rooms.json": false,
-    "daily_routines.json": false,
-    "assigned_routines.json": false
+    "daily_activities.json": false,
+    "assigned_activities.json": false
 }
 
 // Objeto para almacenar el contenido de los archivos cargados
 const fileContents = {
     "dictionary_rooms.json": null,
-    "daily_routines.json": null,
-    "assigned_routines.json": null
+    "daily_activities.json": null,
+    "assigned_activities.json": null
 };
 
 
@@ -120,21 +138,67 @@ document.querySelectorAll(".drag-area").forEach((dragArea) => {
 
     
     function displayImage(dragArea) {
-        // Remueve los eventos
+        // Remove event listeners
         removeEventListeners(dragArea);
-        
-        // Añade la imagen al dragArea
+    
+        // Clear any previous content
+        dragArea.innerHTML = '';
+    
+        // Create a container for the image and cancel icon
+        const container = document.createElement('div');
+        container.style.position = 'relative';
+        container.style.display = 'inline-block';
+    
+        // Add the image to the dragArea
         const img = document.createElement('img');
         img.src = '../imgs/json-icon.png';
         img.alt = 'JSON File Icon';
-        img.style.width = '100px'; // Establece el tamaño de la imagen
-        dragArea.innerHTML = ''; // Limpia cualquier contenido anterior
-        dragArea.appendChild(img);
-        
-        dragArea.addEventListener("dblclick", function() {
+        img.style.width = '100px';
+        container.appendChild(img);
+    
+        // Create and add the cancel icon
+        const cancelIcon = document.createElement('img');
+        cancelIcon.src = '../imgs/cancelar.png'; // Path to your cancel icon image
+        cancelIcon.alt = 'Cancel';
+        cancelIcon.style.position = 'absolute';
+        cancelIcon.style.top = '0';
+        cancelIcon.style.right = '0';
+        cancelIcon.style.width = '20px'; // Adjust size as needed
+        cancelIcon.style.cursor = 'pointer';
+        cancelIcon.addEventListener('click', function() {
             resetDragArea(dragArea);
             filesLoaded[dragArea.getAttribute("nameFile")] = false;
         });
+
+        cancelIcon.addEventListener('mouseover', function() {
+            // appear a message below the image that says "Click to remove"
+            const message = document.createElement('p');
+            message.textContent = 'Click to remove';
+            message.style.position = 'absolute';
+            message.style.bottom = '0';
+            message.style.left = '50%';
+            message.style.transform = 'translateX(-50%)';
+            message.style.fontSize = '12px';
+            message.style.color = '#fff';
+            message.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            message.style.padding = '5px';
+            container.appendChild(message);
+        });
+
+        cancelIcon.addEventListener('mouseout', function(e) {
+            // remove the message
+            container.removeChild(container.lastChild);
+        });
+
+        cancelIcon.addEventListener('click', function(e) {
+            resetDragArea(dragArea);
+            filesLoaded[dragArea.getAttribute("nameFile")] = false;
+            e.stopPropagation();
+        });
+    
+        // Append both image and cancel icon to the container, then the container to the dragArea
+        container.appendChild(cancelIcon);
+        dragArea.appendChild(container);
     }
 });
 
@@ -172,20 +236,20 @@ function processAllFiles(){
                 if (fileName == "dictionary_rooms.json"){
                     dictionary = fileContent;
                     dictionary_inverse = Object.fromEntries(Object.entries(dictionary).map(([key, value]) => [value, key]));
-                } else if (fileName == "daily_routines.json"){
-                    daily_routines = fileContent;
+                } else if (fileName == "daily_activities.json"){
+                    daily_activities = fileContent;
                 } else {
-                    assigned_routines = fileContent;
+                    assigned_activities = fileContent;
                 }
             }
-    })
+        })
     
-        assigned_routines.forEach((instance)=>{
-        daily_routines.forEach((routine)=>{
-            if (routine["typeDate"] == instance["typeDate"]){
+        assigned_activities.forEach((instance)=>{
+        daily_activities.forEach((daily)=>{
+            if (daily["typeDate"] == instance["typeDate"]){
                 json[instance["date"]] = {"typeDate": parseInt(instance["typeDate"]),
-                                          "intervals": routine["intervals"],
-                                          "rooms": routine["rooms"]}
+                                          "intervals": daily["intervals"],
+                                          "rooms": daily["rooms"]}
                 }
             })
         })
@@ -198,12 +262,15 @@ function processAllFiles(){
             setTimeout(() => {
                 visualization_labelmap_section.style.display = 'block';
                 labelmap_section.style.display = 'block';
-                labelMap = getLabelmap(json);
+                labelMap = getLabelmapWithEmptyRows(json);
                 visualization_labelmap_section.style.display = 'block';
                 labelmap_section.style.display = 'block';
 
                 window.location.href = "#visualization-labelmap";
                 showPlot();
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                    showPlot();
+                });
             }, 500);
         }).finally(()=>{
             setTimeout(()=>{
@@ -272,6 +339,11 @@ const aleatorizeIntervals = (intervals) => {
     return new_intervals
 }
 
+const probability_data_drop = () => {
+    let na_rate = Number(document.querySelector('#na').value);
+    return Math.random() > na_rate;
+}
+
 const getLabelmap = (json) => {
     dates_labelmap = Object.keys(json);
     dates_labelmap.forEach((date) => {
@@ -282,11 +354,56 @@ const getLabelmap = (json) => {
             end = convertToMinutes(interval[1]);
             room = dictionary[json[date].rooms[index]];
             for (let i = init; i < end; i++){
-                sequence.push(room);
+                probability_data_drop() ? sequence.push(room): sequence.push(undefined);
             }
         })
+        
         labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
     })
+    return labelMap
+}
+
+// Crear una función que cree un array de fechas desde la primera fecha hasta la última
+const getDates = (start, stop) => {
+    let startDate = new Date(start.split('-')[0], start.split('-')[1]-1, start.split('-')[2]);
+    let stopDate = new Date(stop.split('-')[0], stop.split('-')[1]-1, stop.split('-')[2]);
+    let dateArray = [];
+    let currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push(new Date (currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    // convertir a string
+    string_date = dateArray.map(date => `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`);
+    return string_date;
+}
+
+
+const getLabelmapWithEmptyRows = (json) => {
+    
+    dates_labelmap = Object.keys(json);
+    first_date = dates_labelmap[0]
+    last_date = dates_labelmap[dates_labelmap.length-1]
+    for (date of getDates(first_date, last_date)){
+        let [year, month, day] = date.split('-');
+        let sequence = [];
+        if (dates_labelmap.includes(date)){
+            aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
+                init = convertToMinutes(interval[0]);
+                end = convertToMinutes(interval[1]);
+                room = dictionary[json[date].rooms[index]];
+                for (let j = init; j < end; j++){
+                    probability_data_drop() ? sequence.push(room): sequence.push(undefined);
+                }
+            })
+        } else {
+            for (let i = 0; i < 1440; i++){
+                sequence.push(undefined);
+            }
+        }
+        labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
+    }
+
     return labelMap
 }
 
@@ -304,16 +421,37 @@ const downloadCSV = (data) => {
 
 
 /*CÓDIGO PARA LA SECCIÓN DE VISUALIZACIÓN*/
+var show_empty_rows = true;
+const show_button = document.querySelector('#show-rows');
+const drop_button = document.querySelector('#drop-rows');
+const na_rate = document.querySelector('#na');
+
+const update_labelmap_and_plot = () => {
+    labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
+    show_empty_rows ? labelMap = getLabelmapWithEmptyRows(json) : labelMap = getLabelmap(json);
+    showPlot();
+}
+
+show_button.addEventListener("change", () => {
+    show_empty_rows = !show_empty_rows;
+    update_labelmap_and_plot();
+})
+
+drop_button.addEventListener("change", () => {
+    show_empty_rows = !show_empty_rows;
+    update_labelmap_and_plot();
+})
+
+na_rate.addEventListener("change", () => {
+    update_labelmap_and_plot();
+})
 
 // THRESHOLD
-
 threshold_input = document.querySelector('#threshold');
 
 // Cada vez que cambiamos el threshold, volvemos a obtener el labelmap y mostramos el plot
 threshold_input.addEventListener("change", () => {
-    labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
-    labelMap = getLabelmap(json);
-    showPlot();
+    update_labelmap_and_plot();
 })
 
 
@@ -369,10 +507,49 @@ const showPlot = () => {
         title: 'Daily Room Activity',
         xaxis: { title: 'Minute of Day' },
         yaxis: { title: 'Day' },
+        font: {
+            family: 'Arial',
+            size: 12,
+            color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color,
+            title: {
+                font: {
+                    size: 16,
+                    color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+                }
+            },
+            xaxis: {
+                title: {
+                    font: {
+                        size: 14,
+                        color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    font: {
+                        size: 14,
+                        color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+                    }
+                }
+            },
+
+            xtickfont: {
+                size: 10,
+                color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+            },
+            ytickfont: {
+                size: 10,
+                color: prefersDarkColorScheme() ? globalColorsDark.prefered_text_color : globalColorsLight.prefered_text_color
+            }
+        },
     };
     
     Plotly.newPlot(new_div, data, layout);
     parent.replaceChild(new_div, existent);
+    document.querySelector(".main-svg")
+            .style.backgroundColor = prefersDarkColorScheme() ? globalColorsDark.prefered_fill_plot :
+                                                                globalColorsLight.prefered_fill_plot;
 }
 
 const downloadCSVButton = document.querySelector('#download-labelmap');
