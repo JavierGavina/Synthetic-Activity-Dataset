@@ -1,3 +1,15 @@
+:root {
+    --prefered_background_color: #f0f0f0;
+    --prefered_text_color: #000;
+}
+
+@media(prefers-color-scheme: dark){
+    :root {
+        --prefered_text_color: #fff;
+        --prefered_background_color: #0f0f0f;
+    }
+}
+
 html{
     scroll-behavior: smooth;
 }
@@ -11,6 +23,11 @@ body, html {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+body {
+    background-color: var(--prefered_background_color);
+    color: var(--prefered_text_color);
 }
 
 header {
