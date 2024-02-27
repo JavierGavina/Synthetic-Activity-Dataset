@@ -304,9 +304,14 @@ downloadJSON = (json) => {
     URL.revokeObjectURL(url);
 }
 
+const convertToSeconds = function(hora){
+    const [h, m] = hora.split(":")
+    return h*3600 + m*60
+}    
 
-const convertToMinutes = function(hour){ 
-    return parseInt(hour.split(':')[0])*60 + parseInt(hour.split(':')[1]);
+const convertToMinutes = function(hour){
+    const [h, m] = hour.split(":")
+    return parseInt(h)*60 + parseInt(m);
 }
 
 const convertToHour = function(minutes){
@@ -344,24 +349,23 @@ const probability_data_drop = () => {
     return Math.random() > na_rate;
 }
 
-const getLabelmap = (json) => {
-    dates_labelmap = Object.keys(json);
-    dates_labelmap.forEach((date) => {
-        let sequence = [];
-        let [year, month, day] = date.split('-');
-        aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
-            init = convertToMinutes(interval[0]);
-            end = convertToMinutes(interval[1]);
-            room = dictionary[json[date].rooms[index]];
-            for (let i = init; i < end; i++){
-                probability_data_drop() ? sequence.push(room): sequence.push(undefined);
-            }
-        })
-        sequence = drop_consecutive_na_sequence(sequence);
-        labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
-    })
-    return labelMap
+const kill_battery = (sequence) => {
+    const [morning, evening] = estimate_hour_random();
+    if (Math.random() < drop_rate_morning_ev.value){
+        for (let i = 0; i < convertToMinutes(morning); i++){
+            sequence[i] = undefined;
+        }
+    }
+
+    if (Math.random() < drop_rate_morning_ev.value){
+        for (let i = convertToMinutes(evening); i < 1440; i++){
+            sequence[i] = undefined;
+        }
+    } 
+
+    return sequence
 }
+
 
 // Crear una función que cree un array de fechas desde la primera fecha hasta la última
 const getDates = (start, stop) => {
@@ -397,13 +401,35 @@ const drop_consecutive_na_sequence = (sequence) => {
                 if (room != undefined && index > new_sequence.length) new_sequence.push(room);
             }
         })
-    
+        
         return new_sequence
     } else {
         return sequence
     }
 }
 
+const getLabelmap = (json) => {
+    dates_labelmap = Object.keys(json);
+    dates_labelmap.forEach((date) => {
+        if (Math.random() > drop_day_rate.value){
+            let sequence = [];
+            let [year, month, day] = date.split('-');
+            aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
+                init = convertToMinutes(interval[0]);
+                end = convertToMinutes(interval[1]);
+                room = dictionary[json[date].rooms[index]];
+                for (let i = init; i < end; i++){
+                    probability_data_drop() ? sequence.push(room): sequence.push(undefined);
+                }
+            })
+            sequence = drop_consecutive_na_sequence(sequence);
+            if (drop_rate_morning_ev.value > 0) sequence = kill_battery(sequence);
+            labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
+        }
+    })
+
+    return labelMap
+}
 
 const getLabelmapWithEmptyRows = (json) => {
     
@@ -414,20 +440,28 @@ const getLabelmapWithEmptyRows = (json) => {
         let [year, month, day] = date.split('-');
         let sequence = [];
         if (dates_labelmap.includes(date)){
-            aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
-                init = convertToMinutes(interval[0]);
-                end = convertToMinutes(interval[1]);
-                room = dictionary[json[date].rooms[index]];
-                for (let j = init; j < end; j++){
-                    probability_data_drop() ? sequence.push(room): sequence.push(undefined);
+            if (Math.random() > drop_day_rate.value){
+                aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
+                    init = convertToMinutes(interval[0]);
+                    end = convertToMinutes(interval[1]);
+                    room = dictionary[json[date].rooms[index]];
+                    for (let j = init; j < end; j++){
+                        probability_data_drop() ? sequence.push(room): sequence.push(undefined);
+                    }
+                })
+            }
+            else {
+                for (let i = 0; i < 1440; i++){
+                    sequence.push(undefined);
                 }
-            })
+            }
         } else {
             for (let i = 0; i < 1440; i++){
                 sequence.push(undefined);
             }
         }
         sequence = drop_consecutive_na_sequence(sequence);
+        if (drop_rate_morning_ev.value > 0) sequence = kill_battery(sequence);
         labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
     }
 
@@ -453,30 +487,18 @@ const show_button = document.querySelector('#show-rows');
 const drop_button = document.querySelector('#drop-rows');
 const na_rate = document.querySelector('#na');
 const consecutive_drop = document.querySelector('#consecutive-drop');
+const drop_day_rate = document.querySelector("#drop-day")
+const time_morning = document.querySelector("#morning-input")
+const time_evening = document.querySelector("#evening-input")
+const reset_button = document.querySelector("#reset-hour")
+const time_variability_morning_ev = document.querySelector("#time-mornings-evenings-slider")
+const drop_rate_morning_ev = document.querySelector("#drop-mornings-evenings-slider")
 
 const update_labelmap_and_plot = () => {
     labelMap = new DataFrame({}, ["Year", "Month", "Day", "Sequence"])
     show_empty_rows ? labelMap = getLabelmapWithEmptyRows(json) : labelMap = getLabelmap(json);
     showPlot();
-}
-
-show_button.addEventListener("change", () => {
-    show_empty_rows = !show_empty_rows;
-    update_labelmap_and_plot();
-})
-
-drop_button.addEventListener("change", () => {
-    show_empty_rows = !show_empty_rows;
-    update_labelmap_and_plot();
-})
-
-na_rate.addEventListener("change", () => {
-    update_labelmap_and_plot();
-})
-
-consecutive_drop.addEventListener("change", () => {
-    update_labelmap_and_plot();
-})
+}    
 
 // THRESHOLD
 threshold_input = document.querySelector('#threshold');
@@ -486,6 +508,141 @@ threshold_input.addEventListener("change", () => {
     update_labelmap_and_plot();
 })
 
+show_button.addEventListener("change", () => {
+    show_empty_rows = !show_empty_rows;
+    update_labelmap_and_plot();
+})    
+
+drop_button.addEventListener("change", () => {
+    show_empty_rows = !show_empty_rows;
+    update_labelmap_and_plot();
+})    
+
+na_rate.addEventListener("change", () => {
+    update_labelmap_and_plot();
+})    
+
+consecutive_drop.addEventListener("change", () => {
+    update_labelmap_and_plot();
+})
+
+drop_day_rate.addEventListener("change", ()=>{
+    update_labelmap_and_plot()
+})
+
+time_morning.addEventListener("keyup", () => {
+    if (time_morning.value.length == 2){
+        time_morning.value += ":";
+    }
+    if (time_morning.value.length == 5){
+        if (isValidHour(time_morning.value)){
+            time_morning.blur();
+            time_morning.setAttribute("readonly", true);
+            time_evening.removeAttribute("readonly");
+            time_evening.focus();
+        }
+    }
+})
+
+
+time_evening.addEventListener("keyup", () => {
+    if (time_evening.value.length == 2){
+        time_evening.value += ":";
+    }
+    if (time_evening.value.length == 5){
+        if (isValidHour(time_evening.value) && 
+        isGreaterThan(time_evening.value, time_morning.value)){
+            time_evening.blur();
+            time_evening.setAttribute("readonly", true);
+            document.querySelectorAll(".sliders-times").forEach((element) => {
+                element.style.display = "flex";
+            })
+        }
+    }
+})
+
+reset_button.addEventListener("click", () => {
+    time_morning.value = ""
+    time_evening.value = ""
+    time_morning.focus()
+    if (time_morning.hasAttribute("readonly")) time_morning.removeAttribute("readonly")
+    time_evening.setAttribute("readonly", true)
+    document.querySelectorAll(".sliders-times").forEach((element) => {
+        element.style.display = "none";
+    })
+    time_variability_morning_ev.value = 0;
+    drop_rate_morning_ev.value = 0;
+    update_labelmap_and_plot();
+
+})
+
+document.querySelectorAll(".inputs-times").forEach((element) => {
+    element.addEventListener("focus", (e)=> {
+        element.placeholder=""
+    })
+    element.addEventListener("blur", (e)=> {
+        element.placeholder="HH:MM"
+    })
+})
+
+document.querySelectorAll(".sliders-times").forEach((element) => {
+    element.style.display = "none";
+})
+
+const estimate_hour_random = () => {
+    const morning = convertToMinutes(time_morning.value);
+    const evening = convertToMinutes(time_evening.value);
+    const variance = time_variability_morning_ev.value;
+    const randomness = Math.floor(Math.random() * (variance*2 + 1)) - variance;
+    const [t0, t1] = [convertToHour(morning + randomness), 
+                      convertToHour(evening + randomness)]
+    return [t0, t1];
+}
+
+time_variability_morning_ev.addEventListener("change", () => {
+    update_labelmap_and_plot();
+})
+
+drop_rate_morning_ev.addEventListener("change", () => {
+    update_labelmap_and_plot();
+})
+
+
+                    
+
+const isValidHour = function(hora){
+    const [h, m] = hora.split(":")
+    if ((h.length==2 && m.length==2) && 
+    (h>=0 && h<=23) && (m>=0 && m<=59)) return true
+    
+    Swal.fire({
+        title: "Invalid hour",
+        text: "The hour must be in the format HH:MM and must be a valid hour",
+        icon: "error",
+        confirmButtonText: 'OK'
+    }).then(()=>{
+        setTimeout(()=>{
+            time_morning.value = ""
+            time_morning.focus()
+        }, 1000)
+    })
+}
+
+const isGreaterThan = (hour1, hour2) => {
+    if (convertToMinutes(hour1) > convertToMinutes(hour2)) return true;
+    Swal.fire({
+        title: "Invalid evening hour",
+        text: "The evening hour must be greater than the morning hour",
+        icon: "error",
+        confirmButtonText: 'OK'
+    }).then(()=>{
+        setTimeout(()=>{
+            time_evening.value = ""
+            time_evening.focus()
+        }, 500)
+    })
+    return false;
+}
 
 const getArrayDates = (df) => {
     let dates = df.select("Year", "Month", "Day").toArray().map(row => new Date(parseInt(row[0]), parseInt(row[1])-1, parseInt(row[2])));

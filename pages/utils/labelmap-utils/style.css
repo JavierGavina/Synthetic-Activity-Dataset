@@ -174,16 +174,58 @@ header {
     padding: 10px;
 }
 
-#emptyrows-param{
-    width: 80%;
+#drop-mornings-evenings{
+    width: 90%
 }
 
+#input-time{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+#input-time input{
+    padding: 5px;
+    text-align: center;
+    border: 2px solid var(--select_border_color);
+    border-radius: 5px;
+    background-color: var(--select_background_color);
+    color: var(--prefered_text_color);
+    width: 50%;
+}
+
+#input-time input:focus{
+    outline: none;
+    border: 2px solid #007bff;
+}
+
+#input-time button{
+    padding: 5px;
+    border: 2px solid #142536;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-top: 0px;
+}
+
+#input-time button:hover{
+    background-color: #142536;
+}
+
+
 .visualization-labelmap-div-1 {
-    flex-basis: 40%;
+    flex-basis: 50%;
 }
 
 .visualization-labelmap-div-2 {
-    flex-basis: 60%;
+    flex-basis: 50%;
+}
+
+#emptyrows-param{
+    margin-top: 50px;
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
 .visualization-labelmap-div-1 h2,
