@@ -34,18 +34,19 @@ body, html {
 header {
     background-color: #007bff;
     color: white;
-    padding: 20px 0;
+    padding: 2vh 0;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 0.2rem 5px rgba(0,0,0,0.3);
     position: fixed;
     top: 0;
     width: 100%;
+    font-size: 1dvw;
     z-index: 1; /* Add this line */
   }
 
 .page-title {
     margin: 0;
-    font-size: 2em;
+    font-size: 2dvw;
 }
 
 /* Estilos para el menú de navegación */
@@ -54,7 +55,7 @@ header {
     padding: 0;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 1.5dvh;
 }
 
 .nav-menu li {
@@ -64,7 +65,7 @@ header {
 .nav-menu a {
     color: white;
     text-decoration: none;
-    padding: 10px 15px;
+    padding: 1dvh 1.5dvw;
     border-radius: 10px;
     transition: color 0.3s ease;
 }
@@ -75,36 +76,45 @@ header {
 }
 
 #intro .page-description-div{
-    margin-left: 300px;
-    margin-right: 300px;
-    margin-top: 150px;
+    padding: 15dvh 30dvw;
+    padding-bottom: 1dvh;
+    text-align: justify;
+    font-size: 1dvw;
 }
 
 .dragable{
-    margin-right: 300px;
-    margin-left: 300px;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    padding-right: 3dvw;
+    padding-left: 3dvw;
+    padding-top: 1dvh;
+    padding-bottom: 3dvh;
 }
 
 /* Container for dragables */
 .dragables-container {
     display: flex; /* Use flexbox to arrange children side by side */
-    justify-content: space-around; /* Distribute space around the items */
-    margin: 100px 300px; /* Adjust the margin as needed */
+    /* justify-content: space-around;  */
+    padding: 1dvh 15dvw; /* Adjust the margin as needed */
+    padding-bottom: 3dvh;
 }
 
 /* Make each dragable take up equal space */
 .dragable {
     flex: 1; /* Each dragable will grow equally */
-    margin: 0 10px; /* Add some space between columns */
+    padding: 0 0.5dvw; /* Add some space between columns */
 }
 
 /* Override styles for individual drag areas if needed */
 #dragable-dictionary .drag-area,
 #dragable-daily-activities .drag-area,
 #dragable-assigned-routines .drag-area {
-    height: 200px; /* Make sure all drag areas have the same height */
+    height: 17dvh; /* Make sure all drag areas have the same height */
+    width: 20dvw; /* Make sure all drag areas have the same width */
+}
+
+.dragables-container h1{
+    text-align: left;
+    font-size: 1.2dvw;
+
 }
 
 /*DRAGABLE STYLES*/
@@ -112,11 +122,10 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px; /* Adjust the height as needed */
     border: 2px dashed #ccc;
     background-color: var(--prefered_secondary_background_color);
     color: #999;
-    font-size: 18px;
+    font-size: 1dvw;
   }
   
   /* Estilos para cuando el ratón está encima */
@@ -309,8 +318,7 @@ input[type="radio"] {
 }
 
 #labelmap{
-  margin-right: 300px;
-  margin-left: 300px;
+  padding: 3dvh 30dvw;
 }
 
 #labelmap button {
@@ -321,7 +329,6 @@ input[type="radio"] {
 
 /*PIE DE PÁGINA*/
 footer {
-    margin-top: 100px;
     width: 100%;
     background: #007bff;
     padding: 20px 0;
@@ -329,5 +336,3 @@ footer {
     text-align: center;
     bottom: 0; /* Espacio después de la última sección */
   }
-
-*/
