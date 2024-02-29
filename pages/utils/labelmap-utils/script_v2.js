@@ -228,6 +228,43 @@ function checkAllFilesLoaded() {
     return Object.values(filesLoaded).every(isLoaded => isLoaded)
 }
 
+downloadJSON = (json) => {
+    content = JSON.stringify(json, null, 5)
+    const blob = new Blob([content], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "joined_data.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+
+function asyncLecture() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            visualization_labelmap_section.style.display = 'block';
+            labelmap_section.style.display = 'block';
+            window.location.href = "#visualization-labelmap";
+            labelMap = getLabelmapWithEmptyRows(json);
+            visualization_labelmap_section.style.display = 'block';
+            labelmap_section.style.display = 'block';
+            showPlot();
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                showPlot();
+            });
+        }, 200)
+    })
+}
+
+
+async function asyncCall() { 
+    const result = await asyncLecture();
+    
+}
+
 function processAllFiles(){
     if (checkAllFilesLoaded()){
         Object.keys(fileContents).forEach((fileName) => {
@@ -259,20 +296,8 @@ function processAllFiles(){
             icon: 'success',
             confirmButtonText: 'Continue'
         }).then(()=>{
-            setTimeout(() => {
-                visualization_labelmap_section.style.display = 'block';
-                labelmap_section.style.display = 'block';
-                labelMap = getLabelmapWithEmptyRows(json);
-                visualization_labelmap_section.style.display = 'block';
-                labelmap_section.style.display = 'block';
-
-                window.location.href = "#visualization-labelmap";
-                showPlot();
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                    showPlot();
-                });
-            }, 500);
-        }).finally(()=>{
+            asyncCall()
+        }).then(()=>{
             setTimeout(()=>{
                 Swal.fire({
                     title: "Download the joined data?",
@@ -286,23 +311,11 @@ function processAllFiles(){
                         downloadJSON(json);
                     }
                 })
-            }, 1000)
+            }, 1500)
         })
     };
 }
 
-downloadJSON = (json) => {
-    content = JSON.stringify(json, null, 5)
-    const blob = new Blob([content], {type: "application/json"});
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "joined_data.json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-}
 
 const convertToSeconds = function(hora){
     const [h, m] = hora.split(":")
@@ -323,7 +336,6 @@ const convertToHour = function(minutes){
 const aleatorizeIntervals = (intervals) => {
     threshold = document.querySelector("#threshold").value
     let new_intervals = [];
-    first_interval = 0;
     for (let i = 0; i < intervals.length; i++){
         // randomization from -threshold to +threshold
         let random = Math.floor(Math.random() * (threshold*2 + 1)) - threshold;
@@ -333,11 +345,17 @@ const aleatorizeIntervals = (intervals) => {
             new_intervals.push(["00:00", end]);
         } else {
             start = new_intervals[i-1][1];
-            if (i == intervals.length - 1){
+            if (i == intervals.length - 1 || convertToMinutes(end) + random > 1439){
                 end = "23:59";
             } else {
-                end = convertToHour(convertToMinutes(end) + random);
+                let newEnd = convertToMinutes(end) + random;
+                if (newEnd < convertToMinutes(start)) {
+                    end = start;
+                } else {
+                    end = convertToHour(newEnd);
+                }
             }
+            
             new_intervals.push([start, end]);
         }
     }
@@ -385,11 +403,13 @@ const getDates = (start, stop) => {
 const get_randomized_to_drop = () => {
     const to_drop = document.querySelector("#consecutive-drop").value;
     if (to_drop==0) return 0;
-    return Math.floor(Math.random() * to_drop);
+    return Math.floor(Math.random() * to_drop+1);
 }
 
 const drop_consecutive_na_sequence = (sequence) => {
-    if (document.querySelector("#consecutive-drop").value > 0){
+    consecutive_drop_value = document.querySelector("#consecutive-drop").value
+    na_rate_value = document.querySelector("#na").value
+    if (consecutive_drop_value > 0 && na_rate_value > 0){
         new_sequence = []
         sequence.forEach((room, index) => {
             if (room == undefined && index > new_sequence.length-1){
@@ -398,7 +418,7 @@ const drop_consecutive_na_sequence = (sequence) => {
                     new_sequence.push(undefined);
                 }
             } else {
-                if (room != undefined && index > new_sequence.length) new_sequence.push(room);
+                if (room != undefined && index > new_sequence.length-1) new_sequence.push(room);
             }
         })
         
@@ -422,7 +442,8 @@ const getLabelmap = (json) => {
                     probability_data_drop() ? sequence.push(room): sequence.push(undefined);
                 }
             })
-            sequence = drop_consecutive_na_sequence(sequence);
+            
+            if (document.querySelector('#na').value>0) sequence = drop_consecutive_na_sequence(sequence);
             if (drop_rate_morning_ev.value > 0) sequence = kill_battery(sequence);
             labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
         }
