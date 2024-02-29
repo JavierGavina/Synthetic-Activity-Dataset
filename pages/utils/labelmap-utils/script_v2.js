@@ -460,8 +460,8 @@ const getLabelmapWithEmptyRows = (json) => {
     for (date of getDates(first_date, last_date)){
         let [year, month, day] = date.split('-');
         let sequence = [];
-        if (dates_labelmap.includes(date)){
-            if (Math.random() > drop_day_rate.value){
+        if (Math.random() > drop_day_rate.value){
+            if (dates_labelmap.includes(date)){
                 aleatorizeIntervals(json[date].intervals).forEach((interval, index) => {
                     init = convertToMinutes(interval[0]);
                     end = convertToMinutes(interval[1]);
@@ -470,19 +470,19 @@ const getLabelmapWithEmptyRows = (json) => {
                         probability_data_drop() ? sequence.push(room): sequence.push(undefined);
                     }
                 })
-            }
-            else {
-                for (let i = 0; i < 1440; i++){
+                if (document.querySelector('#na').value>0) sequence = drop_consecutive_na_sequence(sequence);
+                if (drop_rate_morning_ev.value > 0) sequence = kill_battery(sequence);
+            } else {
+                for (let i = 0; i < 1439; i++){
                     sequence.push(undefined);
-                }
+                }  
             }
         } else {
-            for (let i = 0; i < 1440; i++){
+            for (let i = 0; i < 1439; i++){
                 sequence.push(undefined);
             }
         }
-        sequence = drop_consecutive_na_sequence(sequence);
-        if (drop_rate_morning_ev.value > 0) sequence = kill_battery(sequence);
+
         labelMap = labelMap.push({Year: parseInt(year), Month: parseInt(month), Day: parseInt(day), Sequence: sequence})
     }
 
