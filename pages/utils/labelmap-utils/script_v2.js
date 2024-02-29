@@ -376,7 +376,7 @@ const kill_battery = (sequence) => {
     }
 
     if (Math.random() < drop_rate_morning_ev.value){
-        for (let i = convertToMinutes(evening); i < 1440; i++){
+        for (let i = convertToMinutes(evening); i < 1439; i++){
             sequence[i] = undefined;
         }
     } 
