@@ -707,7 +707,7 @@ const showPlot = () => {
         y: array_days,
         z: sequences.flat(),
         text: sequences.flat().map(room => dictionary_inverse[room]),
-        colorscale: "Viridis",
+        colorscale: "Rainbow",
         showscale: false,
     };
     
