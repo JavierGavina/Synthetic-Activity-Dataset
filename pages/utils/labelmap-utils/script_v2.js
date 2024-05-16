@@ -119,7 +119,7 @@ document.querySelectorAll(".drag-area").forEach((dragArea) => {
             const expectedFileBaseName = expectedFileName.replace('.json', ''); // Remove the extension for matching
             
             // Crea una expresión regular que coincida con el nombre del fichero y una secuencia opcional de espacio y número entre paréntesis
-            const regexPattern = new RegExp(`^${expectedFileBaseName}( \\(\\d+\\))?\\.json$`);
+            const regexPattern = new RegExp(`^${expectedFileBaseName}(_year)?( \\(\\d+\\))?\\.json$`);
             
             if (regexPattern.test(file.name)) {
                 displayImage(dragArea);
@@ -262,7 +262,6 @@ function asyncLecture() {
 
 async function asyncCall() { 
     const result = await asyncLecture();
-    
 }
 
 function processAllFiles(){
@@ -700,6 +699,8 @@ const showPlot = () => {
             array_days.push(dates[i]);
         }
     }
+    
+
     // Process the data for Plotly
     let trace = {
         type: 'heatmap',
