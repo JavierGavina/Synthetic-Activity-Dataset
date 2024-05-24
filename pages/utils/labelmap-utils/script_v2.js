@@ -119,7 +119,7 @@ document.querySelectorAll(".drag-area").forEach((dragArea) => {
             const expectedFileBaseName = expectedFileName.replace('.json', ''); // Remove the extension for matching
             
             // Crea una expresión regular que coincida con el nombre del fichero y una secuencia opcional de espacio y número entre paréntesis
-            const regexPattern = new RegExp(`^${expectedFileBaseName}(_year[_a-zA-Z0-9]+)?( \\(\\d+\\))?\\.json$`);
+            const regexPattern = new RegExp(`^${expectedFileBaseName}(_year[_a-zA-Z0-9]*)?( \\(\\d+\\))?\\.json$`);
             
             if (regexPattern.test(file.name)) {
                 displayImage(dragArea);
